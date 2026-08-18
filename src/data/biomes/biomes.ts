@@ -74,7 +74,7 @@ export function campaignRegionsForAct(act: number, difficulty: number): BiomeDef
     4: ['noble-castle', 'arcane-march', 'castle-catacombs', 'underworld'],
     5: ['ghost-ferry', 'ocean-depths'],
     6: ['techno-city', 'neon-court', 'sky-island'],
-    7: ['atlantis', 'demon-nest', 'meteor-ruins', 'world-rampart'],
+    7: ['atlantis', 'demon-nest', 'world-rampart', 'meteor-ruins'],
   };
   const ids = chains[Math.max(1, Math.min(maxActsForDifficulty(level), act))] ?? chains[1];
   return ids.map((id) => biomeById(id));
@@ -103,8 +103,8 @@ const STORIES: Partial<Record<`${RegionId}>${RegionId}`, string>> = {
   'neon-court>sky-island': '霓虹裁决者判你「向上」。升空井喷出白雾，托着你穿过云海。',
   'sky-island>atlantis': '天穹锁桥的尽头没有陆地，只有退去的潮水与重见星光的白色大理石城。',
   'atlantis>demon-nest': '白石之下裂开一道血色深渊，契约的低语从孵化血池深处升起。',
-  'demon-nest>meteor-ruins': '你踩着巢穴母体的残骸攀出裂口，被陨石撞裂的天空在头顶铺开。',
-  'meteor-ruins>world-rampart': '穿过悬浮碎石，世界尽头最后一道地垒横亘眼前——越过它便是一切的终点。',
+  'demon-nest>world-rampart': '你踩着巢穴母体的残骸攀出裂口，前方横亘着世界尽头最后一道星界地垒。',
+  'world-rampart>meteor-ruins': '地垒之心崩碎，最后一道屏障就此洞开。被陨石撞裂的天空在眼前铺展——坠星留下的终点近在咫尺。',
   'atlantis>meteor-ruins': '沉星议院的穹顶指向被撞裂的天空。你踏过裂开的黑曜石原，走向坠星留下的世界终局。',
 };
 export function transitionStory(from: BiomeId, to: BiomeId): string { const left = biomeById(from); const right = biomeById(to); const key = `${left.id}>${right.id}` as keyof typeof STORIES; return STORIES[key] ?? `你越过${left.name}最后的界碑，循着余烬与旧地图继续前行，终于看见${right.name}的轮廓。`; }

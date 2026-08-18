@@ -254,4 +254,8 @@ export const REGION_ENEMIES: Record<string, EnemyDefinition> = {
   'starfall-archer': cycle('starfall-archer', '坠星射手', 90, [atk(8, '星矢 8', 2), hex('vulnerable', 2, '锁定坐标', 2), atk(16, '陨矢 16')]),
   'void-templar': cycle('void-templar', '虚空圣堂武士', 112, [def(16, '虚空甲 16'), buff(2, '汲取宇能 +2'), atk(18, '裂界剑 18')]),
   'rampart-warden': cycle('rampart-warden', '地垒守将', 214, [buff(3, '终末号令 +3'), atk(11, '连锤 11', 2), hex('brittle', 3, '穿垒 · 脆化 3')]),
+  'rampart-heart': phased('rampart-heart', '世界地垒之心', 388, [
+    { id: 'bulwark', label: '壁垒', startsAtHpRatio: 1, intents: [def(20, '星界城壁 20'), atk(20, '崩天锤 20'), hex('brittle', 2, '裂垒 · 脆化 2')] },
+    { id: 'collapse', label: '崩塌', startsAtHpRatio: .5, intents: [summon(['rampart-sentinel'], '唤起地垒哨卫'), atk(15, '连崩 15', 2), hex('sap', 3, '塌陷 · 涸竭 3')] },
+  ], { initialBlock: 14 }),
 };

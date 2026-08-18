@@ -170,11 +170,11 @@ export const REGION_ENCOUNTERS: EncounterDefinition[] = [
   e('demon-broodmother', 'elite', 3, 3, 'demon-nest', ['nest-broodmother']),
   e('demon-fiend-pair', 'elite', 3, 3, 'demon-nest', ['gore-fiend', 'pact-cultist']),
   e('demon-progenitor-fight', 'boss', 0, 3, 'demon-nest', ['demon-progenitor']),
-  // 世界地垒（第七幕终点，Boss 为终焉 world-ender）
+  // 世界地垒（第七幕倒数第二个区域，通往陨石遗迹的最后一道城垒）
   e('rampart-sentinels', 'combat', 0, 3, 'world-rampart', ['rampart-sentinel']),
   e('rampart-archers', 'combat', 1, 3, 'world-rampart', ['starfall-archer', 'void-templar']),
   e('rampart-templars', 'combat', 2, 3, 'world-rampart', ['void-templar']),
   e('rampart-warden-fight', 'elite', 3, 3, 'world-rampart', ['rampart-warden']),
   e('rampart-sentinel-pair', 'elite', 3, 3, 'world-rampart', ['rampart-sentinel', 'starfall-archer']),
-  e('rampart-finality', 'boss', 0, 3, 'world-rampart', ['world-ender']),
+  e('rampart-heart-fight', 'boss', 0, 3, 'world-rampart', ['rampart-heart']),
 ];
