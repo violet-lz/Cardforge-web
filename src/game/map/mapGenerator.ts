@@ -1,162 +1,59 @@
-import { biomeForAct } from '../../data/biomes/biomes';
+import { biomeForAct, campaignRegionsForAct, regionLocation } from '../../data/biomes/biomes';
+import { difficultyFor } from '../../data/ascension/modifiers';
+import { clampDifficulty } from '../ascension/ascensionTypes';
 import { SeededRng } from '../rng/SeededRng';
 import { scoreFor } from './nodeScoring';
-import type { MapEdge, MapLocationKind, MapNode, MapNodeType, MapState } from './mapTypes';
+import type { MapEdge, MapNode, MapNodeType, MapState } from './mapTypes';
 
 const MAX_WIDTH = 4;
 const MAX_GENERATION_ATTEMPTS = 25;
-const BASE_NODE_WEIGHTS: Array<[MapNodeType, number]> = [
-  ['combat', 42], ['event', 18], ['rest', 12], ['shop', 12], ['treasure', 8], ['elite', 8],
-];
-export const DEFAULT_MAP_CONFIG = {
-  layers: 12,
-  columns: MAX_WIDTH,
-  minRouteLength: 9,
-  maxRouteLength: 12,
-  nodeWeights: BASE_NODE_WEIGHTS,
-  guaranteedNodeTypes: [],
-} as const;
-export interface MapGenerationConfig {
-  layers?: number;
-  columns?: number;
-  minRouteLength?: number;
-  maxRouteLength?: number;
-  nodeWeights?: Array<[MapNodeType, number]>;
-  guaranteedNodeTypes?: MapNodeType[];
-}
+const BASE_NODE_WEIGHTS: Array<[MapNodeType, number]> = [['combat', 42], ['event', 18], ['rest', 12], ['shop', 12], ['treasure', 8], ['elite', 8]];
+export const DEFAULT_MAP_CONFIG = { layers: 12, columns: MAX_WIDTH, minRouteLength: 9, maxRouteLength: 12, nodeWeights: BASE_NODE_WEIGHTS, guaranteedNodeTypes: [] } as const;
+export interface MapGenerationConfig { layers?: number; columns?: number; minRouteLength?: number; maxRouteLength?: number; nodeWeights?: Array<[MapNodeType, number]>; guaranteedNodeTypes?: MapNodeType[]; }
 type ResolvedMapConfig = Required<MapGenerationConfig>;
-
-const LOCATIONS: Record<MapNodeType, Array<[MapLocationKind, string]>> = {
-  start: [['trail', '风蚀界碑']],
-  combat: [['trail', '熄火野路'], ['crossing', '断桥岔口'], ['ruin', '灰埋庭院']],
-  elite: [['outpost', '铁哨关'], ['ruin', '坍塌堡垒']],
-  rest: [['sanctum', '余火庇所'], ['village', '炉灰村']],
-  shop: [['waystation', '驮铃驿站'], ['village', '暮市']],
-  event: [['crossing', '褪色路牌'], ['ruin', '无名旧址']],
-  treasure: [['ruin', '封蜡地窖'], ['outpost', '弃守库房']],
-  special: [['sanctum', '黑玻璃祭坛'], ['trail', '雾中石径']],
-  boss: [['sanctum', '守门者的黑曜回廊']],
-};
 
 function clamp(value: number, min: number, max: number): number { return Math.max(min, Math.min(max, value)); }
 function pickBranchCount(rng: SeededRng): number { const roll = rng.nextInt(1, 100); return roll <= 40 ? 1 : roll <= 80 ? 2 : 3; }
-function nearestColumns(from: number, fromWidth: number, toWidth: number): number[] {
-  const scaled = fromWidth <= 1 ? 0 : Math.round((from * (toWidth - 1)) / (fromWidth - 1));
-  return Array.from({ length: toWidth }, (_, index) => index).sort((a, b) => Math.abs(a - scaled) - Math.abs(b - scaled) || a - b);
-}
-function pickWeightedType(rng: SeededRng, weights: Array<[MapNodeType, number]>): MapNodeType {
-  let roll = rng.nextInt(1, weights.reduce((sum, [, weight]) => sum + weight, 0));
-  for (const [type, weight] of weights) { if (roll <= weight) return type; roll -= weight; }
-  return weights[weights.length - 1][0];
-}
+function nearestColumns(from: number, fromWidth: number, toWidth: number): number[] { const scaled = fromWidth <= 1 ? 0 : Math.round((from * (toWidth - 1)) / (fromWidth - 1)); return Array.from({ length: toWidth }, (_, index) => index).sort((a, b) => Math.abs(a - scaled) - Math.abs(b - scaled) || a - b); }
+function pickWeightedType(rng: SeededRng, weights: Array<[MapNodeType, number]>): MapNodeType { let roll = rng.nextInt(1, weights.reduce((sum, [, weight]) => sum + weight, 0)); for (const [type, weight] of weights) { if (roll <= weight) return type; roll -= weight; } return weights[weights.length - 1][0]; }
 function buildLayer(layers: number, columns: number, row: number): number { return row === 0 || row === layers - 1 ? 1 : row === 1 ? 3 : columns; }
 function nodeById(nodes: MapNode[], id: string): MapNode { const node = nodes.find((candidate) => candidate.id === id); if (!node) throw new Error(`Unknown map node ${id}`); return node; }
-function connect(nodes: MapNode[], edges: MapEdge[], from: string, to: string): void {
-  const source = nodeById(nodes, from);
-  if (source.connections.includes(to)) return;
-  source.connections = [...source.connections, to];
-  edges.push({ from, to });
-}
+function connect(nodes: MapNode[], edges: MapEdge[], from: string, to: string): void { const source = nodeById(nodes, from); if (source.connections.includes(to)) return; source.connections = [...source.connections, to]; edges.push({ from, to }); }
 function layout(nodes: MapNode[], layers: number, rng: SeededRng): void {
   for (let row = 0; row < layers; row += 1) {
     const layer = nodes.filter((node) => node.row === row).sort((a, b) => a.column - b.column);
-    layer.forEach((node, index) => {
-      if (row === 0 || row === layers - 1) { node.x = .5; node.y = row === 0 ? .04 : .96; return; }
-      const baseX = layer.length === 1 ? .5 : .12 + index * (.76 / (layer.length - 1));
-      const baseY = .05 + row * (.9 / (layers - 1));
-      node.x = clamp(baseX + (rng.nextFloat() - .5) * .012, .08, .92);
-      node.y = clamp(baseY + (rng.nextFloat() - .5) * .006, baseY - .004, baseY + .004);
-    });
+    layer.forEach((node, index) => { if (row === 0 || row === layers - 1) { node.x = .5; node.y = row === 0 ? .04 : .96; return; } const baseX = layer.length === 1 ? .5 : .12 + index * (.76 / (layer.length - 1)); const baseY = .05 + row * (.9 / (layers - 1)); node.x = clamp(baseX + (rng.nextFloat() - .5) * .012, .08, .92); node.y = clamp(baseY + (rng.nextFloat() - .5) * .006, baseY - .004, baseY + .004); });
   }
 }
-function decorate(nodes: MapNode[], seed: number, layers: number): void {
-  const rng = new SeededRng((seed ^ 0x9e3779b9) >>> 0);
-  layout(nodes, layers, rng);
-  nodes.forEach((node) => { const options = LOCATIONS[node.type]; const [locationKind, locationName] = options[rng.nextInt(0, options.length - 1)]; node.locationKind = locationKind; node.locationName = locationName; });
-}
-function applyGuaranteedNodeTypes(nodes: MapNode[], config: ResolvedMapConfig, seed: number): void {
-  const available = nodes.filter((node) => node.row >= 2 && node.row < config.layers - 2);
-  const rng = new SeededRng((seed ^ 0x51ed270b) >>> 0);
-  for (const type of config.guaranteedNodeTypes) {
-    const existing = nodes.some((node) => node.type === type);
-    if (existing || !available.length) continue;
-    const index = rng.nextInt(0, available.length - 1); const node = available.splice(index, 1)[0];
-    node.type = type;
-    Object.assign(node, scoreFor(type));
-  }
-}
-function attemptGenerate(seed: number, config: ResolvedMapConfig, act: number, mapId: string): MapState {
-  const rng = new SeededRng(seed); const nodes: MapNode[] = []; const edges: MapEdge[] = []; const layerNodeIds: string[][] = [];
+function regionIndexForRow(row: number, layers: number, count: number): number { return Math.min(count - 1, Math.floor(row * count / layers)); }
+function decorate(nodes: MapNode[], seed: number, layers: number): void { const rng = new SeededRng((seed ^ 0x9e3779b9) >>> 0); layout(nodes, layers, rng); nodes.forEach((node) => { const [locationKind, locationName] = regionLocation(node.regionId!, node.type, rng.nextInt(0, 1023)); node.locationKind = locationKind; node.locationName = locationName; }); }
+function applyGuaranteedNodeTypes(nodes: MapNode[], config: ResolvedMapConfig, seed: number): void { const available = nodes.filter((node) => node.row >= 2 && node.row < config.layers - 2); const rng = new SeededRng((seed ^ 0x51ed270b) >>> 0); for (const type of config.guaranteedNodeTypes) { if (nodes.some((node) => node.type === type) || !available.length) continue; const index = rng.nextInt(0, available.length - 1); const node = available.splice(index, 1)[0]; node.type = type; Object.assign(node, scoreFor(type)); } }
+function difficultyWeights(weights: Array<[MapNodeType, number]>, difficulty: number): Array<[MapNodeType, number]> { const multiplier = difficultyFor(difficulty).eliteWeightMultiplier; return weights.map(([type, weight]) => [type, type === 'elite' ? Math.max(1, Math.round(weight * multiplier)) : weight]); }
+function attemptGenerate(seed: number, config: ResolvedMapConfig, act: number, difficulty: number, mapId: string): MapState {
+  const rng = new SeededRng(seed); const nodes: MapNode[] = []; const edges: MapEdge[] = []; const layerNodeIds: string[][] = []; const regions = campaignRegionsForAct(act, difficulty);
   for (let row = 0; row < config.layers; row += 1) {
-    const width = buildLayer(config.layers, config.columns, row); const ids: string[] = [];
+    const width = buildLayer(config.layers, config.columns, row); const ids: string[] = []; const regionId = regions[regionIndexForRow(row, config.layers, regions.length)].id;
     for (let column = 0; column < width; column += 1) {
       const type: MapNodeType = row === 0 ? 'start' : row === config.layers - 1 ? 'boss' : row === config.layers - 2 ? 'rest' : row === 1 ? 'combat' : pickWeightedType(rng, config.nodeWeights);
-      const id = `${mapId}-L${row}-N${column}`; const [locationKind, locationName] = LOCATIONS[type][0];
-      nodes.push({ id, row, column, x: .5, y: 0, type, locationKind, locationName, connections: [], parents: [], ...scoreFor(type) }); ids.push(id);
+      const id = `${mapId}-L${row}-N${column}`; const [locationKind, locationName] = regionLocation(regionId, type, column);
+      nodes.push({ id, row, column, x: .5, y: 0, type, regionId, locationKind, locationName, connections: [], parents: [], ...scoreFor(type) }); ids.push(id);
     }
     layerNodeIds.push(ids);
   }
   applyGuaranteedNodeTypes(nodes, config, seed);
   for (let row = 0; row < config.layers - 1; row += 1) {
     const currentIds = layerNodeIds[row]; const nextIds = layerNodeIds[row + 1]; const incoming = new Set<string>();
-    currentIds.forEach((parentId, parentColumn) => {
-      const finalApproach = row === config.layers - 2;
-      const count = finalApproach ? nextIds.length : Math.min(pickBranchCount(rng), nextIds.length);
-      const targets = (finalApproach ? nextIds : nearestColumns(parentColumn, currentIds.length, nextIds.length).slice(0, count).map((column) => nextIds[column]));
-      [...new Set(targets)].forEach((target) => { connect(nodes, edges, parentId, target); incoming.add(target); });
-    });
-    nextIds.filter((id) => !incoming.has(id)).forEach((orphan) => {
-      const orphanNode = nodeById(nodes, orphan); const parent = currentIds[nearestColumns(orphanNode.column, nextIds.length, currentIds.length)[0]];
-      connect(nodes, edges, parent, orphan);
-    });
+    currentIds.forEach((parentId, parentColumn) => { const finalApproach = row === config.layers - 2; const count = finalApproach ? nextIds.length : Math.min(pickBranchCount(rng), nextIds.length); const targets = finalApproach ? nextIds : nearestColumns(parentColumn, currentIds.length, nextIds.length).slice(0, count).map((column) => nextIds[column]); [...new Set(targets)].forEach((target) => { connect(nodes, edges, parentId, target); incoming.add(target); }); });
+    nextIds.filter((id) => !incoming.has(id)).forEach((orphan) => { const orphanNode = nodeById(nodes, orphan); const parent = currentIds[nearestColumns(orphanNode.column, nextIds.length, currentIds.length)[0]]; connect(nodes, edges, parent, orphan); });
   }
-  edges.forEach((edge) => { const target = nodeById(nodes, edge.to); if (!target.parents.includes(edge.from)) target.parents = [...target.parents, edge.from]; });
-  decorate(nodes, seed, config.layers);
+  edges.forEach((edge) => { const target = nodeById(nodes, edge.to); if (!target.parents.includes(edge.from)) target.parents = [...target.parents, edge.from]; }); decorate(nodes, seed, config.layers);
   const startId = layerNodeIds[0][0]; const bossId = layerNodeIds[config.layers - 1][0];
-  return { mapId, seed, act, biomeId: biomeForAct(act).id, generationVersion: 3, minRouteLength: config.minRouteLength, maxRouteLength: config.maxRouteLength, nodes, edges, currentNodeId: startId, visitedNodeIds: [startId], availableNodeIds: nodeById(nodes, startId).connections, completedNodeIds: [startId], bossNodeId: bossId };
+  return { mapId, seed, act, biomeId: biomeForAct(act).id, generationVersion: 4, minRouteLength: config.minRouteLength, maxRouteLength: config.maxRouteLength, nodes, edges, currentNodeId: startId, visitedNodeIds: [startId], availableNodeIds: nodeById(nodes, startId).connections, completedNodeIds: [startId], bossNodeId: bossId };
 }
 
-export function routeLengths(map: MapState): { shortest: number; longest: number } | null {
-  const byId = new Map(map.nodes.map((node) => [node.id, node])); const start = map.nodes.find((node) => node.type === 'start'); const boss = byId.get(map.bossNodeId);
-  if (!start || !boss) return null;
-  const shortest = new Map<string, number>([[start.id, 1]]); const longest = new Map<string, number>([[start.id, 1]]);
-  for (const node of [...map.nodes].sort((a, b) => a.row - b.row || a.column - b.column)) {
-    const min = shortest.get(node.id); const max = longest.get(node.id); if (min === undefined || max === undefined) continue;
-    for (const target of node.connections) { shortest.set(target, Math.min(shortest.get(target) ?? Infinity, min + 1)); longest.set(target, Math.max(longest.get(target) ?? -Infinity, max + 1)); }
-  }
-  const min = shortest.get(boss.id); const max = longest.get(boss.id); return min === undefined || max === undefined ? null : { shortest: min, longest: max };
-}
-export function validateMap(map: MapState): boolean {
-  const byId = new Map(map.nodes.map((node) => [node.id, node])); const start = map.nodes.find((node) => node.type === 'start'); const boss = byId.get(map.bossNodeId);
-  if (!start || !boss || boss.type !== 'boss') return false;
-  if (map.edges.some((edge) => !byId.has(edge.from) || !byId.has(edge.to) || byId.get(edge.to)!.row !== byId.get(edge.from)!.row + 1)) return false;
-  const reachable = new Set<string>(); const queue = [start.id];
-  while (queue.length) { const id = queue.shift()!; if (reachable.has(id)) continue; const node = byId.get(id); if (!node) return false; reachable.add(id); queue.push(...node.connections); }
-  if (!reachable.has(boss.id) || reachable.size !== map.nodes.length) return false;
-  if (map.nodes.some((node) => (node.id !== boss.id && node.connections.length === 0) || (node.id !== start.id && node.parents.length === 0))) return false;
-  const indegree = new Map(map.nodes.map((node) => [node.id, node.parents.length])); const topo = map.nodes.filter((node) => indegree.get(node.id) === 0).map((node) => node.id); let count = 0;
-  while (topo.length) { const id = topo.shift()!; count += 1; for (const target of byId.get(id)!.connections) { indegree.set(target, (indegree.get(target) ?? 0) - 1); if (indegree.get(target) === 0) topo.push(target); } }
-  const lengths = routeLengths(map); const initialRoutes = map.nodes.filter((node) => node.row === 1);
-  return count === map.nodes.length && initialRoutes.length >= 3 && Boolean(lengths) && lengths!.shortest >= (map.minRouteLength ?? 0) && lengths!.longest >= (map.maxRouteLength ?? 0);
-}
-export function generateMap(seed: number, options: MapGenerationConfig = {}, act = 1): MapState {
-  const biome = biomeForAct(act);
-  const config: ResolvedMapConfig = {
-    ...DEFAULT_MAP_CONFIG,
-    ...biome.mapConfig,
-    ...options,
-    nodeWeights: options.nodeWeights ?? biome.mapConfig.nodeWeights ?? DEFAULT_MAP_CONFIG.nodeWeights,
-    guaranteedNodeTypes: [...(options.guaranteedNodeTypes ?? biome.mapConfig.guaranteedNodeTypes ?? DEFAULT_MAP_CONFIG.guaranteedNodeTypes)],
-  };
-  if (config.layers < config.maxRouteLength || config.minRouteLength < 4 || config.columns < 3) throw new Error('Invalid map generation configuration');
-  const normalizedSeed = seed >>> 0; const mapId = `act${act}-${normalizedSeed}`;
-  for (let attempt = 0; attempt < MAX_GENERATION_ATTEMPTS; attempt += 1) { const map = attemptGenerate((normalizedSeed + attempt * 104729) >>> 0, config, act, mapId); if (validateMap(map)) return map; }
-  throw new Error('Failed to generate a valid map after maximum attempts');
-}
+export function routeLengths(map: MapState): { shortest: number; longest: number } | null { const byId = new Map(map.nodes.map((node) => [node.id, node])); const start = map.nodes.find((node) => node.type === 'start'); const boss = byId.get(map.bossNodeId); if (!start || !boss) return null; const shortest = new Map<string, number>([[start.id, 1]]); const longest = new Map<string, number>([[start.id, 1]]); for (const node of [...map.nodes].sort((a, b) => a.row - b.row || a.column - b.column)) { const min = shortest.get(node.id); const max = longest.get(node.id); if (min === undefined || max === undefined) continue; for (const target of node.connections) { shortest.set(target, Math.min(shortest.get(target) ?? Infinity, min + 1)); longest.set(target, Math.max(longest.get(target) ?? -Infinity, max + 1)); } } const min = shortest.get(boss.id); const max = longest.get(boss.id); return min === undefined || max === undefined ? null : { shortest: min, longest: max }; }
+export function validateMap(map: MapState): boolean { const byId = new Map(map.nodes.map((node) => [node.id, node])); const start = map.nodes.find((node) => node.type === 'start'); const boss = byId.get(map.bossNodeId); if (!start || !boss || boss.type !== 'boss') return false; if (map.edges.some((edge) => !byId.has(edge.from) || !byId.has(edge.to) || byId.get(edge.to)!.row !== byId.get(edge.from)!.row + 1)) return false; const reachable = new Set<string>(); const queue = [start.id]; while (queue.length) { const id = queue.shift()!; if (reachable.has(id)) continue; const node = byId.get(id); if (!node) return false; reachable.add(id); queue.push(...node.connections); } if (!reachable.has(boss.id) || reachable.size !== map.nodes.length) return false; if (map.nodes.some((node) => (node.id !== boss.id && node.connections.length === 0) || (node.id !== start.id && node.parents.length === 0))) return false; const indegree = new Map(map.nodes.map((node) => [node.id, node.parents.length])); const topo = map.nodes.filter((node) => indegree.get(node.id) === 0).map((node) => node.id); let count = 0; while (topo.length) { const id = topo.shift()!; count += 1; for (const target of byId.get(id)!.connections) { indegree.set(target, (indegree.get(target) ?? 0) - 1); if (indegree.get(target) === 0) topo.push(target); } } const lengths = routeLengths(map); const initialRoutes = map.nodes.filter((node) => node.row === 1); return count === map.nodes.length && initialRoutes.length >= 3 && Boolean(lengths) && lengths!.shortest >= (map.minRouteLength ?? 0) && lengths!.longest >= (map.maxRouteLength ?? 0); }
+export function generateMap(seed: number, options: MapGenerationConfig = {}, act = 1, difficulty = 1): MapState { const level = clampDifficulty(difficulty); const biome = biomeForAct(act); const baseWeights = options.nodeWeights ?? biome.mapConfig.nodeWeights ?? DEFAULT_MAP_CONFIG.nodeWeights; const config: ResolvedMapConfig = { ...DEFAULT_MAP_CONFIG, ...biome.mapConfig, ...options, nodeWeights: difficultyWeights(baseWeights, level), guaranteedNodeTypes: [...(options.guaranteedNodeTypes ?? biome.mapConfig.guaranteedNodeTypes ?? DEFAULT_MAP_CONFIG.guaranteedNodeTypes)] }; if (config.layers < config.maxRouteLength || config.minRouteLength < 4 || config.columns < 3) throw new Error('Invalid map generation configuration'); const normalizedSeed = seed >>> 0; const mapId = `act${act}-${normalizedSeed}`; for (let attempt = 0; attempt < MAX_GENERATION_ATTEMPTS; attempt += 1) { const map = attemptGenerate((normalizedSeed + attempt * 104729) >>> 0, config, act, level, mapId); if (validateMap(map)) return map; } throw new Error('Failed to generate a valid map after maximum attempts'); }
 export type MoveAttempt = { ok: true; map: MapState } | { ok: false; reason: 'NOT_CONNECTED' | 'ALREADY_VISITED' | 'INVALID_NODE' };
-export function attemptMove(map: MapState, nodeId: string): MoveAttempt {
-  const node = map.nodes.find((candidate) => candidate.id === nodeId);
-  if (!node) return { ok: false, reason: 'INVALID_NODE' }; if (map.visitedNodeIds.includes(nodeId)) return { ok: false, reason: 'ALREADY_VISITED' }; if (!map.availableNodeIds.includes(nodeId)) return { ok: false, reason: 'NOT_CONNECTED' };
-  return { ok: true, map: { ...map, currentNodeId: node.id, visitedNodeIds: [...map.visitedNodeIds, node.id], completedNodeIds: [...map.completedNodeIds, node.id], availableNodeIds: node.connections } };
-}
+export function attemptMove(map: MapState, nodeId: string): MoveAttempt { const node = map.nodes.find((candidate) => candidate.id === nodeId); if (!node) return { ok: false, reason: 'INVALID_NODE' }; if (map.visitedNodeIds.includes(nodeId)) return { ok: false, reason: 'ALREADY_VISITED' }; if (!map.availableNodeIds.includes(nodeId)) return { ok: false, reason: 'NOT_CONNECTED' }; return { ok: true, map: { ...map, currentNodeId: node.id, visitedNodeIds: [...map.visitedNodeIds, node.id], completedNodeIds: [...map.completedNodeIds, node.id], availableNodeIds: node.connections } }; }
 export function moveToNode(map: MapState, nodeId: string): MapState { const result = attemptMove(map, nodeId); if (!result.ok) throw new Error(result.reason === 'ALREADY_VISITED' ? 'Node has already been visited' : result.reason === 'INVALID_NODE' ? 'Node does not exist' : 'Node is not reachable'); return result.map; }

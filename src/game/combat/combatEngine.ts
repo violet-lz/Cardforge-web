@@ -1,12 +1,14 @@
 import { CARD_CATALOG } from '../../data/cards/basicCards';
+import { difficultyFor } from '../../data/ascension/modifiers';
 import { BASIC_ENEMIES } from '../../data/enemies/basicEnemies';
 import { BASIC_RELICS } from '../../data/relics/basicRelics';
 import { BASIC_STATUSES } from '../../data/statuses/basicStatuses';
 import type { PlayerState } from '../engine/types';
+import { clampDifficulty } from '../ascension/ascensionTypes';
 import { SeededRng } from '../rng/SeededRng';
 import { relicsForTrigger } from '../relics/relicEngine';
 import type { DamageEffectTarget, ItemEffect, RelicTrigger } from '../relics/relicTypes';
-import { applyStatus, getStatusStacks, hasStatus, syncLegacyStatusFields } from '../status/statusEngine';
+import { applyStatus, getStatusStacks, hasStatus, tickScorch, syncLegacyStatusFields } from '../status/statusEngine';
 import { addTemporaryCard, createCardInstance, createDeck, drawCards } from './deckEngine';
 import { adjustEnergy, createEnergy, gainEnergy } from './energyEngine';
 import type { CardDefinition, CardEffect } from './cardTypes';
@@ -17,16 +19,16 @@ import type { EnemyBehavior, EnemyDefinition, EnemyState, IntentAction, IntentDe
 import { beginPlayerTurn, endPlayerTurn } from './turnEngine';
 import { addRetainedBlock, clearRetainedBlock } from './blockEngine';
 
-export function startCombat(player: PlayerState, seed: number, enemyDefinitions: EnemyDefinition[], ascensionLevel = 0): CombatState {
-  const rng = new SeededRng(seed);
-  const enemies = enemyDefinitions.map((definition, index) => createEnemy(definition, index, rng, ascensionLevel));
+export function startCombat(player: PlayerState, seed: number, enemyDefinitions: EnemyDefinition[], ascensionLevel = 1): CombatState {
+  const rng = new SeededRng(seed); const difficulty = clampDifficulty(ascensionLevel);
+  const enemies = enemyDefinitions.map((definition, index) => createEnemy(definition, index, rng, difficulty));
   const innate = player.deck.filter((card) => CARD_CATALOG[card.definitionId]?.keywords?.includes('innate'));
   const regularCards = player.deck.filter((card) => !innate.includes(card));
   const regular = player.characterId.startsWith('legacy-') ? rng.shuffle(regularCards) : regularCards;
   const baseEnergy = player.baseEnergy ?? 3;
   const relicEnergy = relicsForTrigger(player.relics, BASIC_RELICS, 'on-combat-start').reduce((total, relic) => total + (relic.effect.type === 'energy' ? relic.effect.amount : 0), 0);
   const base: CombatState = {
-    phase: 'enemy-turn', turn: 0, rngState: rng.getState(), relicIds: player.relics, potionIds: player.potions,
+    phase: 'enemy-turn', turn: 0, rngState: rng.getState(), ascensionLevel: difficulty, relicIds: player.relics, potionIds: player.potions,
     persistentGoldDelta: 0, persistentMaxHpDelta: 0, enemies,
     player: { hp: player.hp, maxHp: player.maxHp, block: 0, blockRetainTurns: 0, strength: 0, weak: 0, vulnerable: 0, statuses: [] },
     energy: createEnergy(Math.max(0, baseEnergy + relicEnergy)), deck: createDeck([...innate, ...regular]), log: ['Combat started'], lastDrawnCardUids: [],
@@ -46,8 +48,11 @@ export function finishPlayerTurn(state: CombatState): CombatState { return endPl
 
 export function resolveEnemyTurn(state: CombatState): CombatState {
   if (state.phase !== 'enemy-turn') throw new Error('Enemy turn is not active');
-  const rng = new SeededRng(state.rngState); let next = state;
-  const actingUids = state.enemies.filter((enemy) => enemy.hp > 0).map((enemy) => enemy.uid);
+  const rng = new SeededRng(state.rngState);
+  let next = { ...state, enemies: state.enemies.map((enemy) => { if (enemy.hp <= 0) return enemy; const scorched = tickScorch(enemy); return scorched.hpLoss > 0 ? { ...enemy, hp: Math.max(0, enemy.hp - scorched.hpLoss), statuses: scorched.statuses } : enemy; }) };
+  const scorchDealt = next.enemies.reduce((total, enemy, index) => total + Math.max(0, state.enemies[index].hp - enemy.hp), 0);
+  if (scorchDealt > 0) next = { ...next, log: [...next.log, `灼热灼伤敌人共 ${scorchDealt} 点生命`] };
+  const actingUids = next.enemies.filter((enemy) => enemy.hp > 0).map((enemy) => enemy.uid);
   for (const enemyUid of actingUids) {
     const enemy = next.enemies.find((candidate) => candidate.uid === enemyUid); if (!enemy || enemy.hp <= 0) continue;
     const intent = enemy.intent;
@@ -78,7 +83,7 @@ function applyEnemyAction(state: CombatState, enemyUid: string, action: IntentAc
     return { ...state, player: syncLegacyStatusFields({ ...state.player, statuses: applyStatus(state.player.statuses, status, action.amount, action.duration) }) };
   }
   if (action.type === 'energy') return { ...state, energy: adjustEnergy(state.energy, action.amount), log: [...state.log, `${enemy.uid} changed energy by ${action.amount}`] };
-  const result = resolveDamage({ base: Math.max(0, action.amount ?? 0), strength: enemy.strength, weak: hasStatus(enemy.statuses, 'weak'), vulnerable: hasStatus(state.player.statuses, 'vulnerable'), hits: action.hits ?? 1 }, state.player.block);
+  const result = resolveDamage({ base: Math.max(0, action.amount ?? 0), strength: enemy.strength, weak: hasStatus(enemy.statuses, 'weak'), vulnerable: hasStatus(state.player.statuses, 'vulnerable'), brittle: getStatusStacks(state.player.statuses, 'brittle'), hits: action.hits ?? 1 }, state.player.block);
   return { ...state, player: { ...state.player, hp: Math.max(0, state.player.hp - result.hpLoss), block: result.remainingBlock, blockRetainTurns: result.remainingBlock > 0 ? state.player.blockRetainTurns : 0 }, log: [...state.log, `${enemy.uid} dealt ${result.hpLoss} damage`] };
 }
 
@@ -88,6 +93,8 @@ function applyNativeIntent(state: CombatState, enemyUid: string, intent: IntentD
     return { ...state, enemies: state.enemies.map((enemy) => enemy.uid === enemyUid ? syncLegacyStatusFields({ ...enemy, statuses: applyStatus(enemy.statuses, BASIC_STATUSES.strength, amount) }) : enemy) };
   }
   if (intent.type === 'pollute') {
+    const chance = intent.pollutionChance ?? difficultyFor(state.ascensionLevel).pollutionChance;
+    if (rng.nextFloat() > chance) return { ...state, log: [...state.log, `${enemyUid} failed to pollute the deck`] };
     const id = intent.cardIds?.[Math.max(0, (state.turn - 1) % (intent.cardIds?.length ?? 1))];
     return id ? { ...state, deck: addTemporaryCard(state.deck, { ...createCardInstance(id, `pollution-${state.turn}-${enemyUid}-${state.deck.discardPile.length}`, true), polluted: true }), log: [...state.log, `${enemyUid} polluted the discard pile`] } : state;
   }
@@ -95,7 +102,7 @@ function applyNativeIntent(state: CombatState, enemyUid: string, intent: IntentD
   const summoner = state.enemies.find((enemy) => enemy.uid === enemyUid); const available = Math.max(0, 4 - state.enemies.filter((enemy) => enemy.hp > 0).length);
   const summoned = !summoner?.hasSummoned ? (intent.summonIds ?? []).slice(0, available).map((id) => {
     const definition = BASIC_ENEMIES[id]; if (!definition) throw new Error(`Unknown summoned enemy: ${id}`); return definition;
-  }).map((definition, index) => createEnemy(definition, state.enemies.length + index, rng)) : [];
+  }).map((definition, index) => createEnemy(definition, state.enemies.length + index, rng, state.ascensionLevel)) : [];
   const summonerIndex = state.enemies.findIndex((enemy) => enemy.uid === enemyUid);
   return summonerIndex >= 0 && summoned.length > 0 ? { ...state, enemies: [...state.enemies.slice(0, summonerIndex), ...summoned, { ...state.enemies[summonerIndex], hasSummoned: true }, ...state.enemies.slice(summonerIndex + 1)], log: [...state.log, `${enemyUid} summoned ${summoned.length} foe(s)`] } : state;
 }
@@ -106,7 +113,9 @@ function applyEffects(state: CombatState, effects: CardEffect[], definition: Car
     if (effect.condition && !cardConditionIsMet(conditionState, effect.condition)) continue;
     if (effect.type === 'damage') next = damageTargets(next, definition, effect.amount, effect.hits ?? 1, targetUid);
     else if (effect.type === 'block') {
-      const retainedBlock = addRetainedBlock(next.player, effect.amount, effect.retainTurns ?? 0);
+      // Sap drains armour: each stack removes 1 point of block gained, never below zero.
+      const gained = Math.max(0, effect.amount - getStatusStacks(next.player.statuses, 'sap'));
+      const retainedBlock = addRetainedBlock(next.player, gained, effect.retainTurns ?? 0);
       next = { ...next, player: { ...next.player, ...retainedBlock } };
     }
     else if (effect.type === 'draw') { const drawn = drawCards(next.deck, effect.amount, rng); next = { ...next, deck: drawn.deck, lastDrawnCardUids: drawn.drawn.map((card) => card.uid) }; }
@@ -117,6 +126,17 @@ function applyEffects(state: CombatState, effects: CardEffect[], definition: Car
     else if (effect.type === 'status') next = applyStatusEffect(next, effect, definition, targetUid);
     else if (effect.type === 'clear-statuses') next = clearStatuses(next, effect.target, effect.statusIds, targetUid);
     else if (effect.type === 'damage-equal-block') next = damageTargets(next, definition, next.player.block, 1, targetUid);
+    else if (effect.type === 'resource-scaled-damage') {
+      const stacks = getStatusStacks(next.player.statuses, effect.statusId);
+      next = damageTargets(next, definition, effect.amount + stacks * effect.perStack, effect.hits ?? 1, targetUid);
+      if (effect.consume && stacks > 0) next = { ...next, player: syncLegacyStatusFields({ ...next.player, statuses: (next.player.statuses ?? []).filter((status) => status.id !== effect.statusId) }) };
+    }
+    else if (effect.type === 'target-scaled-damage') {
+      const target = next.enemies.find((enemy) => enemy.uid === targetUid && enemy.hp > 0) ?? next.enemies.find((enemy) => enemy.hp > 0);
+      const stacks = getStatusStacks(target?.statuses, effect.statusId);
+      next = damageTargets(next, definition, effect.amount + stacks * effect.perStack, 1, targetUid);
+      if (effect.consume && target && stacks > 0) next = { ...next, enemies: next.enemies.map((enemy) => enemy.uid === target.uid ? syncLegacyStatusFields({ ...enemy, statuses: (enemy.statuses ?? []).filter((status) => status.id !== effect.statusId) }) : enemy) };
+    }
     else if (effect.type === 'damage-equal-statuses') next = damageEqualStatuses(next, definition, effect, targetUid);
     else if (effect.type === 'regen-per-living-enemy') {
       const stacks = next.enemies.filter((enemy) => enemy.hp > 0).length * effect.amount;
@@ -158,15 +178,19 @@ function applyStatusEffect(state: CombatState, effect: Extract<CardEffect, { typ
 }
 
 function sampleRange(range: NumericRange, rng: SeededRng): number { return rng.nextInt(range[0], range[1]); }
-function materializeIntent(intent: IntentDefinition, rng: SeededRng): IntentDefinition {
-  return { ...intent, amount: intent.amountRange ? sampleRange(intent.amountRange, rng) : intent.amount, actions: intent.actions?.map((action) => action.type === 'attack' ? { ...action, amount: action.amountRange ? sampleRange(action.amountRange, rng) : action.amount } : { ...action }) };
+function scaledEnemyAmount(amount: number | undefined, multiplier: number): number | undefined { return amount === undefined ? undefined : Math.max(0, Math.ceil(amount * multiplier)); }
+function materializeIntent(intent: IntentDefinition, rng: SeededRng, ascensionLevel: number): IntentDefinition {
+  const difficulty = difficultyFor(ascensionLevel); const sampled = intent.amountRange ? sampleRange(intent.amountRange, rng) : intent.amount; const amount = intent.type === 'attack' ? scaledEnemyAmount(sampled, difficulty.enemyDamageMultiplier) : sampled;
+  const actions = intent.actions?.map((action) => action.type === 'attack' ? { ...action, amount: scaledEnemyAmount(action.amountRange ? sampleRange(action.amountRange, rng) : action.amount, difficulty.enemyDamageMultiplier) } : { ...action });
+  const attackSuffix = amount === undefined ? '' : `${amount}${(intent.hits ?? 1) > 1 ? `×${intent.hits}` : ''}`; const label = intent.type === 'attack' && attackSuffix ? (/\d+(?:×\d+)?$/.test(intent.label) ? intent.label.replace(/\d+(?:×\d+)?$/, attackSuffix) : `${intent.label} ${attackSuffix}`) : intent.label;
+  return { ...intent, amount, actions, label, pollutionChance: intent.type === 'pollute' ? difficulty.pollutionChance : intent.pollutionChance };
 }
-function materializeBehavior(behavior: EnemyBehavior, rng: SeededRng): EnemyBehavior {
-  return { ...behavior, intents: behavior.intents.map((intent) => materializeIntent(intent, rng)), phases: behavior.phases?.map((phase) => ({ ...phase, intents: phase.intents.map((intent) => materializeIntent(intent, rng)) })) };
+function materializeBehavior(behavior: EnemyBehavior, rng: SeededRng, ascensionLevel: number): EnemyBehavior {
+  return { ...behavior, intents: behavior.intents.map((intent) => materializeIntent(intent, rng, ascensionLevel)), phases: behavior.phases?.map((phase) => ({ ...phase, intents: phase.intents.map((intent) => materializeIntent(intent, rng, ascensionLevel)) })) };
 }
-function createEnemy(definition: EnemyDefinition, index: number, rng: SeededRng, ascensionLevel = 0): EnemyState {
-  const rolledHp = definition.maxHpRange ? sampleRange(definition.maxHpRange, rng) : definition.maxHp;
-  const maxHp = ascensionLevel > 0 ? Math.ceil(rolledHp * 1.1) : rolledHp; const behavior = materializeBehavior(definition.behavior, rng);
+function createEnemy(definition: EnemyDefinition, index: number, rng: SeededRng, ascensionLevel = 1): EnemyState {
+  const difficulty = difficultyFor(ascensionLevel); const rolledHp = definition.maxHpRange ? sampleRange(definition.maxHpRange, rng) : definition.maxHp;
+  const maxHp = Math.ceil(rolledHp * difficulty.enemyHpMultiplier); const behavior = materializeBehavior(definition.behavior, rng, ascensionLevel);
   const intents = behavior.phases?.[0]?.intents ?? behavior.intents;
   return { uid: `${definition.id}-${index}`, definitionId: definition.id, hp: maxHp, maxHp, block: definition.initialBlock ?? 0, strength: 0, statuses: [], intent: intents[0], behavior, phaseIndex: 0, intentIndex: 0 };
 }
@@ -179,7 +203,7 @@ export function resolveCombatPhases(state: CombatState): CombatState {
   return transitioned ? { ...state, enemies, log: [...state.log, 'A foe entered a new phase'] } : state;
 }
 function damageEnemy(enemy: EnemyState, amount: number, hits: number, strength: number, weak: boolean): EnemyState {
-  const result = resolveDamage({ base: Math.max(0, amount), hits, strength, weak, vulnerable: hasStatus(enemy.statuses, 'vulnerable') }, enemy.block);
+  const result = resolveDamage({ base: Math.max(0, amount), hits, strength, weak, vulnerable: hasStatus(enemy.statuses, 'vulnerable'), brittle: getStatusStacks(enemy.statuses, 'brittle') }, enemy.block);
   return { ...enemy, hp: Math.max(0, enemy.hp - result.hpLoss), block: result.remainingBlock };
 }
 export function resolveSingleEnemyTarget(enemies: EnemyState[], _requestedUid?: string): EnemyState { const target = enemies.find((enemy) => enemy.hp > 0); if (!target) throw new Error('No valid enemy target'); return target; }
@@ -208,6 +232,17 @@ export function applyCombatItemEffect(state: CombatState, effect: ItemEffect, so
       return { ...state, energy: adjustEnergy(state.energy, effect.amount), log: [...state.log, `${sourceName}: ${effect.amount >= 0 ? '+' : ''}${effect.amount} energy`] };
     case 'damage':
       return applyPlayerDamageEffect(state, effect.amount, effect.target, effect.hits ?? 1, sourceName);
+    case 'draw': {
+      const rng = new SeededRng(state.rngState); const drawn = drawCards(state.deck, effect.amount, rng);
+      return { ...state, deck: drawn.deck, rngState: rng.getState(), lastDrawnCardUids: drawn.drawn.map((card) => card.uid), log: [...state.log, `${sourceName}: drew ${effect.amount}`] };
+    }
+    case 'apply-status': {
+      const status = BASIC_STATUSES[effect.statusId]; if (!status) return state;
+      if (effect.target === 'all-enemies') return { ...state, enemies: state.enemies.map((enemy) => enemy.hp > 0 ? syncLegacyStatusFields({ ...enemy, statuses: applyStatus(enemy.statuses, status, effect.amount, effect.duration) }) : enemy), log: [...state.log, `${sourceName}: ${status.name} ${effect.amount} to all foes`] };
+      return { ...state, player: syncLegacyStatusFields({ ...state.player, statuses: applyStatus(state.player.statuses, status, effect.amount, effect.duration) }), log: [...state.log, `${sourceName}: ${status.name} ${effect.amount}`] };
+    }
+    case 'cleanse':
+      return { ...state, player: syncLegacyStatusFields({ ...state.player, statuses: (state.player.statuses ?? []).filter((status) => !effect.statusIds.includes(status.id)) }), log: [...state.log, `${sourceName}: 净化 ${effect.statusIds.join('/')}`] };
   }
 }
 

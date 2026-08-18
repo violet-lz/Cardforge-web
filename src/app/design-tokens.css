@@ -1,18 +1,18 @@
 :root {
   /* Primitive tokens */
-  --primitive-coal-950: #100e0d;
-  --primitive-coal-900: #191513;
-  --primitive-coal-800: #27201c;
-  --primitive-iron-700: #493d34;
-  --primitive-ash-100: #f1e7d1;
-  --primitive-ash-300: #c9bba4;
-  --primitive-ash-500: #958a79;
-  --primitive-ember-500: #e08232;
-  --primitive-ember-600: #b95022;
-  --primitive-blood-500: #b74436;
-  --primitive-moss-500: #6d9170;
-  --primitive-cinder-500: #7192a7;
-  --primitive-gold-500: #c5a257;
+  --primitive-coal-950: #080708;
+  --primitive-coal-900: #120e0e;
+  --primitive-coal-800: #251918;
+  --primitive-iron-700: #574233;
+  --primitive-ash-100: #f5e6c4;
+  --primitive-ash-300: #d5bea0;
+  --primitive-ash-500: #9c826d;
+  --primitive-ember-500: #ef7a2d;
+  --primitive-ember-600: #c44224;
+  --primitive-blood-500: #d13c34;
+  --primitive-moss-500: #789a6a;
+  --primitive-cinder-500: #5895b0;
+  --primitive-gold-500: #d8ad55;
   --primitive-radius-sm: 4px;
   --primitive-radius-md: 7px;
   --primitive-radius-lg: 12px;

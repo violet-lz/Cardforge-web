@@ -39,6 +39,18 @@ function createStatus(definition: StatusDefinition, stacks: number, duration?: n
   return { id: definition.id, stacks, duration, expiry };
 }
 
+/**
+ * Deterministic damage-over-time resolved at the affected combatant's turn start.
+ * Scorch burns out (one stack decays per tick); Venom persists until cleansed.
+ */
+export function tickScorch(combatant: { statuses?: StatusState[] }): { statuses: StatusState[]; hpLoss: number } {
+  const scorch = getStatusStacks(combatant.statuses, 'scorch');
+  const venom = getStatusStacks(combatant.statuses, 'venom');
+  if (scorch <= 0 && venom <= 0) return { statuses: combatant.statuses ?? [], hpLoss: 0 };
+  const statuses = scorch > 0 ? consumeStatus(combatant.statuses, 'scorch') : (combatant.statuses ?? []);
+  return { statuses, hpLoss: scorch + venom };
+}
+
 export function syncLegacyStatusFields<T extends { strength: number; weak?: number; vulnerable?: number; statuses?: StatusState[] }>(combatant: T): T {
   if (!combatant.statuses) return combatant;
   return { ...combatant, strength: getStatusStacks(combatant.statuses, 'strength'), weak: getStatusStacks(combatant.statuses, 'weak'), vulnerable: getStatusStacks(combatant.statuses, 'vulnerable') } as T;

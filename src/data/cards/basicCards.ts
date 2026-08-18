@@ -1,4 +1,5 @@
 import type { CardDefinition } from '../../game/combat/cardTypes';
+import { HERO_CARDS } from './heroCards';
 import { LEGACY_CARDS } from './legacyCards';
 const c = (id: string, name: string, type: CardDefinition['type'], rarity: CardDefinition['rarity'], cost: number, target: CardDefinition['target'], description: string, effects: CardDefinition['effects'], extra: Partial<CardDefinition> = {}): CardDefinition => ({ id, name, type, rarity, cost, target, description, effects, ...extra });
 export const BASIC_CARDS: Record<string, CardDefinition> = {
@@ -18,6 +19,10 @@ export const BASIC_CARDS: Record<string, CardDefinition> = {
  'ember-choir': c('ember-choir', '余烬合唱', 'power', 'uncommon', 1, 'self', '抽 1 张牌并获得 1 层力量。', [{ type: 'draw', amount: 1 }, { type: 'status', statusId: 'strength', stacks: 1, target: 'self' }]), 'ashen-mirror': c('ashen-mirror', '灰镜', 'skill', 'rare', 1, 'self', '获得 12 点格挡，保留。', [{ type: 'block', amount: 12 }], { keywords: ['retain'] }), 'sunken-key': c('sunken-key', '沉钥', 'attack', 'uncommon', 0, 'single-enemy', '造成 5 点伤害并抽 1 张牌。', [{ type: 'damage', amount: 5 }, { type: 'draw', amount: 1 }]),
  'ember-scar': c('ember-scar', '烬疤', 'status', 'special', 0, 'none', '污染：留在手中时会阻塞构筑；打出后失去 4 点生命。', [{ type: 'self-damage', amount: 4 }], { keywords: ['exhaust'] }), 'fading-script': c('fading-script', '褪字', 'status', 'special', 0, 'none', '污染：无效果；回合结束时若未打出则消耗。', [], { keywords: ['ethereal'] }), 'iron-mire': c('iron-mire', '铁泥', 'status', 'special', 1, 'self', '污染：花费 1 点能量，仅获得 1 点格挡。', [{ type: 'block', amount: 1 }]), 'rattling-burden': c('rattling-burden', '响骨负担', 'curse', 'special', 2, 'none', '污染：打出后失去 7 点生命。', [{ type: 'self-damage', amount: 7 }]), 'black-seal': c('black-seal', '墨封', 'status', 'special', 0, 'self', '污染：获得 2 层虚弱。', [{ type: 'status', statusId: 'weak', stacks: 2, duration: 2, target: 'self' }]),
  'thunder-psalm': c('thunder-psalm', '雷祷', 'attack', 'rare', 2, 'all-enemies', '对所有敌人造成 6 点伤害三次。', [{ type: 'damage', amount: 6, hits: 3 }]), 'votive-ash': c('votive-ash', '愿灰', 'skill', 'uncommon', 1, 'self', '恢复 7 点生命并获得 5 点格挡。', [{ type: 'heal', amount: 7 }, { type: 'block', amount: 5 }]), 'sealed-horizon': c('sealed-horizon', '封界', 'power', 'rare', 0, 'self', '获得 1 层易伤以换取 2 层力量。', [{ type: 'status', statusId: 'vulnerable', stacks: 1, duration: 2, target: 'self' }, { type: 'status', statusId: 'strength', stacks: 2, target: 'self' }]),
+ // Answer to the region damage-over-time family: sewers / marsh / underworld pressure is cleansable.
+ antitoxin: c('antitoxin', '清毒剂', 'skill', 'common', 1, 'self', '获得 6 点格挡并清除自身全部毒素与灼热。', [{ type: 'block', amount: 6 }, { type: 'clear-statuses', statusIds: ['venom', 'scorch'], target: 'self' }], { upgrade: { description: '获得 9 点格挡并清除自身全部毒素与灼热。', effects: [{ type: 'block', amount: 9 }, { type: 'clear-statuses', statusIds: ['venom', 'scorch'], target: 'self' }] } }),
+ 'purging-flame': c('purging-flame', '净焰', 'attack', 'uncommon', 1, 'single-enemy', '造成 9 点伤害并清除自身全部毒素。', [{ type: 'damage', amount: 9 }, { type: 'clear-statuses', statusIds: ['venom'], target: 'self' }], { upgrade: { description: '造成 12 点伤害并清除自身全部毒素。', effects: [{ type: 'damage', amount: 12 }, { type: 'clear-statuses', statusIds: ['venom'], target: 'self' }] } }),
+ ...HERO_CARDS,
 };
 
 export const CARD_CATALOG: Record<string, CardDefinition> = { ...BASIC_CARDS, ...LEGACY_CARDS };

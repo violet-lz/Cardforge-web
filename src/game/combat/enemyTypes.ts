@@ -9,7 +9,7 @@ export type IntentAction =
   | { type: 'energy'; amount: number };
 export interface IntentDefinition {
   type: IntentType; amount?: number; amountRange?: NumericRange; hits?: number; label: string;
-  statusId?: string; duration?: number; cardIds?: string[]; summonIds?: string[]; actions?: IntentAction[];
+  statusId?: string; duration?: number; cardIds?: string[]; summonIds?: string[]; actions?: IntentAction[]; pollutionChance?: number;
 }
 export interface EnemyPhaseDefinition { id: string; label: string; startsAtHpRatio: number; intents: IntentDefinition[]; }
 export interface EnemyBehavior { type: 'cycle'; intents: IntentDefinition[]; phases?: EnemyPhaseDefinition[]; }

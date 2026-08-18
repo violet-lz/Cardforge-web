@@ -22,6 +22,7 @@ export interface CombatState {
   phase: CombatPhase;
   turn: number;
   rngState: number;
+  ascensionLevel: number;
   relicIds: string[];
   potionIds: string[];
   /** Persistent values gained during this combat, applied to the run on combat exit. */

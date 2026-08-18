@@ -8,6 +8,8 @@ export interface DamageInput {
   vulnerable?: boolean;
   statuses?: StatusState[];
   hits?: number;
+  /** Brittle stacks on the receiving combatant; each stack adds 10% incoming damage. */
+  brittle?: number;
 }
 
 export interface DamageResult {
@@ -25,7 +27,9 @@ export function calculateModifiedDamage(input: DamageInput): number {
   const vulnerable = input.vulnerable ?? hasStatus(input.statuses, 'vulnerable');
   const raw = Math.max(0, input.base + strength);
   const weakened = weak ? Math.floor(raw * 0.75) : raw;
-  return Math.max(0, Math.floor(vulnerable ? weakened * 1.5 : weakened));
+  const exposed = Math.floor(vulnerable ? weakened * 1.5 : weakened);
+  const brittle = Math.max(0, input.brittle ?? 0);
+  return Math.max(0, brittle > 0 ? Math.floor(exposed * (1 + brittle * 0.1)) : exposed);
 }
 
 export function resolveDamage(input: DamageInput, block: number): DamageResult {

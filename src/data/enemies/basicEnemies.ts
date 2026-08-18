@@ -1,4 +1,6 @@
 import type { EnemyDefinition } from '../../game/combat/enemyTypes';
+import { FRONTIER_ENEMIES } from './frontierEnemies';
+import { REGION_ENEMIES } from './regionEnemies';
 import { LEGACY_ENEMIES } from './legacyEnemies';
 const cycle = (id: string, name: string, maxHp: number, intents: EnemyDefinition['behavior']['intents']): EnemyDefinition => ({ id, name, maxHp, behavior: { type: 'cycle', intents } });
 export const BASIC_ENEMIES: Record<string, EnemyDefinition> = {
@@ -13,5 +15,7 @@ export const BASIC_ENEMIES: Record<string, EnemyDefinition> = {
  'bone-scrivener': cycle('bone-scrivener', '骨页抄写者', 52, [{ type: 'pollute', cardIds: ['fading-script', 'iron-mire', 'rattling-burden'], label: '誊写污染' }, { type: 'defend', amount: 8, label: '骨页 8' }, { type: 'attack', amount: 14, label: '页刃 14' }]),
  'ashen-warden': { id: 'ashen-warden', name: '灰烬守门者', maxHp: 72, behavior: { type: 'cycle', intents: [{ type: 'attack', amount: 9, label: '重击 9' }], phases: [{ id: 'watch', label: '守望', startsAtHpRatio: 1, intents: [{ type: 'attack', amount: 9, label: '重击 9' }, { type: 'defend', amount: 7, label: '钟壁 7' }] }, { id: 'judgment', label: '审判', startsAtHpRatio: .55, intents: [{ type: 'summon', summonIds: ['ashling'], label: '唤来灰徒' }, { type: 'attack', amount: 7, hits: 2, label: '连钟 7×2' }, { type: 'pollute', cardIds: ['black-seal'], label: '封印污染' }] }] } },
  'crownless-furnace': { id: 'crownless-furnace', name: '无冠炉心', maxHp: 126, behavior: { type: 'cycle', intents: [{ type: 'buff', amount: 2, label: '升温 +2' }], phases: [{ id: 'smolder', label: '闷燃', startsAtHpRatio: 1, intents: [{ type: 'buff', amount: 2, label: '升温 +2' }, { type: 'attack', amount: 10, hits: 2, label: '震击 10×2' }, { type: 'defend', amount: 18, label: '铁壳 18' }] }, { id: 'rupture', label: '迸裂', startsAtHpRatio: .5, intents: [{ type: 'pollute', cardIds: ['ember-scar', 'iron-mire'], label: '炉渣污染' }, { type: 'summon', summonIds: ['cinder-sprite'], label: '喷吐余烬' }, { type: 'attack', amount: 14, hits: 2, label: '熔裂 14×2' }] }] } },
+ ...REGION_ENEMIES,
+ ...FRONTIER_ENEMIES,
  ...LEGACY_ENEMIES,
 };

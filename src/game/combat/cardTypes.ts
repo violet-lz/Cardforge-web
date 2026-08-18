@@ -21,6 +21,10 @@ export type CardEffect = ConditionalEffect & (
   | { type: 'damage-equal-block' }
   | { type: 'damage-equal-statuses'; statusIds: string[]; clearAfter?: boolean }
   | { type: 'regen-per-living-enemy'; amount: number }
+  /** Deals base + perStack × (self resource stacks), optionally consuming that resource afterwards. */
+  | { type: 'resource-scaled-damage'; amount: number; statusId: string; perStack: number; hits?: number; consume?: boolean }
+  /** Deals base + perStack × (target's status stacks), optionally detonating that status on the target. */
+  | { type: 'target-scaled-damage'; amount: number; statusId: string; perStack: number; consume?: boolean }
 );
 
 export interface CardUpgradeDefinition {

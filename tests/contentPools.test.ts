@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BIOMES, type BiomeId } from '../src/data/biomes/biomes';
+import { BIOMES, contentBiomeFor, type BiomeId } from '../src/data/biomes/biomes';
 import { BASIC_CARDS } from '../src/data/cards/basicCards';
 import { BASIC_ENEMIES } from '../src/data/enemies/basicEnemies';
 import { encounterCatalog, selectEncounter } from '../src/data/encounters/basicEncounters';
@@ -26,16 +26,17 @@ describe('content pools', () => {
 
   it('filters encounter, event, shop, and reward pools by the active biome', () => {
     for (const biome of BIOMES) {
+      const contentBiome = contentBiomeFor(biome.id);
       for (let seed = 1; seed <= 30; seed += 1) {
-        const encounter = selectEncounter(seed, 'combat', 8, biome.id === 'cinder-fields' ? 1 : biome.id === 'bonebind-hamlet' ? 2 : 3, biome.id);
+        const encounter = selectEncounter(seed, 'combat', 8, contentBiome === 'cinder-fields' ? 1 : contentBiome === 'bonebind-hamlet' ? 2 : 3, contentBiome);
         const matchingEncounters = encounterCatalog().filter((entry) => entry.enemyIds.join('|') === encounter.map((enemy) => enemy.id).join('|'));
-        expect(matchingEncounters.some((entry) => isAllowed(entry, biome.id))).toBe(true);
-        const event = selectEvent(seed, 6, biome.id);
-        expect(isAllowed(eventCatalog().find((entry) => entry.id === event.id)!, biome.id)).toBe(true);
-        const shop = createShop(seed, 6, biome.id);
-        expect(shop.items.every((item) => isAllowed(shopCatalog().find((entry) => entry.id === item.id && entry.kind === item.kind)!, biome.id))).toBe(true);
-        const reward = createReward(seed, 6, false, biome.id);
-        expect(reward.cardChoices.every((id) => isAllowed(rewardCardCatalog().find((entry) => entry.id === id)!, biome.id))).toBe(true);
+        expect(matchingEncounters.some((entry) => isAllowed(entry, contentBiome))).toBe(true);
+        const event = selectEvent(seed, 6, contentBiome);
+        expect(isAllowed(eventCatalog().find((entry) => entry.id === event.id)!, contentBiome)).toBe(true);
+        const shop = createShop(seed, 6, contentBiome);
+        expect(shop.items.every((item) => isAllowed(shopCatalog().find((entry) => entry.id === item.id && entry.kind === item.kind)!, contentBiome))).toBe(true);
+        const reward = createReward(seed, 6, false, contentBiome);
+        expect(reward.cardChoices.every((id) => isAllowed(rewardCardCatalog().find((entry) => entry.id === id)!, contentBiome))).toBe(true);
       }
     }
   });

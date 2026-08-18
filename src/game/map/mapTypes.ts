@@ -14,6 +14,8 @@ export interface MapNode extends NodeScore {
   type: MapNodeType;
   locationKind: MapLocationKind;
   locationName: string;
+  /** Fixed campaign region for this row. Old saves may omit it. */
+  regionId?: BiomeId;
   connections: string[];
   parents: string[];
 }

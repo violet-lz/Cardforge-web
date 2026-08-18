@@ -32,11 +32,11 @@ const CARD_TYPES = new Set(['attack', 'skill', 'power', 'status', 'curse']);
 const CARD_RARITIES = new Set(['basic', 'common', 'uncommon', 'rare', 'special']);
 const CARD_TARGETS = new Set(['self', 'single-enemy', 'all-enemies', 'none']);
 const CARD_KEYWORDS = new Set(['exhaust', 'retain', 'ethereal', 'innate']);
-const CARD_EFFECT_TYPES = new Set(['damage', 'block', 'draw', 'gain-energy', 'lose-energy', 'heal', 'self-damage', 'status', 'clear-statuses', 'damage-equal-block', 'damage-equal-statuses', 'regen-per-living-enemy']);
+const CARD_EFFECT_TYPES = new Set(['damage', 'block', 'draw', 'gain-energy', 'lose-energy', 'heal', 'self-damage', 'status', 'clear-statuses', 'damage-equal-block', 'damage-equal-statuses', 'regen-per-living-enemy', 'resource-scaled-damage']);
 const INTENT_TYPES = new Set(['attack', 'defend', 'buff', 'status', 'pollute', 'summon', 'idle', 'energy']);
 const RELIC_TRIGGERS = new Set(['on-combat-start', 'on-turn-start', 'on-combat-end']);
-const RELIC_EFFECT_TYPES = new Set(['strength', 'block', 'gold', 'energy', 'heal', 'max-hp', 'damage']);
-const POTION_EFFECT_TYPES = new Set(['strength', 'block', 'gold', 'energy', 'heal', 'max-hp', 'damage']);
+const RELIC_EFFECT_TYPES = new Set(['strength', 'block', 'gold', 'energy', 'heal', 'max-hp', 'damage', 'draw', 'apply-status', 'cleanse']);
+const POTION_EFFECT_TYPES = new Set(['strength', 'block', 'gold', 'energy', 'heal', 'max-hp', 'damage', 'draw', 'apply-status', 'cleanse']);
 const DAMAGE_EFFECT_TARGETS = new Set(['front-enemy', 'all-enemies']);
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
@@ -151,6 +151,19 @@ function validateEffect(value: unknown, path: string): void {
     case 'damage-equal-statuses':
       requireStringArray(effect.statusIds, `${path}.statusIds`, true, true);
       if (effect.clearAfter !== undefined && typeof effect.clearAfter !== 'boolean') fail(`${path}.clearAfter`, 'must be a boolean');
+      break;
+    case 'resource-scaled-damage':
+      requireId(effect.statusId, `${path}.statusId`);
+      requireFiniteInteger(effect.amount, `${path}.amount`);
+      requireFiniteInteger(effect.perStack, `${path}.perStack`);
+      if (effect.hits !== undefined) requireFiniteInteger(effect.hits, `${path}.hits`, 1);
+      if (effect.consume !== undefined && typeof effect.consume !== 'boolean') fail(`${path}.consume`, 'must be a boolean');
+      break;
+    case 'target-scaled-damage':
+      requireId(effect.statusId, `${path}.statusId`);
+      requireFiniteInteger(effect.amount, `${path}.amount`);
+      requireFiniteInteger(effect.perStack, `${path}.perStack`);
+      if (effect.consume !== undefined && typeof effect.consume !== 'boolean') fail(`${path}.consume`, 'must be a boolean');
       break;
     case 'damage-equal-block':
       break;
@@ -280,6 +293,14 @@ function validateEnemy(value: unknown, path: string): void {
 function validateItemEffect(value: unknown, path: string, allowed: Set<string>): void {
   const effect = requireRecord(value, path);
   const type = requireEnum(effect.type, allowed, `${path}.type`);
+  if (type === 'cleanse') { requireStringArray(effect.statusIds, `${path}.statusIds`, true, true); return; }
+  if (type === 'apply-status') {
+    requireId(effect.statusId, `${path}.statusId`);
+    requireFiniteInteger(effect.amount, `${path}.amount`);
+    if (effect.duration !== undefined) requireFiniteInteger(effect.duration, `${path}.duration`);
+    requireEnum(effect.target, new Set(['self', 'all-enemies']), `${path}.target`);
+    return;
+  }
   if (type === 'energy') {
     requireSignedInteger(effect.amount, `${path}.amount`);
     return;

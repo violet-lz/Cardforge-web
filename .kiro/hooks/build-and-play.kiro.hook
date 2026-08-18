@@ -1,0 +1,12 @@
+{
+  "name": "⚙ 生成并运行游戏 ▶",
+  "version": "1.0.0",
+  "description": "构建星陨牌局，启动本地预览服务器并自动在浏览器中打开游戏。",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "zsh scripts/build-and-play.command"
+  }
+}
