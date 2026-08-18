@@ -10,6 +10,8 @@ export interface CombatantState {
   hp: number;
   maxHp: number;
   block: number;
+  /** Remaining future player turns during which this block will not be cleared. */
+  blockRetainTurns: number;
   strength: number;
   weak: number;
   vulnerable: number;

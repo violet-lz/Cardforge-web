@@ -15,4 +15,4 @@ export interface MetaProgressState { schemaVersion: number; ascensionLevel: numb
 export interface SpecialChoice { id: string; label: string; description: string; kind: 'heal' | 'upgrade' | 'gold' | 'relic' | 'skip'; amount?: number; relicId?: string; }
 export interface SpecialNodeState { nodeType: 'rest' | 'treasure' | 'intermission'; title: string; description: string; choices: SpecialChoice[]; }
 export interface GameState { schemaVersion: number; mode: GameMode; seed: number | null; run: RunState | null; player: PlayerState | null; map?: MapState; combat?: CombatState; reward?: RewardState; event?: EventState; shop?: ShopState; special?: SpecialNodeState; replay?: ReplayState; metaProgress: MetaProgressState; }
-export const GAME_SCHEMA_VERSION = 5;
+export const GAME_SCHEMA_VERSION = 6;

@@ -15,6 +15,7 @@ import type { CombatState } from './combatTypes';
 import { resolveDamage } from './damageEngine';
 import type { EnemyBehavior, EnemyDefinition, EnemyState, IntentAction, IntentDefinition, NumericRange } from './enemyTypes';
 import { beginPlayerTurn, endPlayerTurn } from './turnEngine';
+import { addRetainedBlock, clearRetainedBlock } from './blockEngine';
 
 export function startCombat(player: PlayerState, seed: number, enemyDefinitions: EnemyDefinition[], ascensionLevel = 0): CombatState {
   const rng = new SeededRng(seed);
@@ -27,7 +28,7 @@ export function startCombat(player: PlayerState, seed: number, enemyDefinitions:
   const base: CombatState = {
     phase: 'enemy-turn', turn: 0, rngState: rng.getState(), relicIds: player.relics, potionIds: player.potions,
     persistentGoldDelta: 0, persistentMaxHpDelta: 0, enemies,
-    player: { hp: player.hp, maxHp: player.maxHp, block: 0, strength: 0, weak: 0, vulnerable: 0, statuses: [] },
+    player: { hp: player.hp, maxHp: player.maxHp, block: 0, blockRetainTurns: 0, strength: 0, weak: 0, vulnerable: 0, statuses: [] },
     energy: createEnergy(Math.max(0, baseEnergy + relicEnergy)), deck: createDeck([...innate, ...regular]), log: ['Combat started'], lastDrawnCardUids: [],
   };
   return beginTurnWithRng(applyRelicEffects(base, 'on-combat-start', true), rng);
@@ -38,7 +39,7 @@ export function playCardAndResolve(state: CombatState, cardUid: string, definiti
   let next = resolveCombatPhases(applyEffects(result.state, result.played.effects, result.played.definition, targetUid));
   if (!next.enemies.every((enemy) => enemy.hp <= 0)) return next;
   next = { ...next, phase: 'victory', log: [...next.log, 'Victory'] };
-  return applyCombatEndRelics(next);
+  return clearPlayerBlockRetention(applyCombatEndRelics(next));
 }
 
 export function finishPlayerTurn(state: CombatState): CombatState { return endPlayerTurn(state); }
@@ -54,7 +55,7 @@ export function resolveEnemyTurn(state: CombatState): CombatState {
     const actions = normalizedActions(intent);
     for (const action of actions) next = applyEnemyAction(next, enemyUid, action);
     if (!actions.length) next = applyNativeIntent(next, enemyUid, intent, rng);
-    if (next.player.hp <= 0) return { ...next, rngState: rng.getState(), phase: 'defeat', log: [...next.log, 'Defeat'] };
+    if (next.player.hp <= 0) return clearPlayerBlockRetention({ ...next, rngState: rng.getState(), phase: 'defeat', log: [...next.log, 'Defeat'] });
   }
   const acting = new Set(actingUids);
   return beginTurnWithRng({ ...next, rngState: rng.getState(), enemies: next.enemies.map((enemy) => acting.has(enemy.uid) ? advanceIntent(enemy) : enemy) }, rng);
@@ -78,7 +79,7 @@ function applyEnemyAction(state: CombatState, enemyUid: string, action: IntentAc
   }
   if (action.type === 'energy') return { ...state, energy: adjustEnergy(state.energy, action.amount), log: [...state.log, `${enemy.uid} changed energy by ${action.amount}`] };
   const result = resolveDamage({ base: Math.max(0, action.amount ?? 0), strength: enemy.strength, weak: hasStatus(enemy.statuses, 'weak'), vulnerable: hasStatus(state.player.statuses, 'vulnerable'), hits: action.hits ?? 1 }, state.player.block);
-  return { ...state, player: { ...state.player, hp: Math.max(0, state.player.hp - result.hpLoss), block: result.remainingBlock }, log: [...state.log, `${enemy.uid} dealt ${result.hpLoss} damage`] };
+  return { ...state, player: { ...state.player, hp: Math.max(0, state.player.hp - result.hpLoss), block: result.remainingBlock, blockRetainTurns: result.remainingBlock > 0 ? state.player.blockRetainTurns : 0 }, log: [...state.log, `${enemy.uid} dealt ${result.hpLoss} damage`] };
 }
 
 function applyNativeIntent(state: CombatState, enemyUid: string, intent: IntentDefinition, rng: SeededRng): CombatState {
@@ -104,7 +105,10 @@ function applyEffects(state: CombatState, effects: CardEffect[], definition: Car
   for (const effect of effects) {
     if (effect.condition && !cardConditionIsMet(conditionState, effect.condition)) continue;
     if (effect.type === 'damage') next = damageTargets(next, definition, effect.amount, effect.hits ?? 1, targetUid);
-    else if (effect.type === 'block') next = { ...next, player: { ...next.player, block: next.player.block + effect.amount } };
+    else if (effect.type === 'block') {
+      const retainedBlock = addRetainedBlock(next.player, effect.amount, effect.retainTurns ?? 0);
+      next = { ...next, player: { ...next.player, ...retainedBlock } };
+    }
     else if (effect.type === 'draw') { const drawn = drawCards(next.deck, effect.amount, rng); next = { ...next, deck: drawn.deck, lastDrawnCardUids: drawn.drawn.map((card) => card.uid) }; }
     else if (effect.type === 'gain-energy') next = { ...next, energy: gainEnergy(next.energy, effect.amount) };
     else if (effect.type === 'lose-energy') next = { ...next, energy: { ...next.energy, current: Math.max(0, next.energy.current - effect.amount) } };
@@ -219,6 +223,10 @@ export function applyPlayerDamageEffect(state: CombatState, amount: number, targ
 
 export function applyCombatEndRelics(state: CombatState): CombatState {
   return state.phase === 'victory' ? applyRelicEffects(state, 'on-combat-end') : state;
+}
+
+function clearPlayerBlockRetention(state: CombatState): CombatState {
+  return { ...state, player: { ...state.player, ...clearRetainedBlock() } };
 }
 
 function applyRelicEffects(state: CombatState, trigger: RelicTrigger, skipEnergy = false): CombatState {

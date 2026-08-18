@@ -10,7 +10,7 @@ export type CardCondition =
 type ConditionalEffect = { condition?: CardCondition };
 export type CardEffect = ConditionalEffect & (
   | { type: 'damage'; amount: number; hits?: number }
-  | { type: 'block'; amount: number }
+  | { type: 'block'; amount: number; retainTurns?: number }
   | { type: 'draw'; amount: number }
   | { type: 'gain-energy'; amount: number }
   | { type: 'lose-energy'; amount: number }

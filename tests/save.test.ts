@@ -19,7 +19,7 @@ describe('save system', () => {
     const storage = memoryStorage();
     const state = createRun(42, 1000);
     saveGame(state, storage);
-    expect(storage.getItem(SAVE_KEY)).toContain('"version":5');
+    expect(storage.getItem(SAVE_KEY)).toContain('"version":6');
     expect(loadGame(storage)).toEqual(state);
   });
 

@@ -131,7 +131,11 @@ function validateEffect(value: unknown, path: string): void {
       requireFiniteInteger(effect.amount, `${path}.amount`);
       if (effect.hits !== undefined) requireFiniteInteger(effect.hits, `${path}.hits`, 1);
       break;
-    case 'block': case 'draw': case 'gain-energy': case 'lose-energy': case 'heal': case 'self-damage': case 'regen-per-living-enemy':
+    case 'block':
+      requireFiniteInteger(effect.amount, `${path}.amount`);
+      if (effect.retainTurns !== undefined) requireFiniteInteger(effect.retainTurns, `${path}.retainTurns`, 1);
+      break;
+    case 'draw': case 'gain-energy': case 'lose-energy': case 'heal': case 'self-damage': case 'regen-per-living-enemy':
       requireFiniteInteger(effect.amount, `${path}.amount`);
       break;
     case 'status':
@@ -417,9 +421,11 @@ function resolveStorage(storage?: StorageLike): StorageLike | undefined {
 
 function writePack(pack: CustomContentPackV1, storage?: StorageLike): void {
   const target = resolveStorage(storage);
-  if (!target) return;
+  if (!target) throw new Error('Unable to save custom content: local storage is unavailable');
+  const serialized = JSON.stringify(pack);
   try {
-    target.setItem(CUSTOM_CONTENT_STORAGE_KEY, JSON.stringify(pack));
+    target.setItem(CUSTOM_CONTENT_STORAGE_KEY, serialized);
+    if (target.getItem(CUSTOM_CONTENT_STORAGE_KEY) !== serialized) throw new Error('stored value could not be verified');
   } catch (error) {
     throw new Error(`Unable to save custom content: ${error instanceof Error ? error.message : 'storage failed'}`);
   }
