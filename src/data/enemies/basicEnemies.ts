@@ -1,0 +1,17 @@
+import type { EnemyDefinition } from '../../game/combat/enemyTypes';
+import { LEGACY_ENEMIES } from './legacyEnemies';
+const cycle = (id: string, name: string, maxHp: number, intents: EnemyDefinition['behavior']['intents']): EnemyDefinition => ({ id, name, maxHp, behavior: { type: 'cycle', intents } });
+export const BASIC_ENEMIES: Record<string, EnemyDefinition> = {
+ ashling: cycle('ashling', '灰烬幼兽', 42, [{ type: 'attack', amount: 7, label: '爪击 7' }, { type: 'defend', amount: 5, label: '蜷伏 5' }, { type: 'attack', amount: 10, label: '扑击 10' }]),
+ 'cinder-sprite': cycle('cinder-sprite', '余烬精灵', 28, [{ type: 'attack', amount: 5, label: '灼击 5' }, { type: 'buff', amount: 1, label: '火势 +1' }, { type: 'attack', amount: 8, label: '灼击 8' }]),
+ 'rust-hound': cycle('rust-hound', '锈骨猎犬', 36, [{ type: 'attack', amount: 6, hits: 2, label: '撕咬 6×2' }, { type: 'defend', amount: 4, label: '蜷伏 4' }, { type: 'attack', amount: 12, label: '扑杀 12' }]),
+ 'glass-moth': cycle('glass-moth', '玻璃蛾', 30, [{ type: 'status', statusId: 'weak', amount: 1, duration: 2, label: '昏翳 · 虚弱' }, { type: 'attack', amount: 8, label: '翅刃 8' }, { type: 'buff', amount: 1, label: '振翅 +1' }]),
+ 'veil-monger': cycle('veil-monger', '帷幕贩子', 48, [{ type: 'defend', amount: 9, label: '帷幕 9' }, { type: 'status', statusId: 'vulnerable', amount: 1, duration: 2, label: '揭示伤口' }, { type: 'attack', amount: 13, label: '割裂 13' }]),
+ 'bell-tender': cycle('bell-tender', '守钟侍从', 55, [{ type: 'defend', amount: 12, label: '钟壁 12' }, { type: 'buff', amount: 2, label: '余音 +2' }, { type: 'attack', amount: 15, label: '落钟 15' }]),
+ 'kiln-brute': cycle('kiln-brute', '窑心巨汉', 78, [{ type: 'buff', amount: 3, label: '蓄热 +3' }, { type: 'attack', amount: 18, label: '熔拳 18' }, { type: 'defend', amount: 14, label: '冷却 14' }]),
+ 'ink-leech': cycle('ink-leech', '墨蚀水蛭', 39, [{ type: 'pollute', cardIds: ['ember-scar', 'black-seal'], label: '泼墨污染' }, { type: 'attack', amount: 9, label: '吸附 9' }, { type: 'status', statusId: 'weak', amount: 1, duration: 1, label: '墨雾' }]),
+ 'bone-scrivener': cycle('bone-scrivener', '骨页抄写者', 52, [{ type: 'pollute', cardIds: ['fading-script', 'iron-mire', 'rattling-burden'], label: '誊写污染' }, { type: 'defend', amount: 8, label: '骨页 8' }, { type: 'attack', amount: 14, label: '页刃 14' }]),
+ 'ashen-warden': { id: 'ashen-warden', name: '灰烬守门者', maxHp: 72, behavior: { type: 'cycle', intents: [{ type: 'attack', amount: 9, label: '重击 9' }], phases: [{ id: 'watch', label: '守望', startsAtHpRatio: 1, intents: [{ type: 'attack', amount: 9, label: '重击 9' }, { type: 'defend', amount: 7, label: '钟壁 7' }] }, { id: 'judgment', label: '审判', startsAtHpRatio: .55, intents: [{ type: 'summon', summonIds: ['ashling'], label: '唤来灰徒' }, { type: 'attack', amount: 7, hits: 2, label: '连钟 7×2' }, { type: 'pollute', cardIds: ['black-seal'], label: '封印污染' }] }] } },
+ 'crownless-furnace': { id: 'crownless-furnace', name: '无冠炉心', maxHp: 126, behavior: { type: 'cycle', intents: [{ type: 'buff', amount: 2, label: '升温 +2' }], phases: [{ id: 'smolder', label: '闷燃', startsAtHpRatio: 1, intents: [{ type: 'buff', amount: 2, label: '升温 +2' }, { type: 'attack', amount: 10, hits: 2, label: '震击 10×2' }, { type: 'defend', amount: 18, label: '铁壳 18' }] }, { id: 'rupture', label: '迸裂', startsAtHpRatio: .5, intents: [{ type: 'pollute', cardIds: ['ember-scar', 'iron-mire'], label: '炉渣污染' }, { type: 'summon', summonIds: ['cinder-sprite'], label: '喷吐余烬' }, { type: 'attack', amount: 14, hits: 2, label: '熔裂 14×2' }] }] } },
+ ...LEGACY_ENEMIES,
+};
