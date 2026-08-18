@@ -1,0 +1,53 @@
+:root {
+  /* Primitive tokens */
+  --primitive-coal-950: #100e0d;
+  --primitive-coal-900: #191513;
+  --primitive-coal-800: #27201c;
+  --primitive-iron-700: #493d34;
+  --primitive-ash-100: #f1e7d1;
+  --primitive-ash-300: #c9bba4;
+  --primitive-ash-500: #958a79;
+  --primitive-ember-500: #e08232;
+  --primitive-ember-600: #b95022;
+  --primitive-blood-500: #b74436;
+  --primitive-moss-500: #6d9170;
+  --primitive-cinder-500: #7192a7;
+  --primitive-gold-500: #c5a257;
+  --primitive-radius-sm: 4px;
+  --primitive-radius-md: 7px;
+  --primitive-radius-lg: 12px;
+  --primitive-space-1: 4px;
+  --primitive-space-2: 8px;
+  --primitive-space-3: 12px;
+  --primitive-space-4: 16px;
+  --primitive-space-6: 24px;
+  --primitive-space-8: 32px;
+  --primitive-duration-fast: 150ms;
+  --primitive-duration-normal: 220ms;
+  --primitive-ease: cubic-bezier(.2,.8,.2,1);
+  /* Semantic tokens */
+  --color-background: var(--primitive-coal-950);
+  --color-surface: var(--primitive-coal-900);
+  --color-surface-raised: var(--primitive-coal-800);
+  --color-surface-inset: #0b0908;
+  --color-foreground: var(--primitive-ash-100);
+  --color-muted-foreground: var(--primitive-ash-300);
+  --color-subtle-foreground: var(--primitive-ash-500);
+  --color-primary: var(--primitive-ember-500);
+  --color-primary-strong: var(--primitive-ember-600);
+  --color-on-primary: var(--primitive-coal-950);
+  --color-danger: var(--primitive-blood-500);
+  --color-healing: var(--primitive-moss-500);
+  --color-defense: var(--primitive-cinder-500);
+  --color-reward: var(--primitive-gold-500);
+  --color-border: var(--primitive-iron-700);
+  --color-border-strong: var(--primitive-gold-500);
+  --color-ring: var(--primitive-ash-100);
+  --shadow-panel: 0 20px 50px rgb(0 0 0 / 42%);
+  /* Component tokens */
+  --panel-radius: var(--primitive-radius-lg);
+  --card-radius: var(--primitive-radius-md);
+  --button-radius: var(--primitive-radius-sm);
+  --button-min-height: 44px;
+  --focus-ring: 0 0 0 2px var(--color-surface-inset), 0 0 0 4px var(--color-ring);
+}

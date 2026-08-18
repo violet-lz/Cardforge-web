@@ -1,0 +1,5 @@
+import { cardPresentation, resolveCard } from '../app/presentation';
+import type { RewardState } from '../game/run/rewardTypes';
+export function RewardPage({ reward, onClaim }: { reward: RewardState; onClaim: (cardId?: string) => void }) {
+  return <main className="run-shell"><section className="panel reward-panel"><p className="eyebrow">战利品已显现</p><span className="reward-mark" aria-hidden="true">✧</span><h1>战斗奖励</h1><p>已获得 <strong className="gold-text">{reward.gold} 金币</strong>。选择一张卡牌加入牌组，或保留构筑并跳过。</p><div className="reward-list">{reward.cardChoices.map((id) => { const card = resolveCard(id); if (!card) return null; const info = cardPresentation(card); return <button className={`card card-${card.type}`} key={id} onClick={() => onClaim(id)}><span className="card-meta">{info.type} · {info.rarity}</span><span className="card-cost">{card.cost}</span><strong>{card.name}</strong><small>{card.description}</small><em>{info.target}</em></button>; })}</div><button className="text-button" onClick={() => onClaim()}>跳过卡牌，收下金币</button></section></main>;
+}
