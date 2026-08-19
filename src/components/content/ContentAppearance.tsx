@@ -12,8 +12,6 @@ interface DefaultContentArtProps {
 interface EnemyAppearanceProps {
   id: string;
   label: string;
-  fallbackLabel: string;
-  featureHeading: string;
   defaultLabel: string;
 }
 
@@ -22,8 +20,6 @@ interface ContentAppearanceProps {
   id: string;
   label: string;
   defaultLabel: string;
-  enemyFallbackLabel?: string;
-  featureHeading?: string;
 }
 
 function DefaultArtGlyph({ category }: { category: DefaultArtCategory }) {
@@ -80,29 +76,21 @@ export function DefaultContentArt({ category, label, defaultLabel }: DefaultCont
   );
 }
 
-export function EnemyAppearance({ id, label, fallbackLabel, featureHeading, defaultLabel }: EnemyAppearanceProps) {
+export function EnemyAppearance({ id, label, defaultLabel }: EnemyAppearanceProps) {
   const spec = resolveEnemyVisualSpec(id);
   return (
     <div className="enemy-compendium-appearance" data-content-origin={spec ? 'builtin' : 'custom'}>
       <EnemySprite id={id} label={label} size={142} />
       <div className="enemy-appearance-details">
-        {spec ? (
-          <>
-            <small>{featureHeading}</small>
-            <ul>
-              {spec.features.map((feature, index) => <li key={`${feature.s}-${index}`}>{feature.label}</li>)}
-            </ul>
-          </>
-        ) : <p>{fallbackLabel}</p>}
         {(!spec || !isBuiltInContentId('enemies', id)) && <span className="content-default-art-note">{defaultLabel}</span>}
       </div>
     </div>
   );
 }
 
-export function ContentAppearance({ category, id, label, defaultLabel, enemyFallbackLabel, featureHeading }: ContentAppearanceProps) {
+export function ContentAppearance({ category, id, label, defaultLabel }: ContentAppearanceProps) {
   if (category === 'enemies') {
-    return <EnemyAppearance id={id} label={label} fallbackLabel={enemyFallbackLabel ?? defaultLabel} featureHeading={featureHeading ?? defaultLabel} defaultLabel={defaultLabel} />;
+    return <EnemyAppearance id={id} label={label} defaultLabel={defaultLabel} />;
   }
   if (isBuiltInContentId(category, id)) return null;
   return <DefaultContentArt category={category} label={label} defaultLabel={defaultLabel} />;

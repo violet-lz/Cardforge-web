@@ -18,7 +18,6 @@ export interface FeatureSpec {
   c2?: string; // 辅色
   r?: number;  // 旋转（度）
   sc?: number; // 缩放
-  label: string; // 图鉴展示用的外貌特征描述
 }
 
 export interface MonsterVisualSpec {
@@ -40,6 +39,6 @@ export interface RegionMeta {
   hue: string;
 }
 
-export const F = (s: string, x: number, y: number, c: string, label: string, r = 0, sc = 1, c2?: string): FeatureSpec => ({
-  s, x, y, c, c2, r, sc, label,
+export const F = (s: string, x: number, y: number, c: string, r = 0, sc = 1, c2?: string): FeatureSpec => ({
+  s, x, y, c, c2, r, sc,
 });

@@ -47,7 +47,7 @@ describe('content appearance boundaries', () => {
     expect(BASIC_CARDS.strike.name).toBe('玩家覆盖卡牌');
   });
 
-  it('renders fixed default art only for new content in every category', () => {
+  it('renders SVG art and fixed default text without feature descriptions', () => {
     const categories = [
       ['characters', 'wanderer', 'new-player-character'],
       ['cards', 'strike', 'new-player-card'],
@@ -62,22 +62,24 @@ describe('content appearance boundaries', () => {
         id: builtInId,
         label: builtInId,
         defaultLabel: 'System default appearance',
-        enemyFallbackLabel: 'Custom fallback',
-        featureHeading: 'Visual features',
       }));
-      if (category === 'enemies') expect(builtInMarkup).toContain('data-content-origin="builtin"');
-      else expect(builtInMarkup).toBe('');
+      if (category === 'enemies') {
+        expect(builtInMarkup).toContain('data-content-origin="builtin"');
+        expect(builtInMarkup).toContain('<svg');
+        expect(builtInMarkup).not.toContain('<ul>');
+        expect(builtInMarkup).not.toContain('Visual features');
+      } else expect(builtInMarkup).toBe('');
 
       const customMarkup = renderToStaticMarkup(createElement(ContentAppearance, {
         category,
         id: customId,
         label: customId,
         defaultLabel: 'System default appearance',
-        enemyFallbackLabel: 'Custom fallback',
-        featureHeading: 'Visual features',
       }));
       expect(customMarkup).toContain('data-content-origin="custom"');
-      if (category === 'enemies') expect(customMarkup).toContain('Custom fallback');
+      expect(customMarkup).toContain('<svg');
+      expect(customMarkup).toContain('System default appearance');
+      expect(customMarkup).not.toContain('<ul>');
     }
   });
 
