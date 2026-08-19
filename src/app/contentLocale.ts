@@ -351,6 +351,30 @@ export const CONTENT_EN: Record<string, ContentEN> = {
   'rampart-warden': { name: 'Rampart Warden' },
   'rampart-heart': { name: 'Rampart Heart' },
 
+  // ─── Legacy Enemies ───
+  'legacy-lone-orc-scout': { name: 'Orc Scout' },
+  'legacy-patrol-orc-archer': { name: 'Orc Archer' },
+  'legacy-patrol-orc-scout': { name: 'Orc Scout' },
+  'legacy-orc-warrior': { name: 'Orc Warrior' },
+  'legacy-skeleton-warrior': { name: 'Skeleton Warrior' },
+  'legacy-jaw-worm': { name: 'Jaw Worm' },
+  'legacy-small-slime': { name: 'Small Slime' },
+  'legacy-orc-shaman': { name: 'Orc Shaman' },
+  'legacy-ghost': { name: 'Ghost' },
+  'legacy-orc-berserker': { name: 'Orc Berserker' },
+  'legacy-rat-pack-a': { name: 'Giant Rat' },
+  'legacy-rat-pack-b': { name: 'Giant Rat' },
+  'legacy-rat-pack-c': { name: 'Giant Rat' },
+  'legacy-troll': { name: 'Troll' },
+  'legacy-death-knight': { name: 'Death Knight' },
+  'legacy-orc-warchief': { name: 'Orc Warchief' },
+  'legacy-ettin': { name: 'Ettin' },
+  'legacy-ghost-cultist': { name: 'Ghost Cultist' },
+  'legacy-hag': { name: 'Hag' },
+  'legacy-wraith': { name: 'Wraith' },
+  'legacy-ancient-dragon': { name: 'Ancient Dragon' },
+  'legacy-slime-king': { name: 'Slime King' },
+
   // ─── Frontier Enemies ───
   // Desert
   'sand-worm': { name: 'Sand Worm' },
