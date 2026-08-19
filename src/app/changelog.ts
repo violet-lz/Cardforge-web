@@ -5,6 +5,7 @@
  */
 export interface ChangelogEntry { date: string; message: string; }
 export const CHANGELOG: ChangelogEntry[] = [
+  { date: '2026-08-19', message: '修复战斗中"离开战斗"按钮，现在可随时放弃本次冒险返回主页-/-Fixed "Leave combat" button: can now abandon run at any time and return to home' },
   { date: '2026-08-19', message: '新增中英文 UI 切换按钮与主页更新日志面板-/-Added Chinese/English UI toggle button and homepage changelog panel' },
   { date: '2026-08-18', message: '完善全页面中英文翻译覆盖（战斗、地图、图鉴、自定义工坊）-/-Completed full page Chinese/English translation coverage (combat, map, compendium, custom workshop)' },
   { date: '2026-08-17', message: '卡牌双层升级系统、强化点递增成本、自定义一键复原-/-Card double-upgrade system, progressive upgrade costs, custom content one-click reset' },
