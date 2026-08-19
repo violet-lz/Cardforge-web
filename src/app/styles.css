@@ -518,3 +518,10 @@ h2, h3 { color: #f4dcae; text-shadow: 0 2px 8px rgb(0 0 0 / 60%); }
 .boss-resource em { display: block; height: 100%; }
 .boss-resource small { color: #cbb595; text-align: right; }
 @media (max-width: 460px) { .boss-banner { padding: 10px 12px; } .boss-banner-head { display: grid; gap: 2px; } .resource-meters { width: 100%; } }
+
+/* Homepage locale control: placed above the visual cosmos so it never shifts the menu layout. */
+.locale-toggle { position: absolute; z-index: 3; top: clamp(18px, 4vw, 42px); right: max(20px, calc((100vw - 1120px) / 2)); display: inline-grid; grid-template-columns: auto auto; align-items: center; gap: 3px 8px; min-height: 46px; padding: 7px 12px; border: 1px solid var(--color-reward); border-radius: 999px; color: var(--color-foreground); background: linear-gradient(135deg, rgb(224 130 50 / 24%), rgb(21 18 20 / 92%)); box-shadow: 0 0 0 1px rgb(224 130 50 / 14%), 0 0 22px rgb(224 130 50 / 32%); letter-spacing: .06em; animation: locale-orbit 2.8s ease-in-out infinite; }
+.locale-toggle > span { grid-row: span 2; color: var(--color-reward); font-size: 1.05rem; }.locale-toggle b { font: 800 .72rem ui-sans-serif, system-ui, sans-serif; }.locale-toggle small { color: var(--color-subtle-foreground); font: .58rem ui-sans-serif, system-ui, sans-serif; text-align: left; }.locale-toggle:hover { border-color: var(--color-primary); background: linear-gradient(135deg, rgb(224 130 50 / 40%), rgb(29 23 18 / 96%)); box-shadow: 0 0 0 2px rgb(224 130 50 / 28%), 0 0 30px rgb(224 130 50 / 46%); }.locale-toggle:focus-visible { outline: 0; box-shadow: var(--focus-ring), 0 0 30px rgb(224 130 50 / 48%); }
+@keyframes locale-orbit { 50% { transform: translateY(-2px); box-shadow: 0 0 0 1px rgb(224 130 50 / 30%), 0 0 30px rgb(224 130 50 / 48%); } }
+@media (max-width: 720px) { .locale-toggle { top: 14px; right: 14px; } }
+@media (prefers-reduced-motion: reduce) { .locale-toggle { animation: none; } }
