@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { BIOMES, contentBiomeFor, type BiomeId } from '../src/data/biomes/biomes';
 import { BASIC_CARDS } from '../src/data/cards/basicCards';
 import { BASIC_ENEMIES } from '../src/data/enemies/basicEnemies';
-import { encounterCatalog, selectEncounter } from '../src/data/encounters/basicEncounters';
+import { encounterCatalog, LEGACY_RARE_ENEMIES_BY_REGION, selectEncounter } from '../src/data/encounters/basicEncounters';
+import { LEGACY_ENEMIES } from '../src/data/enemies/legacyEnemies';
 import { eventCatalog, selectEvent } from '../src/data/events/basicEvents';
 import { createShop, shopCatalog } from '../src/data/shops/basicShops';
 import { createReward, rewardCardCatalog } from '../src/game/run/contentSelection';
@@ -63,5 +64,34 @@ describe('content pools', () => {
     const player: PlayerState = { characterId: 'wanderer', hp: 70, maxHp: 70, gold: 0, deck: [createCardInstance('strike', 'test-strike')], relics: [], potions: [] };
     const combat = startCombat(player, 5, [BASIC_ENEMIES['glass-moth']]);
     expect(resolveEnemyTurn({ ...combat, phase: 'enemy-turn' }).player.weak).toBeGreaterThan(0);
+  });
+
+  it('routes every surviving legacy enemy into a rare high-difficulty region encounter', () => {
+    const legacyIds = Object.keys(LEGACY_ENEMIES).sort();
+    const mappedIds = Object.values(LEGACY_RARE_ENEMIES_BY_REGION).flat().sort();
+    expect(mappedIds).toEqual(legacyIds);
+    expect(new Set(mappedIds).size).toBe(mappedIds.length);
+    expect(BASIC_ENEMIES['legacy-rat-pack-b']).toBeUndefined();
+
+    for (const difficulty of [1, 2, 3]) {
+      const encounter = selectEncounter(41, 'combat', 8, 2, 'bloodlands', 'native', difficulty);
+      expect(encounter.some((enemy) => enemy.id.startsWith('legacy-'))).toBe(false);
+    }
+
+    const rateFor = (difficulty: 4 | 5): number => {
+      let injected = 0;
+      for (let seed = 1; seed <= 2000; seed += 1) {
+        const encounter = selectEncounter(seed, 'combat', 8, 2, 'bloodlands', 'native', difficulty);
+        if (encounter.some((enemy) => enemy.id.startsWith('legacy-'))) injected += 1;
+      }
+      return injected / 2000;
+    };
+    expect(rateFor(4)).toBeCloseTo(0.2, 1);
+    expect(rateFor(5)).toBeCloseTo(0.4, 1);
+
+    const deterministic = selectEncounter(73, 'combat', 8, 2, 'bloodlands', 'native', 5).map((enemy) => enemy.id);
+    expect(deterministic).toEqual(selectEncounter(73, 'combat', 8, 2, 'bloodlands', 'native', 5).map((enemy) => enemy.id));
+    expect(selectEncounter(73, 'elite', 8, 2, 'bloodlands', 'native', 5).some((enemy) => enemy.id.startsWith('legacy-'))).toBe(false);
+    expect(selectEncounter(73, 'boss', 8, 2, 'bloodlands', 'native', 5).some((enemy) => enemy.id.startsWith('legacy-'))).toBe(false);
   });
 });

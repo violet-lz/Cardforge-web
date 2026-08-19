@@ -20,6 +20,51 @@ export interface EncounterDefinition {
   enemyIds: string[];
 }
 
+/**
+ * 旧世敌人在现代地图中的主题归属。只用于难度 4/5 的稀有普通遭遇，
+ * 不会把旧世专属遭遇表改造成现代地图的常规遭遇。
+ */
+export const LEGACY_RARE_ENEMIES_BY_REGION: Partial<Record<BiomeId, readonly string[]>> = {
+  'capital-outskirts': ['legacy-lone-orc-scout', 'legacy-patrol-orc-archer', 'legacy-patrol-orc-scout', 'legacy-orc-warrior'],
+  'castle-catacombs': ['legacy-skeleton-warrior', 'legacy-death-knight'],
+  'moss-marsh': ['legacy-jaw-worm', 'legacy-hag'],
+  'fetid-sewers': ['legacy-small-slime', 'legacy-rat-pack-a', 'legacy-rat-pack-c', 'legacy-slime-king'],
+  'arcane-march': ['legacy-orc-shaman'],
+  underworld: ['legacy-ghost'],
+  'ghost-ferry': ['legacy-wraith'],
+  'bell-tower': ['legacy-ghost-cultist'],
+  bloodlands: ['legacy-orc-berserker', 'legacy-orc-warchief'],
+  desert: ['legacy-troll', 'legacy-ettin', 'legacy-ancient-dragon'],
+};
+
+const MAX_COMBAT_ENEMIES = 3;
+
+function legacyRareEncounterChance(difficulty: number): number {
+  return difficulty === 4 ? 0.2 : difficulty === 5 ? 0.4 : 0;
+}
+
+function hashText(value: string): number {
+  let hash = 2166136261;
+  for (const character of value) hash = Math.imul(hash ^ character.charCodeAt(0), 16777619);
+  return hash >>> 0;
+}
+
+function legacyRareEncounterSeed(seed: number, row: number, act: number, biomeId: BiomeId, difficulty: number): number {
+  const combined = (seed ^ Math.imul(row, 0x9e3779b1) ^ Math.imul(act, 0x85ebca6b) ^ Math.imul(difficulty, 0xc2b2ae35) ^ hashText(biomeId)) >>> 0;
+  const first = Math.imul(combined ^ (combined >>> 16), 0x45d9f3b);
+  const second = Math.imul(first ^ (first >>> 16), 0x45d9f3b);
+  return (second ^ (second >>> 16)) >>> 0 || 1;
+}
+
+function legacyRareEnemyId(seed: number, row: number, act: number, biomeId: BiomeId, difficulty: number, existingEnemyIds: readonly string[]): string | undefined {
+  const chance = legacyRareEncounterChance(difficulty);
+  const candidates = (LEGACY_RARE_ENEMIES_BY_REGION[biomeId] ?? []).filter((id) => !existingEnemyIds.includes(id));
+  if (!chance || !candidates.length) return undefined;
+  const rng = new SeededRng(legacyRareEncounterSeed(seed, row, act, biomeId, difficulty));
+  if (rng.nextFloat() >= chance) return undefined;
+  return candidates[rng.nextInt(0, candidates.length - 1)];
+}
+
 const BASE_ENCOUNTERS: EncounterDefinition[] = [
   { id: 'ember-patrol', tier: 'combat', minRow: 0, biomeIds: ['cinder-fields'], enemyIds: ['ashling', 'cinder-sprite'] },
   { id: 'iron-and-moth', tier: 'combat', minRow: 1, biomeIds: ['cinder-fields'], enemyIds: ['rust-hound', 'glass-moth'] },
@@ -55,7 +100,7 @@ const BASE_ENCOUNTERS: EncounterDefinition[] = [
   { id: 'legacy-jaw-worm', tier: 'combat', minRow: 0, legacyOnly: true, enemyIds: ['legacy-jaw-worm'] },
   { id: 'legacy-slime-and-shaman', tier: 'combat', minRow: 0, legacyOnly: true, enemyIds: ['legacy-small-slime', 'legacy-orc-shaman'] },
   { id: 'legacy-ghost-and-berserker', tier: 'combat', minRow: 0, legacyOnly: true, enemyIds: ['legacy-ghost', 'legacy-orc-berserker'] },
-  { id: 'legacy-rat-pack', tier: 'combat', minRow: 0, legacyOnly: true, enemyIds: ['legacy-rat-pack-a', 'legacy-rat-pack-b', 'legacy-rat-pack-c'] },
+  { id: 'legacy-rat-pack', tier: 'combat', minRow: 0, legacyOnly: true, enemyIds: ['legacy-rat-pack-a', 'legacy-rat-pack-c'] },
   { id: 'legacy-troll-bruiser', tier: 'combat', minRow: 0, legacyOnly: true, enemyIds: ['legacy-troll'] },
   { id: 'legacy-death-knight', tier: 'elite', minRow: 0, legacyOnly: true, enemyIds: ['legacy-death-knight'] },
   { id: 'legacy-orc-warchief', tier: 'elite', minRow: 0, legacyOnly: true, enemyIds: ['legacy-orc-warchief'] },
@@ -89,7 +134,11 @@ export function selectEncounter(seed: number, tier: EncounterTier, row: number, 
   const pool = candidates.length ? candidates : tierPool;
   if (!pool.length) throw new Error(`No ${tier} encounter available for biome ${biomeId} in act ${act}`);
   const selected = weightedEncounter(pool, seed, row, difficulty);
-  return selected.enemyIds.map((id) => {
+  const rareEnemyId = tier === 'combat' && selected.enemyIds.length < MAX_COMBAT_ENEMIES
+    ? legacyRareEnemyId(seed, row, act, biomeId, difficulty, selected.enemyIds)
+    : undefined;
+  const selectedEnemyIds = rareEnemyId ? [...selected.enemyIds, rareEnemyId] : selected.enemyIds;
+  return selectedEnemyIds.map((id) => {
     const enemy = BASIC_ENEMIES[id];
     if (!enemy) throw new Error(`Encounter ${selected.id} references unknown enemy ${id}`);
     return enemy;

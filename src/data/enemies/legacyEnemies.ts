@@ -22,7 +22,6 @@ export const LEGACY_ENEMIES: Record<string, EnemyDefinition> = {
   'legacy-ghost': enemy('ghost', '幽魂', 28, [status('weak', 1, '虚弱 1'), attack([7, 11], '缠身 7–11'), attack([4, 8], '缠身 4–8'), idle(), status('weak', 1, '虚弱 1')], { maxHpRange: [28, 32] }),
   'legacy-orc-berserker': enemy('orc-berserker', '兽人狂战士', 50, [status('vulnerable', 1, '易伤 1'), attack([4, 8], '斩击 4–8'), attack([7, 11], '重斩 7–11'), defend(10)], { maxHpRange: [50, 54] }),
   'legacy-rat-pack-a': enemy('rat-pack-a', '巨鼠', 12, [attack([4, 8], '啃咬 4–8')], { maxHpRange: [12, 15] }),
-  'legacy-rat-pack-b': enemy('rat-pack-b', '巨鼠', 12, [attack([4, 8], '啃咬 4–8')], { maxHpRange: [12, 15] }),
   'legacy-rat-pack-c': enemy('rat-pack-c', '巨鼠', 10, [attack([3, 7], '啃咬 3–7')], { maxHpRange: [10, 16] }),
   'legacy-troll': enemy('troll', '巨魔', 28, [status('weak', 1, '虚弱 1'), combo('碾压 10 + 格挡 10', [guard(10), hit(10)]), attack(21, '猛砸 21')]),
   'legacy-death-knight': enemy('death-knight', '死亡骑士', 46, [attack(12, '斩击 12'), combo('受护斩击 11 + 格挡 6', [guard(6), hit(11)]), combo('受护斩击 16 + 格挡 5', [guard(5), hit(16)]), idle(), defend(6)]),

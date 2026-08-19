@@ -363,7 +363,6 @@ export const CONTENT_EN: Record<string, ContentEN> = {
   'legacy-ghost': { name: 'Ghost' },
   'legacy-orc-berserker': { name: 'Orc Berserker' },
   'legacy-rat-pack-a': { name: 'Giant Rat' },
-  'legacy-rat-pack-b': { name: 'Giant Rat' },
   'legacy-rat-pack-c': { name: 'Giant Rat' },
   'legacy-troll': { name: 'Troll' },
   'legacy-death-knight': { name: 'Death Knight' },
