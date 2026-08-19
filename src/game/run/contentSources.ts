@@ -5,6 +5,8 @@ import { RELIC_DROPS } from '../../data/relics/basicRelics';
 import { POTION_DROPS } from '../../data/potions/basicPotions';
 import { rewardCardCatalog } from './contentSelection';
 import { shopCatalog } from '../../data/shops/basicShops';
+import { BIOME_EN } from '../../app/contentLocale';
+import type { Locale } from '../../app/translations';
 
 /**
  * Computes, for every piece of content, which map regions it can actually appear in, by scanning
@@ -13,8 +15,8 @@ import { shopCatalog } from '../../data/shops/basicShops';
  */
 type Category = 'characters' | 'cards' | 'enemies' | 'relics' | 'potions';
 
-function names(ids: Set<BiomeId>): string[] {
-  return [...new Set([...ids].map((id) => biomeById(id).name))];
+function names(ids: Set<BiomeId>, locale: Locale = 'zh-CN'): string[] {
+  return [...new Set([...ids].map((id) => locale === 'en' ? (BIOME_EN[id]?.name ?? biomeById(id).name) : biomeById(id).name))];
 }
 
 const enemySources = new Map<string, Set<BiomeId>>();
@@ -50,24 +52,30 @@ function itemSourceMap(drops: { id: string; biomeIds?: readonly BiomeId[] }[]) {
 const relicSources = itemSourceMap(RELIC_DROPS);
 const potionSources = itemSourceMap(POTION_DROPS);
 
-export function sourceText(category: Category, id: string): string {
-  if (category === 'characters') return '角色选择界面';
+export function sourceText(category: Category, id: string, locale: Locale = 'zh-CN'): string {
+  if (category === 'characters') return locale === 'en' ? 'Character select' : '角色选择界面';
   if (category === 'enemies') {
-    const regions = names(enemySources.get(id) ?? new Set());
-    const kind = bossEnemies.has(id) ? '首领' : eliteEnemies.has(id) ? '精英' : '普通';
-    if (!regions.length) return id.startsWith('legacy-') ? '旧世残响（旧世角色专属）' : '召唤 / 特殊出现';
-    return `${kind} · ${regions.join('、')}`;
+    const regions = names(enemySources.get(id) ?? new Set(), locale);
+    const kind = locale === 'en'
+      ? (bossEnemies.has(id) ? 'Boss' : eliteEnemies.has(id) ? 'Elite' : 'Normal')
+      : (bossEnemies.has(id) ? '首领' : eliteEnemies.has(id) ? '精英' : '普通');
+    if (!regions.length) return id.startsWith('legacy-')
+      ? (locale === 'en' ? 'Legacy Echo (legacy-character exclusive)' : '旧世残响（旧世角色专属）')
+      : (locale === 'en' ? 'Summoned / special' : '召唤 / 特殊出现');
+    return `${kind} · ${regions.join(locale === 'en' ? ', ' : '、')}`;
   }
   if (category === 'cards') {
     const parts: string[] = [];
-    if (starterCards.has(id)) parts.push('起始牌组');
-    const regions = names(cardSources.get(id) ?? new Set());
-    if (regions.length) parts.push(regions.join('、'));
-    if (cardShared.has(id) && !regions.length) parts.push('各地奖励 / 商店');
-    return parts.length ? parts.join(' · ') : '事件 / 特殊获取';
+    if (starterCards.has(id)) parts.push(locale === 'en' ? 'Starting deck' : '起始牌组');
+    const regions = names(cardSources.get(id) ?? new Set(), locale);
+    if (regions.length) parts.push(regions.join(locale === 'en' ? ', ' : '、'));
+    if (cardShared.has(id) && !regions.length) parts.push(locale === 'en' ? 'Regional rewards / shops' : '各地奖励 / 商店');
+    return parts.length ? parts.join(' · ') : (locale === 'en' ? 'Event / special' : '事件 / 特殊获取');
   }
   const src = category === 'relics' ? relicSources : potionSources;
-  const regions = names(src.map.get(id) ?? new Set());
-  if (regions.length) return regions.join('、');
-  return src.shared.has(id) ? '各地宝箱 / 商店' : '起始携带 / 事件';
+  const regions = names(src.map.get(id) ?? new Set(), locale);
+  if (regions.length) return regions.join(locale === 'en' ? ', ' : '、');
+  return src.shared.has(id)
+    ? (locale === 'en' ? 'Regional chests / shops' : '各地宝箱 / 商店')
+    : (locale === 'en' ? 'Starting carry / event' : '起始携带 / 事件');
 }

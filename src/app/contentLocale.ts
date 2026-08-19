@@ -1,6 +1,87 @@
 import type { Locale } from './translations';
+import type { BiomeId } from '../data/biomes/biomes';
 
 export type ContentEN = { name: string; description?: string; signature?: string };
+
+export type BiomeEN = { name: string; tagline: string; locations: string[]; bossLocation: string };
+
+export const BIOME_EN: Record<BiomeId, BiomeEN> = {
+  'ruined-village': { name: 'Ruined Village', tagline: 'Cold ash presses on rooftops; a home without bells still awaits the traveler.', locations: ['Toppled Belfry', 'Charred Lane', 'Hollow Granary'], bossLocation: 'Fireless Gate' },
+  'capital-outskirts': { name: 'Capital Outskirts', tagline: 'A brass key opens the old waterway; wayfire beyond the walls points toward crimson wastes.', locations: ['Toll Checkpoint', 'Ruined Waystation', 'Wall Culvert'], bossLocation: 'Broken Seal Gate' },
+  'castle-catacombs': { name: 'Castle Catacombs', tagline: 'Royal star-charts carved on tomb-brick backs; damp stairs lead all the way to the underworld.', locations: ['Royal Stair', 'Wax-Sealed Ossuary', 'Nameless Gallery'], bossLocation: 'Subterranean Gate' },
+  'verdant-forest': { name: 'Verdant Forest', tagline: 'The last greenery beyond the village swallows the road; luminous leaves guide the expedition.', locations: ['Antler Trail', 'Glowleaf Creek', 'Ancient Tree Court'], bossLocation: 'Rootcrown Watcher' },
+  'moss-marsh': { name: 'Moss Marsh', tagline: 'Forest waters merge into mire; moss-shells and crocodile shadows guard the downstream sluice.', locations: ['Crocodile Shallows', 'Sunken-Log Wharf', 'Mosslight Path'], bossLocation: 'Great Croc Sluice' },
+  'fetid-sewers': { name: 'Fetid Sewers', tagline: 'Behind rusted floodgates the current flows underground toward the capital.', locations: ['Rot Canal', 'Sporecap Pump Hall', 'Rat-King Junction'], bossLocation: 'Brass-Key Watergate' },
+  'radiant-capital': { name: 'Radiant Capital', tagline: 'Gold-white domes illuminate feasts and the names the temple chose to bury.', locations: ['Gilded Boulevard', 'White Tower Plaza', 'Hundred-Lamp Bazaar'], bossLocation: 'Solar-Crown Gate' },
+  'bloodlands': { name: 'Bloodlands', tagline: 'The gatekeeper\'s blood crosses the border, pointing toward land that never clots.', locations: ['Scarlet Bone Mound', 'Blood-Rain Trench', 'Crimson Windmill'], bossLocation: 'Coagulation Altar' },
+  'desert': { name: 'Desert', tagline: 'The bloodlands dry into blistering sand; half-buried pillars and caravans point to a lost city.', locations: ['Quicksand Dune', 'Wind-Worn Pillar', 'Half-Buried Caravan'], bossLocation: 'Sand King Tomb' },
+  'bell-tower': { name: 'Bell Tower', tagline: 'A black-iron tower tolls ceaselessly at the edge of the wastes; each strike marks a quarry.', locations: ['Echo Stairway', 'Suspended Bell Hall', 'Pendulum Chamber'], bossLocation: 'Silent King' },
+  'neon-court': { name: 'Neon Court', tagline: 'An underground tribunal deep within the techno city; neon tubes carry the memory of the judged.', locations: ['Data Corridor', 'Neon Tribunal', 'Memory Engine Room'], bossLocation: 'Neon Adjudicator' },
+  'demon-nest': { name: 'Demon Nest', tagline: 'A crimson abyss splits open beneath Atlantean marble; pacts and claws fester here.', locations: ['Rift Passage', 'Pact Altar', 'Hatchling Blood Pool'], bossLocation: 'Broodmother' },
+  'world-rampart': { name: 'World Rampart', tagline: 'The last bastion at the world\'s edge; beyond it lies the point where falling stars tear reality.', locations: ['Astral Battlement', 'Crumbling Sky-Ladder', 'Final Watchtower'], bossLocation: 'Heart of the Rampart' },
+  'arcane-march': { name: 'Arcane March', tagline: 'Academy beacons still flash beyond the bloodlands; ancient spells preserve celestial coordinates.', locations: ['Candle-Float Academy', 'Rune Arcade', 'Astrolabe Court'], bossLocation: 'Archmage Clocktower' },
+  'techno-city': { name: 'Techno City', tagline: 'A neon metropolis unveiled behind arcane veils; mechanical star-charts plot routes above the clouds.', locations: ['Neon Alley', 'Violet Nexus', 'Gear Skybridge'], bossLocation: 'Launch Well Zero' },
+  'sky-island': { name: 'Sky Island', tagline: 'The launch well pierces the cloud sea; white isles carry the old skybridge to the noble castle.', locations: ['Cloud-Whale Route', 'White-Wing Garden', 'Floating Stone Harbor'], bossLocation: 'Skylock Bridge' },
+  'noble-castle': { name: 'Noble Castle', tagline: 'The heraldry at the skybridge\'s end belongs to a missing family; answers lie beneath the feast hall.', locations: ['Heraldic Court', 'Long Banquet Hall', 'Silver-Armor Gallery'], bossLocation: 'Throneless Seat' },
+  'underworld': { name: 'Underworld', tagline: 'The catacombs extinguish the last flame; pale-blue ghosts point you toward the River of Forgetting.', locations: ['Ghostfire Path', 'Dead Market', 'Lament Stone Forest'], bossLocation: 'Death-King Steps' },
+  'ghost-ferry': { name: 'Ghost Ferry', tagline: 'You pay passage with the royal key; the black vessel follows underground tides to the ocean.', locations: ['Lethe Dock', 'Paper-Lantern Boat', 'Tide-Song Stele'], bossLocation: 'Ferryman\'s Gate' },
+  'ocean-depths': { name: 'Ocean Depths', tagline: 'The black vessel breaks through the underworld river; bubbles and deep-blue ruins surround the lost white city.', locations: ['Bubble Canyon', 'Whalebone Garden', 'Shipwreck Lighthouse'], bossLocation: 'Abyssal Maelstrom' },
+  'atlantis': { name: 'Atlantis', tagline: 'The final difficulty parts the tides; the crumbling marble city sees starlight once more.', locations: ['Broken Column Avenue', 'White Stone Baths', 'Sunken Star Senate'], bossLocation: 'Atlantean Throne' },
+  'meteor-ruins': { name: 'Meteor Ruins', tagline: 'The sky torn by a meteor; rogue energy and cosmic rifts hover above obsidian plains.', locations: ['Meteor Rift', 'Obsidian Plain', 'Suspended Debris'], bossLocation: 'Court of Finality' },
+  // Legacy aliases resolve to their region; provide fallback entries
+  'cinder-fields': { name: 'Ruined Village', tagline: 'Cold ash presses on rooftops.', locations: ['Toppled Belfry', 'Charred Lane', 'Hollow Granary'], bossLocation: 'Fireless Gate' },
+  'bonebind-hamlet': { name: 'Capital Outskirts', tagline: 'A brass key opens the old waterway.', locations: ['Toll Checkpoint', 'Ruined Waystation', 'Wall Culvert'], bossLocation: 'Broken Seal Gate' },
+  'obsidian-capital': { name: 'Castle Catacombs', tagline: 'Royal star-charts carved on tomb-brick backs.', locations: ['Royal Stair', 'Wax-Sealed Ossuary', 'Nameless Gallery'], bossLocation: 'Subterranean Gate' },
+};
+
+export function localizedBiome(id: BiomeId | undefined, locale: Locale): { name: string; tagline: string } {
+  if (locale !== 'en' || !id) return { name: '', tagline: '' };
+  const entry = BIOME_EN[id];
+  return entry ? { name: entry.name, tagline: entry.tagline } : { name: '', tagline: '' };
+}
+
+export function localizedLocation(id: BiomeId | undefined, locationZh: string, locale: Locale): string {
+  if (locale !== 'en' || !id) return locationZh;
+  const entry = BIOME_EN[id];
+  if (!entry) return locationZh;
+  return _translateLocation(id, locationZh, entry);
+}
+
+function _translateLocation(id: BiomeId, locationZh: string, entry: BiomeEN): string {
+  const zhLocations = BIOME_ZH_LOCATIONS[id];
+  if (!zhLocations) return locationZh;
+  const index = zhLocations.indexOf(locationZh);
+  if (index >= 0 && index < entry.locations.length) return entry.locations[index];
+  // Check boss location
+  if (locationZh === zhLocations[zhLocations.length - 1]) return entry.bossLocation;
+  return locationZh;
+}
+
+/** Chinese location names per biome — mirrors biomes.ts data for index-based translation */
+const BIOME_ZH_LOCATIONS: Record<string, string[]> = {
+  'ruined-village': ['倾倒钟楼', '焦木巷', '空谷仓', '无火村门'],
+  'capital-outskirts': ['税吏关', '废弃驿站', '城墙水道', '断印边门'],
+  'castle-catacombs': ['王墓阶梯', '封蜡骨室', '失名回廊', '地下王门'],
+  'verdant-forest': ['鹿角林径', '荧叶溪', '古树庭', '根冠守望者'],
+  'moss-marsh': ['鳄影浅滩', '沉木埠', '苔灯泥径', '巨鳄闸口'],
+  'fetid-sewers': ['腐水渠', '菌灯泵房', '鼠王岔管', '铜钥水门'],
+  'radiant-capital': ['辉金长街', '白塔广场', '百灯市集', '日冕宫门'],
+  'bloodlands': ['赤骨丘', '血雨壕沟', '猩红风车', '凝血祭坛'],
+  'desert': ['流沙丘', '风蚀石柱', '半埋商队', '沙王遗冢'],
+  'bell-tower': ['回音阶梯', '悬钟回廊', '钟摆之室', '不鸣之王'],
+  'neon-court': ['数据回廊', '霓虹审庭', '记忆机房', '霓虹裁决者'],
+  'demon-nest': ['裂口甬道', '契约祭坛', '孵化血池', '巢穴母体'],
+  'world-rampart': ['星界垛墙', '崩裂天梯', '终末哨台', '世界地垒之心'],
+  'arcane-march': ['烛浮学院', '咒文拱廊', '星盘庭院', '大法师钟塔'],
+  'techno-city': ['霓虹机巷', '紫电枢纽', '齿轮天桥', '零号升空井'],
+  'sky-island': ['云鲸航道', '白翼花园', '浮石港', '天穹锁桥'],
+  'noble-castle': ['纹章庭', '长宴厅', '银甲回廊', '无主王座'],
+  'underworld': ['幽火荒径', '亡者集市', '哀歌石林', '冥王断阶'],
+  'ghost-ferry': ['忘川码头', '纸灯黑舟', '潮声碑', '摆渡者之门'],
+  'ocean-depths': ['气泡峡谷', '鲸骨花园', '沉船灯塔', '深潮漩门'],
+  'atlantis': ['断柱大道', '白石浴场', '沉星议院', '亚特兰蒂斯王庭'],
+  'meteor-ruins': ['陨星裂谷', '黑曜石原', '悬浮碎石', '终焉之庭'],
+};
 
 export const CONTENT_EN: Record<string, ContentEN> = {
   // ─── Characters ───
