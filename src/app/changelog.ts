@@ -5,6 +5,7 @@
  */
 export interface ChangelogEntry { date: string; message: string; }
 export const CHANGELOG: ChangelogEntry[] = [
+  { date: '2026-08-19', message: '补全角色难度选择、图鉴遗物/药水效果及自定义工坊详情表单的中英文切换-/-Completed Chinese/English switching for character difficulty selection, compendium relic/potion effects, and the detailed custom-content editor' },
   { date: '2026-08-19', message: '所有游戏实体（角色/卡牌/敌人/遗物/药水）名称与描述支持中英切换-/-All game entity names & descriptions (characters, cards, enemies, relics, potions) now switch with language' },
   { date: '2026-08-19', message: '完善自定义系统全部筛选标签翻译，放弃弹窗与日志弹窗改为暗黑风格模态框-/-Completed custom workshop filter translations, replaced abandon/changelog popups with dark-theme modal dialogs' },
   { date: '2026-08-19', message: '修复战斗中"离开战斗"按钮，现在可随时放弃本次冒险返回主页-/-Fixed "Leave combat" button: can now abandon run at any time and return to home' },

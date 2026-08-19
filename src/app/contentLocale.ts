@@ -136,6 +136,11 @@ export const CONTENT_EN: Record<string, ContentEN> = {
   'bell-toll-potion': { name: 'Bell Toll Potion', description: 'Apply 3 Vulnerable to ALL enemies and deal 4 damage.' },
 };
 
+/** Kept separate because some status IDs intentionally overlap with card IDs. */
+export const STATUS_EN: Record<string, string> = {
+  strength: 'Strength', weak: 'Weak', vulnerable: 'Vulnerable', regen: 'Regeneration', scorch: 'Burn', venom: 'Poison', brittle: 'Brittle', sap: 'Sap', ember: 'Ember', pack: 'Pack', insight: 'Insight', 'bell-mark': 'Bell Mark', stance: 'Stance', disorder: 'Disorder', 'meteor-energy': 'Meteor Energy', 'cosmic-erosion': 'Cosmic Erosion',
+};
+
 export function localizedName(id: string, zhName: string, locale: Locale): string {
   return locale === 'en' ? (CONTENT_EN[id]?.name ?? zhName) : zhName;
 }
