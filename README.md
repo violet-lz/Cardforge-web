@@ -1,73 +1,97 @@
 # 星陨牌局 · Starfall Deckbuilder
 
-> **中文名：星陨牌局** · **English name: Starfall Deckbuilder**
+一个原创的浏览器 Roguelike 卡牌构筑游戏。无需后端、无需外部素材，在本地浏览器即可游玩。
 
-一个原创的浏览器 Roguelike 卡牌构筑游戏。玩家在熄火圣殿的灰烬远征中，以固定 Seed 驱动路线、战斗与抽牌命运，逐步构筑自己的牌组。
+An original browser-based roguelike deckbuilder. No backend, no external assets — runs entirely in your browser.
 
-An original browser-based roguelike deckbuilder. Explore the Ashen Expedition through the extinguished sanctuary, with routes, combat, and draws driven by deterministic Seeds.
+---
 
-## 项目特色 / Highlights
+## 快速开始（三步运行）
 
-- **固定 Seed / Deterministic Seeds**：地图、遭遇和随机流程可复现。
-- **卡牌构筑战斗 / Deckbuilding Combat**：能量、格挡、状态、敌人 Intent、多目标与多段伤害。
-- **多幕远征 / Multi-act Runs**：分支地图、精英、Boss、奖励、事件、商店和休整节点。
-- **局外成长 / Meta Progression**：图鉴发现、角色起始属性强化与 Ascension 进度。
-- **可自定义内容 / Custom Content**：在浏览器中安全编辑、导入和导出卡牌、角色、敌人、遗物和药水 JSON；不执行导入文本。
-- **本地存档 / Local Saves**：版本化 `localStorage` 存档与回放记录。
-- **无外部游戏资源 / No External Game Assets**：UI 视觉、地图与角色展示均不依赖外部资源包。
+> 前置条件：已安装 [Node.js](https://nodejs.org/) 18+ 与 npm。
 
-## 技术栈 / Tech Stack
+```bash
+# 1. 克隆项目
+git clone https://github.com/violet-lz/Cardforge-web.git
+cd Cardforge-web
+
+# 2. 安装依赖
+npm install
+
+# 3. 启动游戏（自动打开浏览器）
+npm start
+```
+
+打开终端输出的地址（通常是 `http://localhost:5173`）即可游玩。
+
+### 其他运行方式
+
+| 命令 | 用途 |
+|------|------|
+| `npm start` / `npm run dev` | 开发模式（热更新，适合修改代码后实时查看） |
+| `npm run preview` | 构建优化版并自动打开浏览器（体验最流畅） |
+| `npm run build` | 仅构建，产物在 `dist/` 目录 |
+
+macOS 用户也可以直接双击 `scripts/build-and-play.command`，它会自动安装依赖、构建并打开游戏。
+
+---
+
+## 游戏简介
+
+- **6 位角色**，各有独立资源与构筑轴心
+- **22 个地域**，每个都有专属怪物、Boss、事件、商店和视觉主题
+- **7 幕远征**（难度 1–3 为 5 幕，难度 4 为 6 幕，难度 5 为 7 幕）
+- **5 档难度**，通关后逐步解锁更高难度与更多内容
+- **固定 Seed**，同一 Seed 地图、遭遇和随机流程完全可复现
+- **自定义内容系统**，可在浏览器中直接编辑卡牌/角色/敌人/遗物/药水并导出分享
+- **本地存档**，刷新即恢复；不需要联网或注册
+
+---
+
+## 技术栈
 
 React 18 · TypeScript · Vite · Zustand · Vitest · Playwright
 
-## 开始运行 / Getting Started
+---
+
+## 测试
 
 ```bash
-npm install
-npm run dev
+npm run test          # 单元测试（Vitest）
+npm run test:e2e      # 端到端测试（Playwright，首次需 npx playwright install chromium）
 ```
 
-打开终端显示的本地地址即可开始。Open the local URL printed by Vite.
+---
 
-## 验证与构建 / Validate and Build
+## 项目结构
 
-```bash
-npm run test
-npm run test:e2e
-npm run build
+```
+src/
+├── game/       纯规则层（不依赖 React）
+├── data/       卡牌、角色、敌人、遗物、药水数据
+├── pages/      页面组件
+├── components/ 通用 UI 组件
+└── stores/     状态管理与存档
+tests/          单元测试
+e2e/            端到端测试
 ```
 
-首次运行 E2E 时，如本机没有 Chromium：
+---
 
-```bash
-npx playwright install chromium
-```
+## 自定义内容
 
-## 项目结构 / Project Structure
+从主页进入「余烬创作工坊」，无需编程即可修改游戏内容。支持导入/导出 JSON 内容包，也可以一键复原为系统原版。导入过程不执行任何代码，安全可靠。
 
-- `src/game`：纯规则层 / framework-independent game rules
-- `src/data`：卡牌、角色、敌人、遗物和药水定义 / content definitions
-- `src/pages`、`src/components`：React 页面与可访问 UI / React UI
-- `src/stores`：运行状态和存档协调 / run-state orchestration
-- `tests`、`e2e`：单元与端到端测试 / unit and end-to-end tests
+---
 
-## 自定义内容 / Custom Content
+## 求助：数值平衡
 
-从主页进入“自定义内容 / Custom Content”，可使用中文字段编辑安全 JSON。导入只接受纯 JSON 或文档中定义的受限 JSON 包装，不会使用 `eval`、动态导入或执行用户文本。
+本游戏数值尚未经过大规模测试，可能存在不平衡之处。欢迎通过自定义系统直接调整并分享平衡方案，或在 Issues 中反馈。一起让六个角色、22 个地域和数百张卡牌达到可玩平衡！
 
-## 仓库命名与介绍 / Repository Name and Description
+Balance has NOT been extensively playtested. Use the built-in Custom Content Editor to fix outliers and share your rebalance pack. Issues are also welcome!
 
-- **推荐仓库名 / Recommended repository name:** `starfall-deckbuilder`
-- **展示名 / Display name:** `星陨牌局 · Starfall Deckbuilder`
-- **GitHub 简介 / GitHub description:** `原创浏览器 Roguelike 卡牌构筑游戏 · An original deterministic browser roguelike deckbuilder.`
+---
 
-## 许可 / License
+## 许可
 
-暂未指定开源许可证。如果要使用/借鉴本项目还请表明出处链接。
-要是觉得这个项目好玩记得点个start，谢谢。
-
-## 求助：数值平衡 / Help Wanted: Balance
-
-本游戏的卡牌、怪物、遗物、药水和角色数值尚未经过大规模真人测试，可能存在较多不平衡之处。如果你在游玩中发现某些内容明显过强或过弱，欢迎通过游戏内自带的**自定义内容系统**（无需编程能力）直接调整并导出分享你的平衡方案。也欢迎在 Issues 中反馈数值问题。一起让这个游戏的六个角色、22 个地域和数百张卡牌达到真正的可玩平衡！
-
-The card, enemy, relic, potion, and character numbers have NOT been extensively playtested and are likely unbalanced. If you discover outliers, you can fix them yourself using the built-in **Custom Content Editor** (no coding required) and export/share your rebalance pack. Issues reporting balance problems are also welcome. Let's make all six heroes, 22 regions, and hundreds of cards truly playable together!
+暂未指定开源许可证。使用/借鉴本项目请标明出处链接。觉得好玩记得点个 ⭐ Star，谢谢！
