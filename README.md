@@ -6,7 +6,7 @@
 
 无需安装、无需注册、无需后端：打开 GitHub Pages 网页即可开始一局。本地开发同样只需 Node.js 与 npm。
 
-**Search keywords:** card roguelike, deckbuilder, Slay the Spire-like, browser game, web game, click-to-play, no-install, custom content editor, GitHub Pages, React TypeScript game.
+**Search keywords:** card roguelike, deckbuilder, Slay the Spire-like, browser game, web game, click-to-play, no-install, custom content editor, GitHub Pages, React TypeScript game, Kill the Spire.
 
 ---
 
