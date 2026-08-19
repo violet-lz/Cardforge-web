@@ -38,6 +38,11 @@ const RELIC_TRIGGERS = new Set(['on-combat-start', 'on-turn-start', 'on-combat-e
 const RELIC_EFFECT_TYPES = new Set(['strength', 'block', 'gold', 'energy', 'heal', 'max-hp', 'damage', 'draw', 'apply-status', 'cleanse']);
 const POTION_EFFECT_TYPES = new Set(['strength', 'block', 'gold', 'energy', 'heal', 'max-hp', 'damage', 'draw', 'apply-status', 'cleanse']);
 const DAMAGE_EFFECT_TARGETS = new Set(['front-enemy', 'all-enemies']);
+const FORBIDDEN_APPEARANCE_FIELDS = new Set([
+  'appearance', 'visual', 'visualspec', 'sprite', 'art', 'image', 'imageurl', 'portrait', 'avatar', 'icon',
+  'shape', 'style', 'color', 'hue', 'features', 'body', 'kind', 'asset', 'asseturl', 'background', 'foreground',
+  'palette', 'skin', 'texture', 'svg',
+]);
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 const emptyPack = (): CustomContentPackV1 => ({ version: 1, cards: {}, characters: {}, enemies: {}, relics: {}, potions: {} });
@@ -53,6 +58,24 @@ const BASELINE = {
   potions: clone(BASIC_POTIONS),
 };
 
+export type ContentOrigin = 'builtin' | 'custom';
+
+function baselineRegistryFor(category: CustomContentCategory): Record<string, unknown> {
+  return (category === 'cards' ? BASELINE.cardCatalog : BASELINE[category]) as Record<string, unknown>;
+}
+
+/**
+ * Resolves content origin from the immutable module-load snapshot, not the live overlay.
+ * Therefore an override keeps the built-in appearance while a new ID receives default art.
+ */
+export function isBuiltInContentId(category: CustomContentCategory, id: string): boolean {
+  return Object.prototype.hasOwnProperty.call(baselineRegistryFor(category), id);
+}
+
+export function contentOrigin(category: CustomContentCategory, id: string): ContentOrigin {
+  return isBuiltInContentId(category, id) ? 'builtin' : 'custom';
+}
+
 let currentPack: CustomContentPackV1 = emptyPack();
 
 function fail(path: string, message: string): never {
@@ -61,6 +84,23 @@ function fail(path: string, message: string): never {
 
 function isRecord(value: unknown): value is JsonRecord {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function rejectAppearanceFields(value: unknown, path: string, seen = new WeakSet<object>()): void {
+  if (Array.isArray(value)) {
+    if (seen.has(value)) return;
+    seen.add(value);
+    value.forEach((entry, index) => rejectAppearanceFields(entry, `${path}[${index}]`, seen));
+    return;
+  }
+  if (!isRecord(value) || seen.has(value)) return;
+  seen.add(value);
+  for (const [key, nested] of Object.entries(value)) {
+    if (FORBIDDEN_APPEARANCE_FIELDS.has(key.toLowerCase())) {
+      fail(`${path}.${key}`, 'appearance, art, image, and other visual fields are not supported');
+    }
+    rejectAppearanceFields(nested, `${path}.${key}`, seen);
+  }
 }
 
 function requireRecord(value: unknown, path: string): JsonRecord {
@@ -344,6 +384,7 @@ function validateCharacterShape(value: unknown, path: string): void {
 }
 
 function validateEntry(category: CustomContentCategory, value: unknown, path: string): void {
+  rejectAppearanceFields(value, path);
   switch (category) {
     case 'cards': validateCard(value, path); break;
     case 'characters': validateCharacterShape(value, path); break;
