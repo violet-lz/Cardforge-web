@@ -2,7 +2,7 @@
 
 一个原创的浏览器 Roguelike 卡牌构筑游戏。无需后端、无需外部素材，在本地浏览器即可游玩。
 
-🎮 **在线试玩 / Play Online:** <https://violet-lz.github.io/Cardforge-web/>
+🎮 **在线即玩 / Play Online:** <https://violet-lz.github.io/Cardforge-web/>
 
 An original browser-based roguelike deckbuilder. No backend, no external assets — runs entirely in your browser.
 
