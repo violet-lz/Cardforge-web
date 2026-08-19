@@ -7,6 +7,8 @@ import { useLocale } from './locale';
 import { localizedName, localizedDescription, CONTENT_EN, STATUS_EN } from './contentLocale';
 import { CARD_CATALOG } from '../data/cards/basicCards';
 import { BASIC_ENEMIES } from '../data/enemies/basicEnemies';
+import { REGION_ENEMIES } from '../data/enemies/regionEnemies';
+import { FRONTIER_ENEMIES } from '../data/enemies/frontierEnemies';
 import { BASIC_POTIONS } from '../data/potions/basicPotions';
 import { BASIC_RELICS } from '../data/relics/basicRelics';
 import { BASIC_STATUSES } from '../data/statuses/basicStatuses';
@@ -18,7 +20,7 @@ export function useContentLocale() {
   return useMemo(() => ({
     cardName: (card: CardDefinition) => localizedName(card.id, card.name, locale),
     cardDesc: (card: CardDefinition) => localizedDescription(card.id, card.description, locale) ?? card.description,
-    enemyName: (id: string) => { const e = BASIC_ENEMIES[id]; return e ? localizedName(id, e.name, locale) : id; },
+    enemyName: (id: string) => { const e = BASIC_ENEMIES[id] ?? REGION_ENEMIES[id] ?? FRONTIER_ENEMIES[id]; return e ? localizedName(id, e.name, locale) : id; },
     relicName: (id: string) => { const r = BASIC_RELICS[id]; return r ? localizedName(id, r.name, locale) : id; },
     relicDesc: (id: string) => { const r = BASIC_RELICS[id]; return r ? (localizedDescription(id, r.description, locale) ?? r.description) : ''; },
     potionName: (id: string) => { const p = BASIC_POTIONS[id]; return p ? localizedName(id, p.name, locale) : id; },
