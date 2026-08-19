@@ -525,3 +525,11 @@ h2, h3 { color: #f4dcae; text-shadow: 0 2px 8px rgb(0 0 0 / 60%); }
 @keyframes locale-orbit { 50% { transform: translateY(-2px); box-shadow: 0 0 0 1px rgb(224 130 50 / 30%), 0 0 30px rgb(224 130 50 / 48%); } }
 @media (max-width: 720px) { .locale-toggle { top: 14px; right: 14px; } }
 @media (prefers-reduced-motion: reduce) { .locale-toggle { animation: none; } }
+
+/* Changelog section in the home menu card */
+.home-changelog { width: 100%; }
+.home-changelog-button { width: 100%; text-align: left; }
+.changelog-list { margin: 12px 0 0; padding: 0 0 0 4px; list-style: none; max-height: 180px; overflow-y: auto; }
+.changelog-list li { display: flex; gap: 10px; align-items: baseline; padding: 6px 0; border-bottom: 1px solid var(--color-border); font: .78rem ui-sans-serif, system-ui, sans-serif; }
+.changelog-list time { flex: 0 0 80px; color: var(--color-subtle-foreground); font-size: .68rem; }
+.changelog-list span { color: var(--color-muted-foreground); }

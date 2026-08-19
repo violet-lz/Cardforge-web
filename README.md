@@ -1,10 +1,12 @@
 # 星陨牌局 · Starfall Deckbuilder
 
-一个原创的浏览器 Roguelike 卡牌构筑游戏。无需后端、无需外部素材，在本地浏览器即可游玩。
+**星陨牌局（Starfall Deckbuilder）** 是一款原创的 **浏览器卡牌 Roguelike / Deckbuilder**：以同一 Seed 推导可复现的地图与遭遇，围绕构筑、路线抉择和高难度 Boss 展开。它拥有类似《杀戮尖塔》（Slay the Spire）的卡牌构筑循环，但与该作品不存在官方关联；本作更强调可在浏览器内直接编辑、导入和分享内容的灵活自定义系统。
 
-🎮 **在线即玩 / Play Online:** <https://violet-lz.github.io/Cardforge-web/>
+🎮 **在线即玩 / Play instantly:** <https://violet-lz.github.io/Cardforge-web/>
 
-An original browser-based roguelike deckbuilder. No backend, no external assets — runs entirely in your browser.
+无需安装、无需注册、无需后端：打开 GitHub Pages 网页即可开始一局。本地开发同样只需 Node.js 与 npm。
+
+**Search keywords:** card roguelike, deckbuilder, Slay the Spire-like, browser game, web game, click-to-play, no-install, custom content editor, GitHub Pages, React TypeScript game.
 
 ---
 
