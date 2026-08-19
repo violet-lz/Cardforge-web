@@ -63,4 +63,11 @@ npx playwright install chromium
 
 ## 许可 / License
 
-暂未指定开源许可证。请在公开发布前根据你的发布计划添加合适的 LICENSE 文件。
+暂未指定开源许可证。如果要使用/借鉴本项目还请表明出处链接。
+要是觉得这个项目好玩记得点个start，谢谢。
+
+## 求助：数值平衡 / Help Wanted: Balance
+
+本游戏的卡牌、怪物、遗物、药水和角色数值尚未经过大规模真人测试，可能存在较多不平衡之处。如果你在游玩中发现某些内容明显过强或过弱，欢迎通过游戏内自带的**自定义内容系统**（无需编程能力）直接调整并导出分享你的平衡方案。也欢迎在 Issues 中反馈数值问题。一起让这个游戏的六个角色、22 个地域和数百张卡牌达到真正的可玩平衡！
+
+The card, enemy, relic, potion, and character numbers have NOT been extensively playtested and are likely unbalanced. If you discover outliers, you can fix them yourself using the built-in **Custom Content Editor** (no coding required) and export/share your rebalance pack. Issues reporting balance problems are also welcome. Let's make all six heroes, 22 regions, and hundreds of cards truly playable together!

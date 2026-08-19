@@ -37,4 +37,4 @@ export interface CardDefinition {
   onDraw?: CardEffect[]; conditions?: CardCondition[]; upgrade?: CardUpgradeDefinition;
 }
 export interface CardModifier { costDelta?: number; damageDelta?: number; blockDelta?: number; drawDelta?: number; energyDelta?: number; statusStacksDelta?: number; }
-export interface CardInstance { uid: string; definitionId: string; upgraded: boolean; modifiers?: CardModifier[]; temporary?: boolean; polluted?: boolean; }
+export interface CardInstance { uid: string; definitionId: string; upgraded: boolean; /** 0 = base, 1 = first upgrade (篝火/商店/事件), 2 = second upgrade (图鉴强化点). */ upgradeLevel?: number; modifiers?: CardModifier[]; temporary?: boolean; polluted?: boolean; }
