@@ -605,3 +605,364 @@ h2, h3 { color: #f4dcae; text-shadow: 0 2px 8px rgb(0 0 0 / 60%); }
 .monster-compendium .anim-controls { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; justify-content: center; }
 .monster-compendium .anim-controls button { font-size: 0.75rem; padding: 0.4rem 0.8rem; border-radius: 6px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: inherit; cursor: pointer; min-height: auto; }
 .monster-compendium .anim-controls button:hover { background: rgba(255,255,255,0.15); }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   Character Sprite System — multi-part SVG with per-character combat animations
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Base character sprite styling */
+.char-sprite { display: block; width: 100%; height: auto; overflow: visible; }
+.char-shadow { fill: rgb(0 0 0 / 48%); }
+.char-root { transform-origin: 80px 120px; }
+
+/* Idle floating animation for all characters */
+.figure-player .char-root { animation: charIdle 3.6s ease-in-out infinite; }
+@keyframes charIdle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+/* Body part transform origins for rotation-based animations */
+.char-arm-weapon { transform-origin: 100px 84px; }
+.char-arm-left { transform-origin: 60px 84px; }
+.char-head { transform-origin: 80px 68px; }
+.char-legs { transform-origin: 80px 150px; }
+.char-body { transform-origin: 80px 110px; }
+.char-accessory { transform-origin: 80px 90px; }
+
+/* Override idle when any action is playing */
+.figure-player.action-attack .char-root,
+.figure-player.action-defend .char-root,
+.figure-player.action-skill .char-root,
+.figure-player.action-summon .char-root,
+.figure-player.action-hurt .char-root,
+.figure-player.action-defeated .char-root { animation: none; }
+
+/* ─── WANDERER (远行者) — sword slash ─────────────────────────────────────── */
+.figure-player.char-wanderer.action-attack .char-arm-weapon {
+  animation: wanderer-slash 480ms cubic-bezier(.2,.9,.25,1) both;
+}
+.figure-player.char-wanderer.action-attack .char-body {
+  animation: wanderer-lunge 480ms cubic-bezier(.2,.9,.25,1) both;
+}
+@keyframes wanderer-slash {
+  0% { transform: rotate(0); }
+  25% { transform: rotate(-35deg) translateX(-4px); }
+  55% { transform: rotate(25deg) translateX(12px); }
+  100% { transform: rotate(0); }
+}
+@keyframes wanderer-lunge {
+  0%, 100% { transform: translateX(0); }
+  40% { transform: translateX(10px) rotate(-2deg); }
+}
+
+.figure-player.char-wanderer.action-defend .char-arm-left {
+  animation: wanderer-guard 420ms ease-out both;
+}
+.figure-player.char-wanderer.action-defend .char-body {
+  animation: wanderer-brace 420ms ease-out both;
+}
+@keyframes wanderer-guard {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(20deg) translateX(8px); }
+}
+@keyframes wanderer-brace {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(.95) translateX(-3px); }
+}
+
+.figure-player.char-wanderer.action-skill .char-root {
+  animation: wanderer-skill 520ms ease-out both !important;
+}
+@keyframes wanderer-skill {
+  0%, 100% { transform: translateY(0); }
+  35% { transform: translateY(-10px) rotate(-3deg); }
+  65% { transform: translateY(-4px) rotate(2deg); filter: brightness(1.3); }
+}
+
+.figure-player.char-wanderer.action-hurt .char-root {
+  animation: wanderer-hurt 360ms ease-out both !important;
+}
+@keyframes wanderer-hurt {
+  20%, 60% { transform: translateX(-8px) rotate(2deg); }
+  40%, 80% { transform: translateX(6px) rotate(-1deg); }
+}
+
+/* ─── ARCHIVIST (档案师) — card/page launch ────────────────────────────────── */
+.figure-player.char-archivist.action-attack .char-arm-weapon {
+  animation: archivist-cast 560ms ease-out both;
+}
+.figure-player.char-archivist.action-attack .char-accessory {
+  animation: archivist-pages-fly 560ms ease-out both;
+}
+@keyframes archivist-cast {
+  0% { transform: rotate(0) translate(0); }
+  35% { transform: rotate(-18deg) translateY(-6px); }
+  65% { transform: rotate(12deg) translateX(14px); }
+  100% { transform: rotate(0) translate(0); }
+}
+@keyframes archivist-pages-fly {
+  0% { transform: translate(0) scale(1); opacity: 1; }
+  40% { transform: translate(5px, -8px) scale(1.1); opacity: 1; }
+  75% { transform: translate(20px, -4px) scale(.85); opacity: .6; }
+  100% { transform: translate(0) scale(1); opacity: 1; }
+}
+
+.figure-player.char-archivist.action-defend .char-accessory {
+  animation: archivist-shield 460ms ease-out both;
+}
+.figure-player.char-archivist.action-defend .char-body {
+  animation: archivist-huddle 460ms ease-out both;
+}
+@keyframes archivist-shield {
+  0%, 100% { transform: translate(0) scale(1); }
+  50% { transform: translate(4px, 0) scale(1.2); opacity: 1; }
+}
+@keyframes archivist-huddle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(.92); }
+}
+
+.figure-player.char-archivist.action-skill .char-root {
+  animation: archivist-channel 600ms ease-out both !important;
+}
+@keyframes archivist-channel {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-12px); filter: brightness(1.4); }
+  70% { transform: translateY(-6px) rotate(1deg); filter: brightness(1.2); }
+}
+
+.figure-player.char-archivist.action-hurt .char-root {
+  animation: archivist-hurt 360ms ease-out both !important;
+}
+@keyframes archivist-hurt {
+  20%, 60% { transform: translateX(-7px) rotate(3deg); }
+  40%, 80% { transform: translateX(5px) rotate(-2deg); }
+}
+
+/* ─── ASH-PRIEST (灰烬祭司) — fire burst from hands ───────────────────────── */
+.figure-player.char-ash-priest.action-attack .char-arm-weapon {
+  animation: ashpriest-burst 520ms ease-out both;
+}
+.figure-player.char-ash-priest.action-attack .char-arm-left {
+  animation: ashpriest-burst-left 520ms ease-out both;
+}
+.figure-player.char-ash-priest.action-attack .char-head {
+  animation: ashpriest-head-tilt 520ms ease-out both;
+}
+@keyframes ashpriest-burst {
+  0% { transform: rotate(0); }
+  30% { transform: rotate(-25deg) translateY(-8px); }
+  60% { transform: rotate(15deg) translateX(16px) scale(1.1); }
+  100% { transform: rotate(0); }
+}
+@keyframes ashpriest-burst-left {
+  0% { transform: rotate(0); }
+  30% { transform: rotate(20deg) translateY(-6px); }
+  60% { transform: rotate(-10deg) translateX(-12px) scale(1.1); }
+  100% { transform: rotate(0); }
+}
+@keyframes ashpriest-head-tilt {
+  0%, 100% { transform: rotate(0); }
+  40% { transform: rotate(-5deg) translateY(-4px); }
+}
+
+.figure-player.char-ash-priest.action-defend .char-body {
+  animation: ashpriest-ward 450ms ease-out both;
+}
+.figure-player.char-ash-priest.action-defend .char-arm-weapon {
+  animation: ashpriest-ward-arms 450ms ease-out both;
+}
+@keyframes ashpriest-ward {
+  0%, 100% { transform: scale(1); }
+  45% { transform: scale(.9) translateY(4px); filter: brightness(1.3); }
+}
+@keyframes ashpriest-ward-arms {
+  0%, 100% { transform: rotate(0); }
+  45% { transform: rotate(-15deg) translateX(6px); }
+}
+
+.figure-player.char-ash-priest.action-skill .char-root {
+  animation: ashpriest-ritual 620ms ease-out both !important;
+}
+@keyframes ashpriest-ritual {
+  0%, 100% { transform: translateY(0) scale(1); }
+  25% { transform: translateY(-14px) scale(1.04); filter: brightness(1.5); }
+  60% { transform: translateY(-6px) scale(1.02); filter: brightness(1.2); }
+}
+
+.figure-player.char-ash-priest.action-hurt .char-root {
+  animation: ashpriest-hurt 380ms ease-out both !important;
+}
+@keyframes ashpriest-hurt {
+  15%, 55% { transform: translateX(-10px) rotate(4deg); }
+  35%, 75% { transform: translateX(8px) rotate(-3deg); }
+}
+
+/* ─── BELL-HUNTER (钟楼猎手) — crossbow fire ───────────────────────────────── */
+.figure-player.char-bell-hunter.action-attack .char-arm-weapon {
+  animation: bellhunter-fire 440ms cubic-bezier(.3,.9,.3,1) both;
+}
+.figure-player.char-bell-hunter.action-attack .char-body {
+  animation: bellhunter-recoil 440ms cubic-bezier(.3,.9,.3,1) both;
+}
+@keyframes bellhunter-fire {
+  0% { transform: rotate(0) translate(0); }
+  20% { transform: rotate(-4deg) translateX(4px); }
+  45% { transform: rotate(8deg) translateX(-6px); }
+  100% { transform: rotate(0) translate(0); }
+}
+@keyframes bellhunter-recoil {
+  0%, 100% { transform: translateX(0); }
+  35% { transform: translateX(-5px) rotate(1deg); }
+}
+
+.figure-player.char-bell-hunter.action-defend .char-body {
+  animation: bellhunter-dodge 400ms ease-out both;
+}
+.figure-player.char-bell-hunter.action-defend .char-legs {
+  animation: bellhunter-crouch 400ms ease-out both;
+}
+@keyframes bellhunter-dodge {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  50% { transform: translateX(-8px) rotate(-4deg) scaleY(.92); }
+}
+@keyframes bellhunter-crouch {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px) scaleY(.9); }
+}
+
+.figure-player.char-bell-hunter.action-skill .char-root {
+  animation: bellhunter-aim 540ms ease-out both !important;
+}
+@keyframes bellhunter-aim {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  40% { transform: translateY(-5px) rotate(-2deg); }
+  70% { transform: translateX(6px) rotate(1deg); filter: brightness(1.2); }
+}
+
+.figure-player.char-bell-hunter.action-hurt .char-root {
+  animation: bellhunter-hurt 340ms ease-out both !important;
+}
+@keyframes bellhunter-hurt {
+  20%, 60% { transform: translateX(-6px) rotate(3deg); }
+  40%, 80% { transform: translateX(5px) rotate(-2deg); }
+}
+
+/* ─── LEGACY-CLASSIC (旧世战士) — shield bash / charge ─────────────────────── */
+.figure-player.char-legacy-classic.action-attack .char-arm-left {
+  animation: legacy-bash 500ms cubic-bezier(.2,.9,.25,1) both;
+}
+.figure-player.char-legacy-classic.action-attack .char-body {
+  animation: legacy-charge 500ms cubic-bezier(.2,.9,.25,1) both;
+}
+@keyframes legacy-bash {
+  0% { transform: rotate(0) translate(0); }
+  30% { transform: rotate(-10deg) translateX(-8px); }
+  55% { transform: rotate(20deg) translateX(18px); }
+  100% { transform: rotate(0) translate(0); }
+}
+@keyframes legacy-charge {
+  0%, 100% { transform: translateX(0); }
+  45% { transform: translateX(14px) rotate(-3deg); }
+}
+
+.figure-player.char-legacy-classic.action-defend .char-arm-left {
+  animation: legacy-shield-up 440ms ease-out both;
+}
+.figure-player.char-legacy-classic.action-defend .char-body {
+  animation: legacy-hunker 440ms ease-out both;
+}
+@keyframes legacy-shield-up {
+  0%, 100% { transform: rotate(0) translate(0); }
+  50% { transform: rotate(8deg) translateX(10px) translateY(-4px); }
+}
+@keyframes legacy-hunker {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(.93) translateY(4px); }
+}
+
+.figure-player.char-legacy-classic.action-skill .char-root {
+  animation: legacy-warcry 550ms ease-out both !important;
+}
+@keyframes legacy-warcry {
+  0%, 100% { transform: translateY(0) scale(1); }
+  30% { transform: translateY(-6px) scale(1.06); filter: brightness(1.3); }
+  70% { transform: translateY(-2px) scale(1.02); }
+}
+
+.figure-player.char-legacy-classic.action-hurt .char-root {
+  animation: legacy-hurt 380ms ease-out both !important;
+}
+@keyframes legacy-hurt {
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+/* ─── LEGACY-ONE-OF-EACH (旧世卡牌) — card throw ──────────────────────────── */
+.figure-player.char-legacy-one-of-each.action-attack .char-arm-weapon {
+  animation: cardthrow-arm 500ms ease-out both;
+}
+.figure-player.char-legacy-one-of-each.action-attack .char-accessory {
+  animation: cardthrow-orbit 500ms ease-out both;
+}
+@keyframes cardthrow-arm {
+  0% { transform: rotate(0) translate(0); }
+  30% { transform: rotate(-20deg) translateX(-6px); }
+  60% { transform: rotate(18deg) translateX(16px); }
+  100% { transform: rotate(0) translate(0); }
+}
+@keyframes cardthrow-orbit {
+  0% { transform: rotate(0) scale(1); opacity: 1; }
+  40% { transform: rotate(8deg) scale(1.1) translateX(6px); opacity: .9; }
+  70% { transform: rotate(-4deg) scale(.9) translateX(14px); opacity: .5; }
+  100% { transform: rotate(0) scale(1); opacity: 1; }
+}
+
+.figure-player.char-legacy-one-of-each.action-defend .char-accessory {
+  animation: carddefend-orbit 460ms ease-out both;
+}
+.figure-player.char-legacy-one-of-each.action-defend .char-body {
+  animation: carddefend-body 460ms ease-out both;
+}
+@keyframes carddefend-orbit {
+  0%, 100% { transform: scale(1) rotate(0); }
+  50% { transform: scale(1.25) rotate(5deg); opacity: 1; }
+}
+@keyframes carddefend-body {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(.9); }
+}
+
+.figure-player.char-legacy-one-of-each.action-skill .char-root {
+  animation: cardskill-channel 580ms ease-out both !important;
+}
+@keyframes cardskill-channel {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  30% { transform: translateY(-10px) rotate(-2deg); filter: brightness(1.35); }
+  65% { transform: translateY(-5px) rotate(1deg); filter: brightness(1.15); }
+}
+
+.figure-player.char-legacy-one-of-each.action-hurt .char-root {
+  animation: cardthrow-hurt 350ms ease-out both !important;
+}
+@keyframes cardthrow-hurt {
+  20%, 60% { transform: translateX(-7px) rotate(2deg); }
+  40%, 80% { transform: translateX(6px) rotate(-1deg); }
+}
+
+/* ─── Universal defeated state for all characters ─────────────────────────── */
+.figure-player.action-defeated .char-root {
+  animation: none !important;
+  transform: translateY(14px) rotate(8deg);
+  opacity: .55;
+  filter: saturate(.2);
+  transition: transform 400ms ease-out, opacity 400ms ease-out, filter 400ms ease-out;
+}
+
+/* ─── Summon animation (shared pattern — mystical lift) ────────────────────── */
+.figure-player.action-summon .char-root {
+  animation: char-summon 600ms ease-out both !important;
+}
+@keyframes char-summon {
+  0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
+  40% { transform: translateY(-16px) scale(1.06); filter: brightness(1.6); }
+  75% { transform: translateY(-8px) scale(1.02); filter: brightness(1.2); }
+}

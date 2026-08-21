@@ -1,5 +1,6 @@
 import type { IntentType } from '../game/combat/enemyTypes';
 import EnemySprite from './enemies/EnemySprite';
+import CharacterSprite from './characters/CharacterSprite';
 
 export type CombatAnimation = 'idle' | 'attack' | 'defend' | 'skill' | 'summon' | 'hurt' | 'defeated';
 
@@ -44,19 +45,10 @@ export function CombatantFigure({ id, label, side, animation = 'idle' }: { id: s
       </figure>
     );
   }
-  // For player characters, keep existing SHAPES rendering
-  const shape = SHAPES[id] ?? SHAPES.wanderer;
+  // For player characters, use detailed multi-part CharacterSprite
   return (
-    <figure className={`combatant-figure figure-player action-${animation}`} aria-label={label}>
-      <svg viewBox="0 0 160 180" role="img">
-        <title>{label}</title>
-        <ellipse className="figure-shadow" cx="80" cy="157" rx="58" ry="10" />
-        <g className="figure-art">
-          <path className="figure-body" d={shape.body} />
-          <path className="figure-accent" d={shape.accent} />
-          <path className="figure-mark" d={shape.mark} />
-        </g>
-      </svg>
+    <figure className={`combatant-figure figure-player char-${id} action-${animation}`} aria-label={label}>
+      <CharacterSprite id={id} label={label} animation={animation} />
     </figure>
   );
 }
