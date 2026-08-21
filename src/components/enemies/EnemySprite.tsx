@@ -3,6 +3,8 @@
 import { isBuiltInContentId } from '../../game/content/customContent';
 import { MONSTER_VISUALS, enemyTier } from '../../game/enemies/monsterVisuals';
 import { BodyGlyph, FeatureGlyph } from './spriteShapes';
+import { JointRenderer } from './JointRenderer';
+import { generateAnimationCSS } from './animationGenerator';
 
 export function resolveEnemyVisualSpec(id: string) {
   return isBuiltInContentId('enemies', id) ? MONSTER_VISUALS[id] : undefined;
@@ -13,11 +15,15 @@ export default function EnemySprite({
   label = id,
   size = 180,
   animate = true,
+  animation,
+  onAnimationEnd,
 }: {
   id: string;
   label?: string;
   size?: number;
   animate?: boolean;
+  animation?: string;
+  onAnimationEnd?: () => void;
 }) {
   const spec = resolveEnemyVisualSpec(id);
   const gid = `esg-${id.replace(/[^a-zA-Z0-9]/g, '')}`;
@@ -32,7 +38,32 @@ export default function EnemySprite({
     );
   }
 
+  // Dev-only validation
+  if (import.meta.env.DEV) {
+    if (spec.features.length < 7) {
+      console.error(`[EnemySprite] ${id}: only ${spec.features.length} features (minimum 7)`);
+    }
+    if (spec.size < 0.5 || spec.size > 1.8) {
+      console.warn(`[EnemySprite] ${id}: size ${spec.size} outside expected range [0.5, 1.8]`);
+    }
+  }
+
   const tier = enemyTier(id);
+  const sizeScale = spec.size;
+  const groundY = 103;
+  const offsetY = groundY * (1 - sizeScale);
+
+  const hasJoints = spec.joints && spec.joints.length === 6;
+  const isAnimating = hasJoints && animation;
+
+  // Generate animation CSS when needed
+  const animationCSS = isAnimating
+    ? generateAnimationCSS(
+        spec.animations?.find((c) => c.name === animation) ?? { name: '', duration: 0, keyframes: [] },
+        spec.joints!,
+        gid,
+      )
+    : '';
 
   return (
     <svg viewBox="0 0 120 120" width={size} height={size} role="img" aria-label={id}>
@@ -42,6 +73,7 @@ export default function EnemySprite({
           <stop offset="100%" stopColor={spec.glow} stopOpacity={0} />
         </radialGradient>
       </defs>
+      {animationCSS && <style>{animationCSS}</style>}
       <circle cx={60} cy={58} r={55} fill={`url(#${gid}-bg)`} />
       {tier === 'boss' && (
         <>
@@ -50,12 +82,21 @@ export default function EnemySprite({
         </>
       )}
       {tier === 'elite' && <circle cx={60} cy={58} r={48} fill="none" stroke={spec.glow} strokeOpacity={0.22} strokeWidth={1} strokeDasharray="10 5" />}
-      <ellipse cx={60} cy={103} rx={27} ry={4.4} fill="#000" opacity={0.42} />
-      <g className={animate ? 'enemy-idle' : undefined}>
-        <BodyGlyph spec={spec} gid={gid} />
-        {spec.features.map((f, i) => (
-          <FeatureGlyph key={i} id={f.s} f={f} />
-        ))}
+      <ellipse cx={60} cy={103} rx={27 * sizeScale} ry={4.4} fill="#000" opacity={0.42} />
+      <g
+        transform={`translate(${60 * (1 - sizeScale)}, ${offsetY}) scale(${sizeScale})`}
+        className={!animation && animate ? 'enemy-idle' : undefined}
+      >
+        {isAnimating ? (
+          <JointRenderer spec={spec} animation={animation!} instanceId={gid} onEnd={onAnimationEnd} />
+        ) : (
+          <>
+            <BodyGlyph spec={spec} gid={gid} />
+            {spec.features.map((f, i) => (
+              <FeatureGlyph key={i} id={f.s} f={f} />
+            ))}
+          </>
+        )}
       </g>
     </svg>
   );

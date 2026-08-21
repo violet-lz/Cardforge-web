@@ -2,12 +2,17 @@
 // 新增文件（对 violet-lz/Cardforge-web 纯增量，不修改任何既有文件）
 import { VISUALS_A } from './monsterVisualsA';
 import { VISUALS_B } from './monsterVisualsB';
+import { VISUALS_C } from './monsterVisualsC';
+import { VISUALS_D } from './monsterVisualsD';
+import { VISUALS_E } from './monsterVisualsE';
+import { VISUALS_F } from './monsterVisualsF';
+import { VISUALS_G } from './monsterVisualsG';
 import type { EnemyTier, MonsterVisualSpec, RegionMeta } from './monsterVisualTypes';
 
 export type { EnemyTier, FeatureSpec, MonsterVisualSpec, RegionMeta, BodyKind, EyeStyle } from './monsterVisualTypes';
 export { F } from './monsterVisualTypes';
 
-export const MONSTER_VISUALS: Record<string, MonsterVisualSpec> = { ...VISUALS_A, ...VISUALS_B };
+export const MONSTER_VISUALS: Record<string, MonsterVisualSpec> = { ...VISUALS_A, ...VISUALS_B, ...VISUALS_C, ...VISUALS_D, ...VISUALS_E, ...VISUALS_F, ...VISUALS_G };
 
 /** 地域顺序（图鉴分组用） */
 export const REGIONS: RegionMeta[] = [

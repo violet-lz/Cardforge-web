@@ -1269,6 +1269,97 @@ function buttonEyes(f: FeatureSpec) {
   );
 }
 
+function tongue(f: FeatureSpec) {
+  return (
+    <g transform={t(f)} fill={f.c}>
+      <path d="M0 -4C-3 -2 -4 2 -3 6C-2 9 0 10 1 8C2 6 3 4 4 6C5 9 3 10 2 10C4 11 6 9 6 6C7 2 5 -2 2 -4Z" />
+      <path d="M-1 4V8" stroke={f.c2 ?? '#1a1410'} strokeWidth={0.8} opacity={0.6} />
+    </g>
+  );
+}
+function ribcage(f: FeatureSpec) {
+  return (
+    <g transform={t(f)} stroke={f.c} fill="none" strokeWidth={1.6} strokeLinecap="round">
+      <path d="M0 -10V10" strokeWidth={2.2} />
+      {[-8, -4, 0, 4, 8].map((y, i) => (
+        <g key={i}>
+          <path d={`M0 ${y}C-4 ${y - 1} -8 ${y + 1} -10 ${y + 3}`} />
+          <path d={`M0 ${y}C4 ${y - 1} 8 ${y + 1} 10 ${y + 3}`} />
+        </g>
+      ))}
+      {f.c2 && <path d="M-6 -4C-4 -6 4 -6 6 -4" stroke={f.c2} strokeWidth={1} opacity={0.5} />}
+    </g>
+  );
+}
+function tendons(f: FeatureSpec) {
+  return (
+    <g transform={t(f)} stroke={f.c} fill="none" strokeWidth={1.4} opacity={0.85} strokeLinecap="round">
+      <path d="M-8 8C-6 2 -2 -4 0 -8" />
+      <path d="M-4 9C-2 4 2 -2 4 -7" />
+      <path d="M2 10C4 5 7 0 8 -6" />
+      {f.c2 && <path d="M-6 4C-2 2 2 4 6 2" stroke={f.c2} strokeWidth={0.9} opacity={0.5} />}
+    </g>
+  );
+}
+function flail(f: FeatureSpec) {
+  return (
+    <g transform={t(f)}>
+      <path d="M0 14V4" stroke={f.c2 ?? '#8a7350'} strokeWidth={2.4} strokeLinecap="round" />
+      {[0, 1, 2, 3].map((i) => (
+        <ellipse key={i} cx={0} cy={4 - i * 4} rx={2.4} ry={1.8} fill="none" stroke={f.c} strokeWidth={1.4} transform={`rotate(${i * 12})`} />
+      ))}
+      <circle cy={-14} r={5} fill={f.c} />
+      {[0, 60, 120, 180, 240, 300].map((a) => (
+        <circle key={a} cx={5 * Math.cos((a * Math.PI) / 180)} cy={-14 + 5 * Math.sin((a * Math.PI) / 180)} r={1.4} fill={f.c2 ?? '#1a1410'} />
+      ))}
+    </g>
+  );
+}
+function pauldron(f: FeatureSpec) {
+  return (
+    <g transform={t(f)}>
+      <path d="M-10 2C-10 -6 -4 -10 0 -10C4 -10 10 -6 10 2C8 6 4 8 0 8C-4 8 -8 6 -10 2Z" fill={f.c} />
+      <path d="M-8 0C-4 -4 4 -4 8 0" stroke={f.c2 ?? '#1a1410'} strokeWidth={1} opacity={0.5} />
+      <path d="M-6 4C-2 2 2 2 6 4" stroke={f.c2 ?? '#1a1410'} strokeWidth={0.8} opacity={0.4} />
+      <circle cy={-6} r={1.8} fill={f.c2 ?? '#1a1410'} opacity={0.6} />
+    </g>
+  );
+}
+function pentagram(f: FeatureSpec) {
+  const r = 9;
+  const pts = Array.from({ length: 5 }, (_, i) => {
+    const a = ((i * 72 - 90) * Math.PI) / 180;
+    return [r * Math.cos(a), r * Math.sin(a)] as [number, number];
+  });
+  const starPath = `M${pts[0][0]} ${pts[0][1]}L${pts[2][0]} ${pts[2][1]}L${pts[4][0]} ${pts[4][1]}L${pts[1][0]} ${pts[1][1]}L${pts[3][0]} ${pts[3][1]}Z`;
+  return (
+    <g transform={t(f)}>
+      <circle r={r + 2} fill="none" stroke={f.c} strokeWidth={1.2} opacity={0.6} />
+      <path d={starPath} fill="none" stroke={f.c} strokeWidth={1.4} strokeLinejoin="round" opacity={0.9} />
+      <circle r={2} fill={f.c2 ?? f.c} opacity={0.7} />
+    </g>
+  );
+}
+function antenna(f: FeatureSpec) {
+  return (
+    <g transform={t(f)}>
+      <path d="M0 10V-6" stroke={f.c} strokeWidth={2} strokeLinecap="round" />
+      <circle cy={-8} r={2.4} fill={f.c} />
+      {[5, 9, 13].map((r, i) => (
+        <path key={i} d={`M${-r * 0.6} ${-8 - r * 0.3}A${r} ${r} 0 0 1 ${r * 0.6} ${-8 - r * 0.3}`} fill="none" stroke={f.c2 ?? f.c} strokeWidth={1.2} opacity={0.7 - i * 0.2} />
+      ))}
+    </g>
+  );
+}
+function barb(f: FeatureSpec) {
+  return (
+    <g transform={t(f)} fill={f.c}>
+      <path d="M0 -10L3 -4L6 -6L4 0L8 2L2 4L0 10L-2 4L-8 2L-4 0L-6 -6L-3 -4Z" opacity={0.9} />
+      {f.c2 && <circle r={2} fill={f.c2} opacity={0.6} />}
+    </g>
+  );
+}
+
 /** 语义调度：特征 id → 具体绘制 */
 export function FeatureGlyph({ id, f }: { id: string; f: FeatureSpec }) {
   let node: ReactNode;
@@ -1399,6 +1490,14 @@ export function FeatureGlyph({ id, f }: { id: string; f: FeatureSpec }) {
   else if (has(id, 'vent', 'grille', 'slit')) node = vent(f);
   else if (has(id, 'straw', 'wheat', 'stalk', 'hay')) node = straw(f);
   else if (has(id, 'trail', 'streak')) node = trail(f);
+  else if (has(id, 'tongue', 'lick', 'lolling')) node = tongue(f);
+  else if (has(id, 'ribcage', 'ribExpose')) node = ribcage(f);
+  else if (has(id, 'tendon', 'sinew', 'ligament')) node = tendons(f);
+  else if (has(id, 'flail', 'morningstar')) node = flail(f);
+  else if (has(id, 'pauldron', 'shoulderPlate', 'shoulderGuard')) node = pauldron(f);
+  else if (has(id, 'pentagram', 'pentacle', 'fivePoint')) node = pentagram(f);
+  else if (has(id, 'antenna', 'aerial', 'signalMast')) node = antenna(f);
+  else if (has(id, 'barb', 'hookBarb', 'thornBarb')) node = barb(f);
   else if (has(id, 'dot', 'glint', 'pupil', 'speck')) node = id.endsWith('dots') ? dots(f, 3) : dot(f);
   else node = dot(f);
 

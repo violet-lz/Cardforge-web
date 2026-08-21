@@ -20,6 +20,38 @@ export interface FeatureSpec {
   sc?: number; // 缩放
 }
 
+// ─── 骨骼关节定义 ───
+
+export interface JointDef {
+  id: string;
+  parentId: string | null;
+  anchor: { x: number; y: number };
+  boundFeatures: number[];
+}
+
+// ─── 动画关键帧 ───
+
+export interface JointKeyframe {
+  jointId: string;
+  rotation?: number;
+  translateX?: number;
+  translateY?: number;
+}
+
+export interface AnimationKeyframe {
+  time: number;
+  joints: JointKeyframe[];
+  easing?: 'linear' | 'ease-in' | 'ease-out' | 'ease-in-out';
+}
+
+export interface AnimationClip {
+  name: string;
+  duration: number;
+  keyframes: AnimationKeyframe[];
+}
+
+// ─── 怪物视觉规格 ───
+
 export interface MonsterVisualSpec {
   kind: BodyKind;
   hue: string;
@@ -28,6 +60,8 @@ export interface MonsterVisualSpec {
   size: number;
   eye: EyeStyle;
   features: FeatureSpec[];
+  joints?: JointDef[];
+  animations?: AnimationClip[];
 }
 
 export type EnemyTier = 'boss' | 'elite' | 'normal';
