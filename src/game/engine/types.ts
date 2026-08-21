@@ -5,7 +5,7 @@ import type { RewardState } from '../run/rewardTypes';
 import type { EventState } from '../run/eventTypes';
 import type { ShopState } from '../run/shopTypes';
 import type { ReplayState } from '../replay/replayTypes';
-export type GameMode = 'home' | 'compendium' | 'custom-content' | 'character-select' | 'map' | 'combat' | 'reward' | 'event' | 'shop' | 'special' | 'run-summary';
+export type GameMode = 'home' | 'compendium' | 'custom-content' | 'character-select' | 'monster-compendium' | 'map' | 'combat' | 'reward' | 'event' | 'shop' | 'special' | 'run-summary';
 export type RunStatus = 'active' | 'victory' | 'defeat';
 export interface RunState { id: string; seed: number; status: RunStatus; startedAt: number; currentAct: number; currentNodeId: string | null; visitedNodeIds: string[]; ascensionLevel: number; }
 export interface CharacterDefinition { id: string; name: string; maxHp: number; baseEnergy?: number; description?: string; signature?: string; startingGold?: number; startingDeck: string[]; startingRelics: string[]; startingPotions: string[]; }

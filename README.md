@@ -4,7 +4,7 @@
 
 🎮 **在线即玩 / Play instantly:** <https://violet-lz.github.io/Cardforge-web/>
 
-无需安装、无需注册、无需后端：打开 GitHub Pages 网页即可开始一局。本地开发同样只需 Node.js 与 npm。
+无需安装、无需注册、无需后端：打开 GitHub Pages 网页即可开始一局，并且支持中英文切换。本地开发同样只需 Node.js 与 npm。
 
 **Search keywords:** card roguelike, deckbuilder, Slay the Spire-like, browser game, web game, click-to-play, no-install, custom content editor, GitHub Pages, React TypeScript game, Kill the Spire.
 
@@ -99,3 +99,6 @@ Balance has NOT been extensively playtested. Use the built-in Custom Content Edi
 ## 许可
 
 暂未指定开源许可证。使用/借鉴本项目请标明出处链接。觉得好玩记得点个 ⭐ Star，谢谢！
+
+##git注意事项
+//所有修改不用上传github，每次修改完记得本地commit就行了，commit时需注意提交标签的写法（例如：怪物骨骼动画集成到战斗场景 -/- Integrate skeletal monster animations into combat），git push由开发者自己来。【git注意事项】这部分内容只存于本地不需要commit！

@@ -585,3 +585,23 @@ h2, h3 { color: #f4dcae; text-shadow: 0 2px 8px rgb(0 0 0 / 60%); }
   .content-default-art { grid-template-columns: 72px 1fr; padding: 8px; }
   .content-default-art svg { width: 68px; height: 68px; }
 }
+
+/* Monster Compendium */
+.monster-compendium .region-section { margin-bottom: 2rem; }
+.monster-compendium .region-header { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-left: 4px solid var(--region-hue); margin-bottom: 1rem; }
+.monster-compendium .region-header h2 { margin: 0; font-size: 1.1rem; }
+.monster-compendium .region-header small { opacity: 0.6; text-transform: uppercase; letter-spacing: 0.05em; font-family: ui-sans-serif, system-ui, sans-serif; font-size: 0.7rem; }
+.monster-compendium .region-count { margin-left: auto; font-size: 0.7rem; opacity: 0.5; font-family: ui-sans-serif, system-ui, sans-serif; }
+.monster-compendium .monster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; padding: 0 1rem; }
+.monster-compendium .monster-card { display: flex; flex-direction: column; align-items: center; padding: 0.75rem; border-radius: 8px; background: rgba(255,255,255,0.03); cursor: pointer; transition: background 0.2s; border: 1px solid transparent; }
+.monster-compendium .monster-card:hover { background: rgba(255,255,255,0.08); }
+.monster-compendium .monster-card-active { background: rgba(255,255,255,0.06); border-color: var(--color-border-strong); }
+.monster-compendium .monster-name { font-size: 0.75rem; margin-top: 0.5rem; text-align: center; }
+.monster-compendium .tier-badge { font-size: 0.65rem; padding: 0.15rem 0.4rem; border-radius: 4px; margin-top: 0.25rem; font-family: ui-sans-serif, system-ui, sans-serif; }
+.monster-compendium .tier-boss { background: rgba(232,64,60,0.2); color: #e8403c; }
+.monster-compendium .tier-elite { background: rgba(240,205,125,0.2); color: #f0cd7d; }
+.monster-compendium .tier-normal { background: rgba(168,162,145,0.15); color: #a8a291; }
+.monster-compendium .monster-detail-panel { display: flex; flex-direction: column; align-items: center; padding: 1.5rem; background: rgba(0,0,0,0.3); border-radius: 12px; margin: 0.5rem 0 1.5rem; }
+.monster-compendium .anim-controls { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; justify-content: center; }
+.monster-compendium .anim-controls button { font-size: 0.75rem; padding: 0.4rem 0.8rem; border-radius: 6px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: inherit; cursor: pointer; min-height: auto; }
+.monster-compendium .anim-controls button:hover { background: rgba(255,255,255,0.15); }

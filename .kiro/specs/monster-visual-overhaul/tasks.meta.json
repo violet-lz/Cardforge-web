@@ -1,0 +1,303 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 新增 JointDef、JointKeyframe、AnimationKeyframe、AnimationClip 接口定义": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206120593
+      },
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206138151
+      },
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206889016
+      }
+    ],
+    "2.1 新增 FeatureGlyph 形状函数至 150+ 个": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206120692
+      },
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206901341
+      },
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787208148591
+      }
+    ],
+    "3.1 创建 `src/components/enemies/animationGenerator.ts`": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206120798
+      },
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206902266
+      },
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787208149500
+      }
+    ],
+    "4.1 创建 `src/components/enemies/JointRenderer.tsx`": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206120848
+      },
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787208161646
+      },
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787208303153
+      }
+    ],
+    "5.1 更新 `src/components/enemies/EnemySprite.tsx` 支持 size/ground-line 对齐": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206120886
+      },
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787208336208
+      },
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787208757981
+      }
+    ],
+    "6. Checkpoint - 渲染引擎验证": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206120917
+      },
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787208801267
+      },
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787208826609
+      }
+    ],
+    "7.1 更新 `src/game/enemies/monsterVisualsA.ts` — 灰烬/村庄/森林 地域怪物": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206120953
+      },
+      {
+        "executionId": "9c2c0901-746f-493e-b880-f899c97d3d8f",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787208903472
+      },
+      {
+        "executionId": "9c2c0901-746f-493e-b880-f899c97d3d8f",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787210185133
+      }
+    ],
+    "8.1 更新 `src/game/enemies/monsterVisualsB.ts` — 沼泽/下水道/皇都 地域怪物": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206120992
+      },
+      {
+        "executionId": "9c2c0901-746f-493e-b880-f899c97d3d8f",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787210191902
+      },
+      {
+        "executionId": "9c2c0901-746f-493e-b880-f899c97d3d8f",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787216283295
+      }
+    ],
+    "9.1 创建 `src/game/enemies/monsterVisualsC.ts` — 外环/血色/魔法 地域怪物": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206121030
+      },
+      {
+        "executionId": "9c2c0901-746f-493e-b880-f899c97d3d8f",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787216300553
+      },
+      {
+        "executionId": "9c2c0901-746f-493e-b880-f899c97d3d8f",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787217787616
+      }
+    ],
+    "10.1 创建 `src/game/enemies/monsterVisualsD.ts` — 科技/天空/城堡/墓道 地域怪物": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206121059
+      },
+      {
+        "executionId": "9c2c0901-746f-493e-b880-f899c97d3d8f",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787217805513
+      }
+    ],
+    "11.1 创建 `src/game/enemies/monsterVisualsE.ts` — 冥界/渡口/海洋/亚特兰蒂斯 地域怪物": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206121080
+      }
+    ],
+    "12.1 创建 `src/game/enemies/monsterVisualsF.ts` — 钟楼/荒漠/陨石 地域怪物": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206121103
+      }
+    ],
+    "13.1 创建 `src/game/enemies/monsterVisualsG.ts` — 霓虹/恶魔/地垒/余响 地域怪物": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206121144
+      }
+    ],
+    "14.1 更新 `src/game/enemies/monsterVisuals.ts` 导入并合并所有视觉数据文件": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206121164
+      }
+    ],
+    "15. Checkpoint - 数据完整性验证": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206121186
+      }
+    ],
+    "16.1 创建 `src/game/enemies/monsterAnimations.ts`": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206121205
+      }
+    ],
+    "17.1 创建 `src/pages/MonsterCompendiumPage.tsx`": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206121224
+      }
+    ],
+    "17.2 接入路由系统": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206121248
+      }
+    ],
+    "19.1 扩展现有 `tests/contentAppearance.test.ts`": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206121271
+      }
+    ],
+    "19.2 运行完整构建验证": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206121303
+      }
+    ],
+    "20. Final checkpoint - 全面验证": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206121333
+      }
+    ],
+    "1. 扩展类型系统 (monsterVisualTypes.ts)": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787206889044
+      }
+    ],
+    "2. 扩展 spriteShapes 形状库": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787208148639
+      }
+    ],
+    "3. 实现 AnimationGenerator 工具模块": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787208149523
+      }
+    ],
+    "4. 实现 JointRenderer 组件": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787208303210
+      }
+    ],
+    "5. 升级 EnemySprite 组件": [
+      {
+        "executionId": "3884d491-ff49-4131-b8c3-bb51ad71fcab",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787208758043
+      }
+    ],
+    "7. 填充怪物视觉数据 — 文件 A (灰烬荒原 + 落败村庄 + 生机森林)": [
+      {
+        "executionId": "9c2c0901-746f-493e-b880-f899c97d3d8f",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787210185165
+      }
+    ],
+    "8. 填充怪物视觉数据 — 文件 B (苔藓沼泽 + 恶臭下水道 + 繁华皇都)": [
+      {
+        "executionId": "9c2c0901-746f-493e-b880-f899c97d3d8f",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787216283353
+      }
+    ],
+    "9. 填充怪物视觉数据 — 文件 C (皇都外环 + 血色之地 + 魔法之地)": [
+      {
+        "executionId": "9c2c0901-746f-493e-b880-f899c97d3d8f",
+        "chatSessionId": "92315e13-a634-44ba-a11c-f7acf9ba643d",
+        "timestamp": 1787217787651
+      }
+    ]
+  }
+}
