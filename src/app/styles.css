@@ -966,3 +966,7 @@ h2, h3 { color: #f4dcae; text-shadow: 0 2px 8px rgb(0 0 0 / 60%); }
   40% { transform: translateY(-16px) scale(1.06); filter: brightness(1.6); }
   75% { transform: translateY(-8px) scale(1.02); filter: brightness(1.2); }
 }
+
+/* Character portrait in compendium */
+.character-compendium-portrait { display: flex; justify-content: center; margin-bottom: 0.5rem; }
+.character-compendium-portrait svg { width: 100px; height: 112px; }

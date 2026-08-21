@@ -5,6 +5,7 @@
  */
 export interface ChangelogEntry { date: string; message: string; }
 export const CHANGELOG: ChangelogEntry[] = [
+  { date: '2026-08-21', message: '图鉴角色特性页面展示精细角色外观 -/- Show detailed character sprites in compendium character section' },
   { date: '2026-08-21', message: '6角色UI全面重做·精细多部件SVG外貌+独特战斗动画（挥剑/飞卡/喷火/射弩/盾冲/甩牌） -/- Overhaul 6 character sprites: detailed multi-part SVG with unique combat animations (sword slash, card launch, fire burst, crossbow, shield bash, card throw)' },
   { date: '2026-08-21', message: '新增8项怪物数据属性测试+集成渲染验证·1235测试全通过 -/- Add 8 monster visual property tests + render integration tests, 1235 tests all passing' },
   { date: '2026-08-21', message: '新增怪物视觉图鉴页面·25地域分组·动画预览·懒加载 -/- Add Monster Compendium page with 25-region grouping, animation preview, and lazy loading' },
