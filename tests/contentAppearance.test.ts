@@ -5,7 +5,7 @@ import { BASIC_CARDS } from '../src/data/cards/basicCards';
 import { BASIC_ENEMIES } from '../src/data/enemies/basicEnemies';
 import { ContentAppearance } from '../src/components/content/ContentAppearance';
 import { MONSTER_VISUALS } from '../src/game/enemies/monsterVisuals';
-import { resolveEnemyVisualSpec } from '../src/components/enemies/EnemySprite';
+import EnemySprite, { resolveEnemyVisualSpec } from '../src/components/enemies/EnemySprite';
 import {
   contentOrigin,
   importCustomContent,
@@ -95,5 +95,30 @@ describe('content appearance boundaries', () => {
     expect(() => importCustomContent(JSON.stringify(pack), undefined, false)).toThrow(/imageUrl|visual fields/);
     expect(Object.keys(pack.enemies)).toEqual(['visual-enemy']);
     expect(contentOrigin('enemies', 'visual-enemy')).toBe('custom');
+  });
+});
+
+
+describe('EnemySprite render integration', () => {
+  it('renders every monster in MONSTER_VISUALS without throwing', () => {
+    const ids = Object.keys(MONSTER_VISUALS);
+    expect(ids.length).toBeGreaterThan(0);
+
+    for (const id of ids) {
+      expect(() => {
+        renderToStaticMarkup(createElement(EnemySprite, { id, size: 120 }));
+      }).not.toThrow();
+    }
+  });
+
+  it('renders a monster with animation="hit" without throwing (joint animation path)', () => {
+    // Find a monster that has joints data
+    const withJoints = Object.entries(MONSTER_VISUALS).find(([, spec]) => spec.joints && spec.joints.length === 6);
+    expect(withJoints).toBeDefined();
+
+    const [id] = withJoints!;
+    expect(() => {
+      renderToStaticMarkup(createElement(EnemySprite, { id, size: 120, animation: 'hit' }));
+    }).not.toThrow();
   });
 });

@@ -5,6 +5,7 @@
  */
 export interface ChangelogEntry { date: string; message: string; }
 export const CHANGELOG: ChangelogEntry[] = [
+  { date: '2026-08-21', message: '新增8项怪物数据属性测试+集成渲染验证·1235测试全通过 -/- Add 8 monster visual property tests + render integration tests, 1235 tests all passing' },
   { date: '2026-08-21', message: '新增怪物视觉图鉴页面·25地域分组·动画预览·懒加载 -/- Add Monster Compendium page with 25-region grouping, animation preview, and lazy loading' },
   { date: '2026-08-21', message: '怪物骨骼动画集成到战斗场景·26种体型专属动画模板·每种5个动作 -/- Integrate skeletal monster animations into combat: 26 body-type animation templates with 5 clips each' },
   { date: '2026-08-21', message: '添加自动更新日志的 post-commit hook 脚本 -/- Add auto-changelog post-commit hook script' },
