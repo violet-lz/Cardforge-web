@@ -5,6 +5,7 @@
  */
 export interface ChangelogEntry { date: string; message: string; }
 export const CHANGELOG: ChangelogEntry[] = [
+  { date: '2026-08-21', message: '怪物骨骼动画集成到战斗场景·26种体型专属动画模板·每种5个动作 -/- Integrate skeletal monster animations into combat: 26 body-type animation templates with 5 clips each' },
   { date: '2026-08-21', message: '添加自动更新日志的 post-commit hook 脚本 -/- Add auto-changelog post-commit hook script' },
   { date: '2026-08-21', message: '怪物视觉系统全面升级：每只怪物7-9处独特外貌特征、骨骼关节动画系统、体型缩放差异化、数据按地域拆分-/-Monster visual overhaul: 7-9 unique features per monster, 6-joint skeletal animation, size scaling, region-based data split' },
   { date: '2026-08-19', message: '补全角色难度选择、图鉴遗物/药水效果及自定义工坊详情表单的中英文切换-/-Completed Chinese/English switching for character difficulty selection, compendium relic/potion effects, and the detailed custom-content editor' },

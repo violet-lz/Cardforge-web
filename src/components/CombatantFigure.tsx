@@ -1,5 +1,20 @@
 import type { IntentType } from '../game/combat/enemyTypes';
+import EnemySprite from './enemies/EnemySprite';
+
 export type CombatAnimation = 'idle' | 'attack' | 'defend' | 'skill' | 'summon' | 'hurt' | 'defeated';
+
+// Map CombatAnimation to skeletal animation clip names
+const combatAnimToClip = (anim: CombatAnimation): string | undefined => {
+  switch (anim) {
+    case 'attack': return 'attack1';
+    case 'defend': return 'defend';
+    case 'skill': return 'skill1';
+    case 'summon': return 'skill2';
+    case 'hurt': case 'defeated': return 'hit';
+    default: return undefined;
+  }
+};
+
 type Shape = { body: string; accent: string; mark: string };
 const SHAPES: Record<string, Shape> = {
   wanderer: { body: 'M43 145Q39 101 55 69L69 52 91 52 108 72Q121 106 114 145Z', accent: 'M57 70Q80 86 104 70L96 45Q80 31 64 45ZM48 104L24 121 42 135 65 113Z', mark: 'M24 108a22 22 0 1 0 1 0M19 108h10M24 103v10' },
@@ -20,4 +35,28 @@ const SHAPES: Record<string, Shape> = {
 };
 const INTENT_PATHS: Record<IntentType, string> = { attack: 'M5 19L19 5M8 5l11 11M5 16l3 3', defend: 'M12 3L20 7v5c0 5-3 8-8 10-5-2-8-5-8-10V7Z', buff: 'M12 20V5M6 11l6-6 6 6', status: 'M3 12s4-6 9-6 9 6 9 6-4 6-9 6-9-6-9-6Zm9-3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z', pollute: 'M7 4c0 5-4 6-4 11a4 4 0 0 0 8 0C11 10 7 9 7 4Zm10 5c0 4-3 5-3 8a3 3 0 0 0 6 0c0-3-3-4-3-8Z', summon: 'M12 3v18M3 12h18M6 6l12 12M18 6L6 18', energy: 'M13 2 4 14h7l-1 8 9-12h-7z', idle: 'M5 12h14' };
 export function IntentIcon({ type }: { type: IntentType }) { return <svg viewBox="0 0 24 24" aria-hidden="true"><path d={INTENT_PATHS[type]} /></svg>; }
-export function CombatantFigure({ id, label, side, animation = 'idle' }: { id: string; label: string; side: 'player' | 'enemy'; animation?: CombatAnimation }) { const shape = SHAPES[id] ?? (side === 'player' ? SHAPES.wanderer : SHAPES.ashling); return <figure className={`combatant-figure figure-${side} action-${animation}`} aria-label={label}><svg viewBox="0 0 160 180" role="img"><title>{label}</title><ellipse className="figure-shadow" cx="80" cy="157" rx="58" ry="10" /><g className="figure-art"><path className="figure-body" d={shape.body} /><path className="figure-accent" d={shape.accent} /><path className="figure-mark" d={shape.mark} /></g></svg></figure>; }
+export function CombatantFigure({ id, label, side, animation = 'idle' }: { id: string; label: string; side: 'player' | 'enemy'; animation?: CombatAnimation }) {
+  // For enemies, use skeletal animation system via EnemySprite
+  if (side === 'enemy') {
+    return (
+      <figure className={`combatant-figure figure-enemy action-${animation}`} aria-label={label}>
+        <EnemySprite id={id} label={label} size={160} animation={combatAnimToClip(animation)} />
+      </figure>
+    );
+  }
+  // For player characters, keep existing SHAPES rendering
+  const shape = SHAPES[id] ?? SHAPES.wanderer;
+  return (
+    <figure className={`combatant-figure figure-player action-${animation}`} aria-label={label}>
+      <svg viewBox="0 0 160 180" role="img">
+        <title>{label}</title>
+        <ellipse className="figure-shadow" cx="80" cy="157" rx="58" ry="10" />
+        <g className="figure-art">
+          <path className="figure-body" d={shape.body} />
+          <path className="figure-accent" d={shape.accent} />
+          <path className="figure-mark" d={shape.mark} />
+        </g>
+      </svg>
+    </figure>
+  );
+}
