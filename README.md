@@ -99,6 +99,3 @@ Balance has NOT been extensively playtested. Use the built-in Custom Content Edi
 ## 许可
 
 暂未指定开源许可证。使用/借鉴本项目请标明出处链接。觉得好玩记得点个 ⭐ Star，谢谢！
-
-##git注意事项
-//所有修改不用上传github，每次修改完记得本地commit就行了，commit时需注意提交标签的写法（例如：怪物骨骼动画集成到战斗场景 -/- Integrate skeletal monster animations into combat），git push由开发者自己来。【git注意事项】这部分内容只存于本地不需要commit！
