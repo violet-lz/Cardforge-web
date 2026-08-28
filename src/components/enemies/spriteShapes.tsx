@@ -1546,6 +1546,18 @@ export function FeatureGlyph({ id, f }: { id: string; f: FeatureSpec }) {
   else if (has(id, 'deepCrush', 'stonePalm')) node = fist(f);
   else if (has(id, 'goldenBuckle')) node = coin(f, 3);
   else if (has(id, 'reefCamouflage')) node = moss(f);
+  else if (has(id, 'bigWrench', 'crierScepter', 'buffDrumstick')) node = staff(f, 'rod');
+  else if (has(id, 'breakPoint', 'brittleMark', 'rivetLine')) node = crack(f, 2);
+  else if (has(id, 'coronaFlare', 'plagueGeyser', 'gasBurst', 'sludgePour')) node = flame(f, 1);
+  else if (has(id, 'crocNursery', 'toadPerch', 'guardSummon', 'summonScratch')) node = orb(f);
+  else if (has(id, 'crushGreave', 'sandals', 'marchStance')) node = boots(f);
+  else if (has(id, 'heraldTabard', 'leanTorso', 'reedCamo')) node = cloth(f);
+  else if (has(id, 'legCluster')) node = paw(f);
+  else if (has(id, 'lordlyPose', 'wetSheen')) node = dust(f);
+  else if (has(id, 'marshBind')) node = bandage(f);
+  else if (has(id, 'mireFilm', 'toxicMass', 'stoneHide')) node = plate(f);
+  else if (has(id, 'plagueSore', 'taxPouch')) node = drops(f, 3);
+  else if (has(id, 'valveHead')) node = gear(f);
 
   else node = dot(f);
 

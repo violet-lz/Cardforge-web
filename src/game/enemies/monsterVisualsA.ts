@@ -554,146 +554,155 @@ export const VISUALS_A: Record<string, MonsterVisualSpec> = {
   'mire-crocodile': {
     kind: 'croc', hue: '#4c5a3a', hue2: '#2e3624', glow: '#6b8f3d', size: 1.0, eye: 'glow',
     features: [
-      F('mossBack', 60, 40, '#5c7a3c', 0, 1.1),
-      F('deadRoll', 60, 62, '#2e3624', 0, 1),
-      F('mudMuzzle', 30, 66, '#3a2c18', 0, 0.9),
-      F('siltEyes', 34, 56, '#b8e04f', 0, 0.7),
-      F('tugClaw', 78, 74, '#4c5a3a', 0, 0.9),
-      F('bubbleGulp', 36, 74, '#b8e04f', 0, 0.8),
-      F('sapRing', 60, 84, '#6b8f3d', 0, 1.1),
-      F('swampTail', 90, 80, '#2e3624', 12, 1),
+      F('scutePlate', 60, 48, '#3a4a30', 0, 1.15, '#2e3624'),  // 0: dorsal scute armour
+      F('mudSubmerse', 60, 88, '#2c1f10', 0, 1.2),              // 1: half-submerged mud pool
+      F('rollSpine', 60, 60, '#4c5a3a', 18, 1.0),              // 2: torso death-roll twist
+      F('jawHinge', 28, 62, '#2e3624', 0, 1.0),                // 3: massive hinged jaw
+      F('dragClaw', 80, 76, '#3a4a30', -8, 0.9),               // 4: right drag claw
+      F('mireFilm', 60, 94, '#6b8f3d', 0, 1.1),               // 5: swamp film underfoot
+      F('nostrilBubble', 34, 54, '#b8e04f', 0, 0.7),           // 6: nostril gas bubble
+      F('sapVent', 44, 78, '#6b8f3d', 0, 0.8),                 // 7: sap-drain vent on belly
+      F('scarredTail', 92, 72, '#2e3624', 22, 1.0),            // 8: thick scarred tail
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 62 }, boundFeatures: [0, 1] },
-      { id: 'head', parentId: 'root', anchor: { x: 34, y: 56 }, boundFeatures: [2, 3] },
-      { id: 'armL', parentId: 'root', anchor: { x: 36, y: 74 }, boundFeatures: [5] },
-      { id: 'armR', parentId: 'root', anchor: { x: 78, y: 74 }, boundFeatures: [4] },
-      { id: 'legL', parentId: 'root', anchor: { x: 60, y: 84 }, boundFeatures: [6] },
-      { id: 'legR', parentId: 'root', anchor: { x: 90, y: 80 }, boundFeatures: [7] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 62 }, boundFeatures: [0, 2] },
+      { id: 'head', parentId: 'root', anchor: { x: 30, y: 58 }, boundFeatures: [3, 6] },
+      { id: 'armL', parentId: 'root', anchor: { x: 44, y: 78 }, boundFeatures: [7] },
+      { id: 'armR', parentId: 'root', anchor: { x: 80, y: 76 }, boundFeatures: [4] },
+      { id: 'legL', parentId: 'root', anchor: { x: 60, y: 90 }, boundFeatures: [1, 5] },
+      { id: 'legR', parentId: 'root', anchor: { x: 92, y: 72 }, boundFeatures: [8] },
     ],
   },
   'moss-lurker': {
     kind: 'blob', hue: '#3a5a42', hue2: '#22332a', glow: '#b8e04f', size: 0.85, eye: 'white',
     features: [
-      F('mossFur', 60, 44, '#5c7a3c', 0, 1.1),
-      F('sporePore', 60, 66, '#b8e04f', 0, 1),
-      F('clawStump', 40, 86, '#22332a', 0, 0.8),
-      F('dripVenom', 44, 94, '#8fae3c', 0, 0.9),
-      F('halfSunken', 60, 98, '#2e3624', 0, 1),
-      F('watchPit', 60, 40, '#e9e4d4', 0, 0.8),
-      F('fernTuft', 76, 36, '#5c7a3c', 0, 0.8),
+      F('sporeSac', 54, 30, '#b8e04f', 0, 0.9),               // 0: dorsal spore sac
+      F('mossMantle', 60, 52, '#5c7a3c', 0, 1.15, '#22332a'), // 1: amorphous moss body
+      F('hiddenClaw', 36, 72, '#22332a', -6, 0.85),           // 2: left concealed claw
+      F('hiddenClaw2', 82, 72, '#22332a', 6, 0.85),           // 3: right concealed claw
+      F('poreVent', 70, 38, '#b8e04f', 0, 0.7),               // 4: spore vent opening
+      F('poreVent2', 48, 44, '#b8e04f', 0, 0.65),             // 5: secondary vent
+      F('rootGrip', 60, 92, '#2e3624', 0, 1.0),               // 6: root tendrils base
+      F('toxinDrip', 44, 82, '#8fae3c', 0, 0.8),              // 7: poison drip trail
+      F('dimEye', 60, 42, '#e9e4d4', 0, 0.6),                 // 8: faint watching eye
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 60 }, boundFeatures: [0, 1] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 40 }, boundFeatures: [5, 6] },
-      { id: 'armL', parentId: 'root', anchor: { x: 40, y: 66 }, boundFeatures: [2] },
-      { id: 'armR', parentId: 'root', anchor: { x: 76, y: 66 }, boundFeatures: [3] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 94 }, boundFeatures: [4] },
-      { id: 'legR', parentId: 'root', anchor: { x: 60, y: 98 }, boundFeatures: [] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 56 }, boundFeatures: [1, 8] },
+      { id: 'head', parentId: 'root', anchor: { x: 58, y: 34 }, boundFeatures: [0, 4, 5] },
+      { id: 'armL', parentId: 'root', anchor: { x: 36, y: 72 }, boundFeatures: [2] },
+      { id: 'armR', parentId: 'root', anchor: { x: 82, y: 72 }, boundFeatures: [3] },
+      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 88 }, boundFeatures: [7] },
+      { id: 'legR', parentId: 'root', anchor: { x: 60, y: 92 }, boundFeatures: [6] },
     ],
   },
   'reed-stalker': {
     kind: 'humanoid', hue: '#5c6a3a', hue2: '#3a4224', glow: '#c98f2f', size: 0.9, eye: 'slit',
     features: [
-      F('reedHood', 60, 24, '#7a8a4c', 0, 1),
-      F('reedLance', 30, 36, '#8a9a5c', 10, 1.1),
-      F('stemCloak', 60, 66, '#5c6a3a', 0, 1.1, '#3a4224'),
-      F('stalkBend', 60, 50, '#7a8a4c', 0, 1),
-      F('jointKnees', 60, 84, '#3a4224', 0, 0.9),
-      F('reedShadow', 60, 96, '#3a4224', 0, 1),
-      F('marshWraps', 34, 72, '#6b8f3d', 0, 0.8),
+      F('reedCamo', 60, 54, '#7a8a4c', 0, 1.1, '#3a4224'),   // 0: reed-woven torso wrap
+      F('reedSpear', 28, 28, '#8a9a5c', 8, 1.2),              // 1: long reed spear
+      F('splitHood', 60, 18, '#5c6a3a', 0, 0.9),              // 2: split reed hood
+      F('leanTorso', 60, 44, '#6b7a42', 0, 1.0),              // 3: lean angular torso
+      F('marshBind', 38, 70, '#6b8f3d', 0, 0.8),              // 4: left marsh wrapping
+      F('marshBind2', 78, 70, '#6b8f3d', 0, 0.8),             // 5: right marsh wrapping
+      F('stabStance', 52, 86, '#3a4224', 0, 0.9),             // 6: lunging leg stance
+      F('slitGaze', 60, 24, '#c98f2f', 0, 0.6),              // 7: predatory slit gaze
+      F('muddySole', 68, 94, '#2e3624', 0, 0.8),             // 8: mud-caked feet
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 58 }, boundFeatures: [2, 3] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 24 }, boundFeatures: [0] },
-      { id: 'armL', parentId: 'root', anchor: { x: 30, y: 46 }, boundFeatures: [1] },
-      { id: 'armR', parentId: 'root', anchor: { x: 86, y: 50 }, boundFeatures: [6] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 84 }, boundFeatures: [4] },
-      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 96 }, boundFeatures: [5] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 50 }, boundFeatures: [0, 3] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 20 }, boundFeatures: [2, 7] },
+      { id: 'armL', parentId: 'root', anchor: { x: 28, y: 42 }, boundFeatures: [1] },
+      { id: 'armR', parentId: 'root', anchor: { x: 86, y: 48 }, boundFeatures: [5] },
+      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 82 }, boundFeatures: [4, 6] },
+      { id: 'legR', parentId: 'root', anchor: { x: 72, y: 94 }, boundFeatures: [8] },
     ],
   },
   'bog-witchling': {
     kind: 'hag', hue: '#4c5a3a', hue2: '#2e3624', glow: '#b8e04f', size: 0.9, eye: 'glow',
     features: [
-      F('mudPigtails', 60, 16, '#3a2c18', 0, 0.9),
-      F('gasBubbles', 74, 78, '#b8e04f', 0, 0.9),
-      F('clayKettle', 88, 70, '#5c4224', 0, 0.8),
-      F('swampWig', 60, 22, '#5c7a3c', 0, 1),
-      F('mudSplat', 44, 66, '#3a2c18', 0, 1),
-      F('cackleMouth', 60, 36, '#2e3624', 0, 0.9),
-      F('toadFriend', 34, 88, '#6b8f3d', 0, 0.7),
-      F('curseCharm', 80, 48, '#b8e04f', 0, 0.7),
+      F('mudKettle', 84, 68, '#5c4224', 0, 0.9),              // 0: bubbling mud kettle
+      F('toadPerch', 32, 86, '#6b8f3d', 0, 0.7),              // 1: toad companion
+      F('gasBurst', 78, 50, '#b8e04f', 0, 0.8),               // 2: swamp gas burst
+      F('tangledHair', 60, 14, '#3a2c18', 0, 0.95),           // 3: tangled mud hair
+      F('patchRobe', 60, 56, '#4c5a3a', 0, 1.05, '#2e3624'), // 4: patched swamp robe
+      F('mudBall', 38, 54, '#3a2c18', 0, 0.8),                // 5: prepared mud ball
+      F('witchGrin', 60, 32, '#2e3624', 0, 0.75),             // 6: cackling grin
+      F('charmDangle', 76, 38, '#b8e04f', 0, 0.65),           // 7: hanging curse charm
+      F('bareFootMud', 60, 94, '#3a2c18', 0, 0.8),            // 8: muddy bare feet
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 56 }, boundFeatures: [4, 5] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 20 }, boundFeatures: [0, 3] },
-      { id: 'armL', parentId: 'root', anchor: { x: 34, y: 60 }, boundFeatures: [6] },
-      { id: 'armR', parentId: 'root', anchor: { x: 88, y: 60 }, boundFeatures: [2, 7] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 88 }, boundFeatures: [1] },
-      { id: 'legR', parentId: 'root', anchor: { x: 74, y: 78 }, boundFeatures: [] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 54 }, boundFeatures: [4, 6] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 18 }, boundFeatures: [3, 7] },
+      { id: 'armL', parentId: 'root', anchor: { x: 36, y: 58 }, boundFeatures: [5, 1] },
+      { id: 'armR', parentId: 'root', anchor: { x: 84, y: 62 }, boundFeatures: [0, 2] },
+      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 88 }, boundFeatures: [8] },
+      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 90 }, boundFeatures: [] },
     ],
   },
   'swamp-hag': {
     kind: 'hag', hue: '#3a4a34', hue2: '#22332a', glow: '#8fae3c', size: 1.1, eye: 'red',
     features: [
-      F('cauldronArm', 84, 58, '#2b2115', 0, 1),
-      F('boneStaff', 30, 30, '#d8cbb0', 6, 1.2),
-      F('hairWisps', 60, 18, '#5c7a3c', 0, 1.1),
-      F('curseBeads', 60, 58, '#b8e04f', 0, 0.9),
-      F('festerHands', 44, 72, '#8fae3c', 0, 0.9),
-      F('bogSkirt', 60, 92, '#22332a', 0, 1.1),
-      F('toadThrone', 60, 98, '#4c5a3a', 0, 0.8),
-      F('venomVial', 76, 44, '#8fae3c', 0, 0.7),
+      F('boneStaff', 26, 26, '#d8cbb0', 6, 1.25),             // 0: gnarled bone staff
+      F('cauldronBig', 86, 62, '#2b2115', 0, 1.05),           // 1: iron cauldron
+      F('poisonFume', 86, 46, '#8fae3c', 0, 0.85),            // 2: cauldron poison fume
+      F('curseBeadNeck', 60, 44, '#b8e04f', 0, 0.9),          // 3: curse bead necklace
+      F('ragCloak', 60, 68, '#22332a', 0, 1.15, '#3a4a34'),   // 4: tattered rag cloak
+      F('wispHair', 60, 14, '#5c7a3c', 0, 1.1),               // 5: wild wispy hair
+      F('warpedHands', 40, 74, '#8fae3c', 0, 0.85),           // 6: warped green hands
+      F('bogHemSkirt', 60, 90, '#22332a', 0, 1.1),            // 7: frayed bog-hem skirt
+      F('hexEye', 60, 28, '#e34325', 0, 0.7),                 // 8: glowing hex eye
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 60 }, boundFeatures: [3, 4] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 22 }, boundFeatures: [2] },
-      { id: 'armL', parentId: 'root', anchor: { x: 30, y: 44 }, boundFeatures: [1] },
-      { id: 'armR', parentId: 'root', anchor: { x: 84, y: 52 }, boundFeatures: [0, 7] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 92 }, boundFeatures: [5] },
-      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 98 }, boundFeatures: [6] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 58 }, boundFeatures: [3, 4] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 20 }, boundFeatures: [5, 8] },
+      { id: 'armL', parentId: 'root', anchor: { x: 26, y: 42 }, boundFeatures: [0] },
+      { id: 'armR', parentId: 'root', anchor: { x: 86, y: 54 }, boundFeatures: [1, 2] },
+      { id: 'legL', parentId: 'root', anchor: { x: 40, y: 86 }, boundFeatures: [6, 7] },
+      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 92 }, boundFeatures: [] },
     ],
   },
   'ancient-croc': {
     kind: 'croc', hue: '#3a4a32', hue2: '#20281f', glow: '#e2ae4f', size: 1.15, eye: 'red',
     features: [
-      F('oldScale', 60, 44, '#4c5a3a', 0, 1.2),
-      F('mossCrown', 60, 26, '#5c7a3c', 0, 1),
-      F('giantJaw', 30, 66, '#20281f', 0, 1),
-      F('rageVein', 70, 56, '#e34325', 0, 0.9),
-      F('stumpLeg', 80, 80, '#2e3624', 0, 0.9),
-      F('deepMud', 60, 98, '#2e3624', 0, 1),
-      F('scarRidge', 60, 38, '#20281f', 0, 1),
-      F('ironHide', 46, 72, '#3a4a32', 0, 1.1),
+      F('thickScales', 60, 50, '#4c5a3a', 0, 1.25, '#20281f'), // 0: layered thick scales
+      F('massiveJaw', 24, 60, '#20281f', -4, 1.1),             // 1: oversized crushing jaw
+      F('mossGrowth', 60, 34, '#5c7a3c', 0, 1.0),             // 2: ancient moss on back
+      F('rageVeins', 72, 54, '#e34325', 0, 0.85),             // 3: rage-glowing veins
+      F('stoneHide', 44, 70, '#3a4a32', 0, 1.1),              // 4: stone-hard flank
+      F('ancientEye', 30, 48, '#e2ae4f', 0, 0.7),             // 5: ancient amber eye
+      F('mudArmour', 60, 80, '#2e3624', 0, 1.15),             // 6: caked mud armour
+      F('tailClub', 94, 68, '#20281f', 16, 1.05),             // 7: club-like tail tip
+      F('scarMark', 58, 42, '#20281f', 0, 0.8),               // 8: battle scar ridge
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 56 }, boundFeatures: [0, 3] },
-      { id: 'head', parentId: 'root', anchor: { x: 30, y: 44 }, boundFeatures: [1, 2] },
-      { id: 'armL', parentId: 'root', anchor: { x: 46, y: 72 }, boundFeatures: [7] },
-      { id: 'armR', parentId: 'root', anchor: { x: 80, y: 80 }, boundFeatures: [4] },
-      { id: 'legL', parentId: 'root', anchor: { x: 60, y: 98 }, boundFeatures: [5] },
-      { id: 'legR', parentId: 'root', anchor: { x: 60, y: 38 }, boundFeatures: [6] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 56 }, boundFeatures: [0, 8] },
+      { id: 'head', parentId: 'root', anchor: { x: 26, y: 52 }, boundFeatures: [1, 5] },
+      { id: 'armL', parentId: 'root', anchor: { x: 44, y: 70 }, boundFeatures: [4] },
+      { id: 'armR', parentId: 'root', anchor: { x: 78, y: 66 }, boundFeatures: [3] },
+      { id: 'legL', parentId: 'root', anchor: { x: 60, y: 82 }, boundFeatures: [2, 6] },
+      { id: 'legR', parentId: 'root', anchor: { x: 94, y: 68 }, boundFeatures: [7] },
     ],
   },
   'mother-of-the-mire': {
     kind: 'blob', hue: '#3a4436', hue2: '#222b22', glow: '#8fae3c', size: 1.4, eye: 'red',
     features: [
-      F('mudBelly', 60, 66, '#3a4436', 0, 1.2, '#222b22'),
-      F('twinClaw', 60, 44, '#222b22', 0, 1.1),
-      F('siltRing', 60, 88, '#5c6a3a', 0, 1.3),
-      F('sporeHalo', 60, 24, '#b8e04f', 0, 1.1),
-      F('crocChild', 92, 80, '#4c5a3a', 0, 0.7),
-      F('drainEyes', 60, 40, '#8fae3c', 0, 0.9),
-      F('bogBloom', 44, 30, '#b8e04f', 0, 0.9),
-      F('rootTendrils', 34, 76, '#2e3624', 0, 1),
+      F('vastMudBody', 60, 60, '#3a4436', 0, 1.3, '#222b22'),  // 0: massive mud mass
+      F('crocNursery', 88, 78, '#4c5a3a', 0, 0.75),            // 1: croc spawn pod
+      F('deepMaw', 60, 46, '#222b22', 0, 1.1),                 // 2: gaping central maw
+      F('twinClaw', 32, 54, '#222b22', -10, 1.0),              // 3: left rending claw
+      F('twinClaw2', 86, 54, '#222b22', 10, 1.0),              // 4: right rending claw
+      F('sapAura', 60, 82, '#8fae3c', 0, 1.2),                 // 5: sap-drain miasma
+      F('sporeCanopy', 60, 22, '#b8e04f', 0, 1.15),            // 6: spore cloud crown
+      F('rootNetwork', 40, 92, '#2e3624', 0, 1.0),             // 7: spreading root system
+      F('bossEye', 60, 36, '#e34325', 0, 0.9),                 // 8: baleful boss eye
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 60 }, boundFeatures: [0, 1] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 30 }, boundFeatures: [3, 5] },
-      { id: 'armL', parentId: 'root', anchor: { x: 34, y: 66 }, boundFeatures: [6, 7] },
-      { id: 'armR', parentId: 'root', anchor: { x: 92, y: 80 }, boundFeatures: [4] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 88 }, boundFeatures: [2] },
-      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 88 }, boundFeatures: [] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 58 }, boundFeatures: [0, 2] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 28 }, boundFeatures: [6, 8] },
+      { id: 'armL', parentId: 'root', anchor: { x: 32, y: 54 }, boundFeatures: [3] },
+      { id: 'armR', parentId: 'root', anchor: { x: 88, y: 60 }, boundFeatures: [1, 4] },
+      { id: 'legL', parentId: 'root', anchor: { x: 40, y: 88 }, boundFeatures: [5, 7] },
+      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 90 }, boundFeatures: [] },
     ],
   },
 
@@ -701,123 +710,132 @@ export const VISUALS_A: Record<string, MonsterVisualSpec> = {
   'sewer-rat-king': {
     kind: 'rat', hue: '#5c5a4a', hue2: '#38362c', glow: '#e2ae4f', size: 1.0, eye: 'red',
     features: [
-      F('tailCrown', 60, 16, '#6f6a5c', 0, 1),
-      F('ironBands', 60, 60, '#8a8f9c', 0, 1),
-      F('royalSlop', 60, 94, '#5c6a3a', 0, 1),
-      F('yellowFangs', 34, 66, '#d8cbb0', 0, 0.9),
-      F('subjectRing', 60, 76, '#38362c', 0, 1.1),
-      F('plagueMuzzle', 36, 64, '#4a4838', 0, 0.8),
-      F('coinStash', 88, 88, '#e2ae4f', 0, 0.8),
-      F('crownSewage', 74, 26, '#6f6a5c', 0, 0.7),
+      F('rattyCrown', 60, 14, '#e2ae4f', 0, 0.9),              // 0: crude sewer crown
+      F('ironBandBody', 60, 56, '#8a8f9c', 0, 1.05),           // 1: iron band harness
+      F('subjectCircle', 60, 80, '#38362c', 0, 1.1),           // 2: rat subject ring
+      F('gnarlFangs', 38, 38, '#d8cbb0', 0, 0.85),             // 3: plague-yellow fangs
+      F('swarmTail', 88, 28, '#5c5a4a', 18, 1.0),              // 4: coiled tail throne
+      F('plagueSore', 74, 62, '#8fae3c', 0, 0.7),              // 5: plague sore
+      F('lordlyPose', 60, 66, '#5c5a4a', 0, 1.0),              // 6: regal hunched pose
+      F('slopCarpet', 60, 94, '#5c6a3a', 0, 1.0),              // 7: sewage carpet
+      F('summonScratch', 34, 72, '#38362c', 0, 0.8),           // 8: summoning scratch mark
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 60 }, boundFeatures: [1, 4] },
-      { id: 'head', parentId: 'root', anchor: { x: 44, y: 30 }, boundFeatures: [0, 7] },
-      { id: 'armL', parentId: 'root', anchor: { x: 34, y: 66 }, boundFeatures: [3, 5] },
-      { id: 'armR', parentId: 'root', anchor: { x: 88, y: 66 }, boundFeatures: [6] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 88 }, boundFeatures: [2] },
-      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 88 }, boundFeatures: [] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 58 }, boundFeatures: [1, 6] },
+      { id: 'head', parentId: 'root', anchor: { x: 50, y: 26 }, boundFeatures: [0, 3] },
+      { id: 'armL', parentId: 'root', anchor: { x: 34, y: 64 }, boundFeatures: [8] },
+      { id: 'armR', parentId: 'root', anchor: { x: 88, y: 44 }, boundFeatures: [4, 5] },
+      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 86 }, boundFeatures: [2] },
+      { id: 'legR', parentId: 'root', anchor: { x: 72, y: 94 }, boundFeatures: [7] },
     ],
   },
   'plague-rat': {
     kind: 'rat', hue: '#54524a', hue2: '#32312c', glow: '#8fae3c', size: 0.65, eye: 'red',
     features: [
-      F('sorePaw', 36, 86, '#8fae3c', 0, 0.8),
-      F('wetFur', 60, 60, '#42413a', 0, 1),
-      F('feverGlow', 60, 30, '#e34325', 0, 0.7),
-      F('gnawedPipe', 88, 40, '#8a8f9c', 0, 0.8),
-      F('twitchTail', 90, 76, '#54524a', 14),
-      F('runawayEyes', 60, 28, '#e34325', 0, 0.7),
-      F('scabPatch', 74, 54, '#8fae3c', 0, 0.7),
+      F('mangeFur', 60, 54, '#42413a', 0, 1.0),                // 0: patchy mange fur
+      F('sorePaws', 34, 78, '#8fae3c', 0, 0.75),               // 1: sore-riddled paws
+      F('sorePaws2', 80, 78, '#8fae3c', 0, 0.75),              // 2: right sore paw
+      F('wetSheen', 60, 60, '#54524a', 0, 1.05),               // 3: wet-slick body
+      F('feverEyes', 60, 30, '#e34325', 0, 0.65),              // 4: feverish red eyes
+      F('scrawnyTail', 90, 68, '#32312c', 14, 0.9),            // 5: thin twitching tail
+      F('biteTeeth', 54, 40, '#d8cbb0', 0, 0.6),               // 6: exposed bite teeth
+      F('filthMat', 60, 90, '#32312c', 0, 0.9),                // 7: filth-matted underbelly
+      F('infectedNose', 48, 34, '#8fae3c', 0, 0.5),            // 8: infected pink nose
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 58 }, boundFeatures: [1, 6] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 28 }, boundFeatures: [2, 5] },
-      { id: 'armL', parentId: 'root', anchor: { x: 36, y: 66 }, boundFeatures: [0] },
-      { id: 'armR', parentId: 'root', anchor: { x: 88, y: 50 }, boundFeatures: [3] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 86 }, boundFeatures: [] },
-      { id: 'legR', parentId: 'root', anchor: { x: 90, y: 76 }, boundFeatures: [4] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 56 }, boundFeatures: [0, 3] },
+      { id: 'head', parentId: 'root', anchor: { x: 52, y: 34 }, boundFeatures: [4, 6, 8] },
+      { id: 'armL', parentId: 'root', anchor: { x: 34, y: 72 }, boundFeatures: [1] },
+      { id: 'armR', parentId: 'root', anchor: { x: 80, y: 72 }, boundFeatures: [2] },
+      { id: 'legL', parentId: 'root', anchor: { x: 50, y: 88 }, boundFeatures: [7] },
+      { id: 'legR', parentId: 'root', anchor: { x: 90, y: 68 }, boundFeatures: [5] },
     ],
   },
   'filth-slime': {
     kind: 'blob', hue: '#6a6a4a', hue2: '#42422c', glow: '#8fae3c', size: 0.85, eye: 'white',
     features: [
-      F('slopBody', 60, 62, '#6a6a4a', 0, 1.15, '#42422c'),
-      F('corrodeMist', 60, 40, '#8fae3c', 0, 1.1),
-      F('stinkLine', 60, 24, '#8a8f5c', 0, 1),
-      F('gritSplat', 44, 92, '#42422c', 0, 1),
-      F('dullEye', 60, 50, '#e9e4d4', 0, 0.8),
-      F('pipeRind', 74, 78, '#5c5a4a', 0, 0.8),
-      F('oozeDrip', 30, 74, '#8fae3c', 0, 0.9),
+      F('toxicMass', 60, 58, '#6a6a4a', 0, 1.2, '#42422c'),   // 0: main toxic body mass
+      F('corrodeMist', 60, 34, '#8fae3c', 0, 1.05),            // 1: rising corrosive mist
+      F('membraneShell', 60, 48, '#7a7a5a', 0, 1.1),           // 2: protective membrane
+      F('acidDrip', 36, 76, '#8fae3c', 0, 0.85),               // 3: left acid drip
+      F('acidDrip2', 80, 76, '#8fae3c', 0, 0.85),              // 4: right acid drip
+      F('splashRing', 60, 88, '#42422c', 0, 1.15),             // 5: splash ring on ground
+      F('nucleusEye', 60, 46, '#e9e4d4', 0, 0.7),              // 6: inner nucleus eye
+      F('pipeDebris', 78, 64, '#5c5a4a', 0, 0.8),              // 7: embedded pipe debris
+      F('stenchWave', 60, 22, '#8a8f5c', 0, 0.9),              // 8: stench wave lines
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 58 }, boundFeatures: [0, 4] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 30 }, boundFeatures: [1, 2] },
-      { id: 'armL', parentId: 'root', anchor: { x: 30, y: 68 }, boundFeatures: [6] },
-      { id: 'armR', parentId: 'root', anchor: { x: 74, y: 68 }, boundFeatures: [5] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 92 }, boundFeatures: [3] },
-      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 92 }, boundFeatures: [] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 54 }, boundFeatures: [0, 2, 6] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 28 }, boundFeatures: [1, 8] },
+      { id: 'armL', parentId: 'root', anchor: { x: 36, y: 68 }, boundFeatures: [3] },
+      { id: 'armR', parentId: 'root', anchor: { x: 80, y: 68 }, boundFeatures: [4, 7] },
+      { id: 'legL', parentId: 'root', anchor: { x: 46, y: 88 }, boundFeatures: [5] },
+      { id: 'legR', parentId: 'root', anchor: { x: 74, y: 88 }, boundFeatures: [] },
     ],
   },
   'gutter-roach': {
     kind: 'roach', hue: '#4c3a2c', hue2: '#2c2018', glow: '#8fae3c', size: 0.7, eye: 'red',
     features: [
-      F('glossShell', 60, 56, '#5c4232', 0, 1.1),
-      F('whiskerFan', 34, 40, '#6d5527', 0, 1.2),
-      F('clawSnaps', 30, 62, '#3a2c18', 0, 0.9),
-      F('rotGoo', 60, 92, '#8fae3c', 0, 1),
-      F('hopperLegs', 60, 84, '#4c3a2c', 0, 1),
-      F('gritEye', 60, 36, '#e34325', 0, 0.7),
-      F('antennaTwitch', 72, 26, '#6d5527', 0, 0.8),
+      F('chitinShell', 60, 52, '#5c4232', 0, 1.15),            // 0: glossy chitin shell
+      F('pincerL', 30, 56, '#3a2c18', -8, 0.9),                // 1: left pincer claw
+      F('pincerR', 88, 56, '#3a2c18', 8, 0.9),                 // 2: right pincer claw
+      F('antennaL', 40, 24, '#6d5527', -12, 0.85),             // 3: left antenna
+      F('antennaR', 76, 24, '#6d5527', 12, 0.85),              // 4: right antenna
+      F('rotOoze', 60, 86, '#8fae3c', 0, 0.9),                 // 5: rot ooze trail
+      F('legCluster', 60, 74, '#4c3a2c', 0, 1.0),              // 6: skittering leg cluster
+      F('compoundEye', 56, 34, '#e34325', 0, 0.65),            // 7: compound red eye
+      F('carapaceRidge', 60, 44, '#2c2018', 0, 1.0),           // 8: carapace ridge line
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 56 }, boundFeatures: [0, 3] },
-      { id: 'head', parentId: 'root', anchor: { x: 50, y: 36 }, boundFeatures: [1, 5, 6] },
-      { id: 'armL', parentId: 'root', anchor: { x: 30, y: 56 }, boundFeatures: [2] },
-      { id: 'armR', parentId: 'root', anchor: { x: 86, y: 56 }, boundFeatures: [] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 84 }, boundFeatures: [4] },
-      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 92 }, boundFeatures: [] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 54 }, boundFeatures: [0, 8] },
+      { id: 'head', parentId: 'root', anchor: { x: 56, y: 30 }, boundFeatures: [3, 4, 7] },
+      { id: 'armL', parentId: 'root', anchor: { x: 30, y: 56 }, boundFeatures: [1] },
+      { id: 'armR', parentId: 'root', anchor: { x: 88, y: 56 }, boundFeatures: [2] },
+      { id: 'legL', parentId: 'root', anchor: { x: 46, y: 78 }, boundFeatures: [6] },
+      { id: 'legR', parentId: 'root', anchor: { x: 74, y: 86 }, boundFeatures: [5] },
     ],
   },
   'pipe-warden': {
     kind: 'construct', hue: '#4a4c44', hue2: '#2c2e28', glow: '#8fae3c', size: 1.1, eye: 'red',
     features: [
-      F('gateArmour', 60, 60, '#5c5e54', 0, 1.1),
-      F('wrenchFist', 30, 68, '#8a8f9c', -16, 1),
-      F('pipeVeins', 60, 44, '#6a6a5c', 0, 1.1),
-      F('sludgeVent', 74, 30, '#8fae3c', 0, 0.9),
-      F('valveEye', 60, 28, '#e34325', 0, 0.8),
-      F('chainLeg', 84, 88, '#6f6a5c', 0, 1),
-      F('dripHelm', 60, 18, '#4a4c44', 0, 0.9),
-      F('pressureGauge', 86, 54, '#8a8f9c', 0, 0.8),
+      F('pipeChest', 60, 54, '#5c5e54', 0, 1.15, '#2c2e28'),  // 0: pipe-lattice chest
+      F('bigWrench', 28, 58, '#8a8f9c', -14, 1.1),             // 1: oversized wrench arm
+      F('gateShutter', 86, 58, '#6a6a5c', 0, 1.0),             // 2: iron gate shutter shield
+      F('valveHead', 60, 22, '#8a8f9c', 0, 0.95),              // 3: valve-wheel head
+      F('sludgePour', 74, 36, '#8fae3c', 0, 0.85),             // 4: sludge pour spout
+      F('pressureDial', 84, 42, '#e34325', 0, 0.7),            // 5: pressure dial
+      F('drainLegs', 50, 86, '#4a4c44', 0, 1.0),               // 6: left drain-pipe leg
+      F('drainLegs2', 72, 86, '#4a4c44', 0, 1.0),              // 7: right drain-pipe leg
+      F('rivetLine', 60, 68, '#6f6a5c', 0, 0.9),               // 8: rivet seam line
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 56 }, boundFeatures: [0, 2] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 24 }, boundFeatures: [4, 6] },
-      { id: 'armL', parentId: 'root', anchor: { x: 30, y: 60 }, boundFeatures: [1] },
-      { id: 'armR', parentId: 'root', anchor: { x: 86, y: 54 }, boundFeatures: [3, 7] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 88 }, boundFeatures: [5] },
-      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 88 }, boundFeatures: [] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 54 }, boundFeatures: [0, 8] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 22 }, boundFeatures: [3, 4] },
+      { id: 'armL', parentId: 'root', anchor: { x: 28, y: 54 }, boundFeatures: [1] },
+      { id: 'armR', parentId: 'root', anchor: { x: 86, y: 50 }, boundFeatures: [2, 5] },
+      { id: 'legL', parentId: 'root', anchor: { x: 50, y: 86 }, boundFeatures: [6] },
+      { id: 'legR', parentId: 'root', anchor: { x: 72, y: 86 }, boundFeatures: [7] },
     ],
   },
   'the-bloated-sovereign': {
     kind: 'brute', hue: '#6a6248', hue2: '#423c2c', glow: '#8fae3c', size: 1.45, eye: 'white',
     features: [
-      F('giantSlop', 60, 62, '#6a6248', 0, 1.25, '#423c2c'),
-      F('festerPores', 60, 50, '#8fae3c', 0, 1.1),
-      F('fatMembrane', 60, 84, '#7a7258', 0, 1.2),
-      F('crownOintment', 60, 18, '#e2ae4f', 0, 0.9),
-      F('roarStench', 60, 34, '#8a8f5c', 0, 1.1),
-      F('crackedShell', 60, 72, '#423c2c', 0, 1),
-      F('minionDrip', 84, 92, '#6a6a5c', 0, 1),
-      F('swollenGut', 44, 76, '#7a7258', 0, 1.1),
+      F('bloatBelly', 60, 62, '#6a6248', 0, 1.3, '#423c2c'),   // 0: grotesque bloat belly
+      F('plagueGeyser', 60, 38, '#8fae3c', 0, 1.1),            // 1: plague geyser pores
+      F('fatMembraneSkirt', 60, 82, '#7a7258', 0, 1.25),       // 2: fat membrane skirt
+      F('crownSlime', 60, 14, '#e2ae4f', 0, 0.9),              // 3: slime-dripping crown
+      F('crushArm', 32, 60, '#423c2c', -6, 1.05),              // 4: left crushing arm
+      F('crushArm2', 86, 60, '#423c2c', 6, 1.05),              // 5: right crushing arm
+      F('summonMaw', 84, 86, '#6a6a5c', 0, 0.9),               // 6: minion-spawn orifice
+      F('toxicCrown', 60, 24, '#8a8f5c', 0, 1.0),              // 7: toxic crown fumes
+      F('crackShell', 60, 72, '#423c2c', 0, 1.05),             // 8: cracked carapace
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 62 }, boundFeatures: [0, 2, 5] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 26 }, boundFeatures: [3, 4] },
-      { id: 'armL', parentId: 'root', anchor: { x: 34, y: 62 }, boundFeatures: [7] },
-      { id: 'armR', parentId: 'root', anchor: { x: 84, y: 62 }, boundFeatures: [6] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 90 }, boundFeatures: [1] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 60 }, boundFeatures: [0, 8] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 20 }, boundFeatures: [3, 7] },
+      { id: 'armL', parentId: 'root', anchor: { x: 32, y: 58 }, boundFeatures: [4, 1] },
+      { id: 'armR', parentId: 'root', anchor: { x: 86, y: 58 }, boundFeatures: [5, 6] },
+      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 86 }, boundFeatures: [2] },
       { id: 'legR', parentId: 'root', anchor: { x: 76, y: 90 }, boundFeatures: [] },
     ],
   },
@@ -826,142 +844,155 @@ export const VISUALS_A: Record<string, MonsterVisualSpec> = {
   'royal-halberdier': {
     kind: 'knight', hue: '#8a8f9c', hue2: '#5c5e68', glow: '#f0cd7d', size: 1.0, eye: 'white',
     features: [
-      F('halberdShaft', 32, 22, '#8a7350', 4, 1.2, '#cfd3dc'),
-      F('crestPlume', 60, 14, '#e34325', 0, 0.9),
-      F('lanceLivery', 60, 62, '#f0cd7d', 0, 0.9),
-      F('breakArmour', 84, 60, '#cfd3dc', 0, 0.8),
-      F('stepLines', 60, 94, '#5c5e68', 0, 1),
-      F('shieldBoss', 90, 66, '#f0cd7d', 0, 0.8),
-      F('chainGuard', 44, 50, '#8a8f9c', 0, 0.9),
+      F('halberdPole', 28, 18, '#8a7350', 4, 1.3, '#cfd3dc'),  // 0: tall halberd weapon
+      F('formShield', 88, 60, '#cfd3dc', 0, 0.9),              // 1: formation shield
+      F('plumedHelm', 60, 14, '#e34325', 0, 0.9),              // 2: plumed helmet crest
+      F('plateChest', 60, 52, '#8a8f9c', 0, 1.1, '#5c5e68'),  // 3: plate armour chest
+      F('armourSkirt', 60, 78, '#5c5e68', 0, 1.05),            // 4: armour skirt
+      F('breakPoint', 78, 48, '#f0cd7d', 0, 0.7),              // 5: armour-break tip
+      F('marchStance', 48, 90, '#5c5e68', 0, 0.9),             // 6: disciplined stance
+      F('chainMaille', 44, 62, '#8a8f9c', 0, 0.9),             // 7: chain mail detail
+      F('regimentBelt', 60, 68, '#8a7350', 0, 0.85),           // 8: regiment belt buckle
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 58 }, boundFeatures: [2, 6] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 18 }, boundFeatures: [1] },
-      { id: 'armL', parentId: 'root', anchor: { x: 32, y: 44 }, boundFeatures: [0] },
-      { id: 'armR', parentId: 'root', anchor: { x: 90, y: 58 }, boundFeatures: [3, 5] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 88 }, boundFeatures: [4] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 56 }, boundFeatures: [3, 7, 8] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 16 }, boundFeatures: [2] },
+      { id: 'armL', parentId: 'root', anchor: { x: 28, y: 42 }, boundFeatures: [0] },
+      { id: 'armR', parentId: 'root', anchor: { x: 88, y: 54 }, boundFeatures: [1, 5] },
+      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 84 }, boundFeatures: [4, 6] },
       { id: 'legR', parentId: 'root', anchor: { x: 76, y: 88 }, boundFeatures: [] },
     ],
   },
   'white-tower-adept': {
     kind: 'humanoid', hue: '#e9e4d4', hue2: '#b8b0a0', glow: '#8fc3e8', size: 0.9, eye: 'glow',
     features: [
-      F('towerRobe', 60, 64, '#f2eee0', 0, 1.1, '#b8b0a0'),
-      F('bindSigil', 60, 56, '#8fc3e8', 0, 0.8),
-      F('quillBelt', 30, 78, '#8a7350', 0, 0.8),
-      F('chalkSmudge', 60, 44, '#c8c0ae', 0, 0.9),
-      F('rookieHat', 60, 16, '#f2eee0', 8, 0.9),
-      F('fumbleGlow', 60, 34, '#8fc3e8', 0, 0.8),
-      F('scrollTuck', 86, 70, '#e9e4d4', 0, 0.8),
+      F('prayerRobe', 60, 62, '#f2eee0', 0, 1.1, '#b8b0a0'),  // 0: white prayer robe
+      F('glyphCircle', 60, 48, '#8fc3e8', 0, 0.9),             // 1: orbiting glyph circle
+      F('chantGlow', 60, 34, '#8fc3e8', 0, 0.8),               // 2: chanting glow aura
+      F('apprenticeHat', 60, 12, '#f2eee0', 8, 0.9),           // 3: apprentice pointed hat
+      F('bindRune', 34, 56, '#8fc3e8', 0, 0.75),               // 4: left binding rune
+      F('scrollHand', 86, 60, '#e9e4d4', 0, 0.8),              // 5: scroll in hand
+      F('buffAura', 60, 26, '#8fc3e8', 0, 0.85),               // 6: chanting buff shimmer
+      F('inkStain', 50, 74, '#b8b0a0', 0, 0.7),                // 7: ink stain on robe
+      F('sandals', 60, 92, '#8a7350', 0, 0.75),                // 8: simple sandals
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 56 }, boundFeatures: [0, 3] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 20 }, boundFeatures: [4, 5] },
-      { id: 'armL', parentId: 'root', anchor: { x: 30, y: 56 }, boundFeatures: [2] },
-      { id: 'armR', parentId: 'root', anchor: { x: 86, y: 56 }, boundFeatures: [1, 6] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 88 }, boundFeatures: [] },
-      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 88 }, boundFeatures: [] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 54 }, boundFeatures: [0, 1] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 18 }, boundFeatures: [3, 6] },
+      { id: 'armL', parentId: 'root', anchor: { x: 34, y: 52 }, boundFeatures: [4, 2] },
+      { id: 'armR', parentId: 'root', anchor: { x: 86, y: 56 }, boundFeatures: [5] },
+      { id: 'legL', parentId: 'root', anchor: { x: 48, y: 86 }, boundFeatures: [7, 8] },
+      { id: 'legR', parentId: 'root', anchor: { x: 72, y: 88 }, boundFeatures: [] },
     ],
   },
   'gilded-inquisitor': {
     kind: 'knight', hue: '#c9a34f', hue2: '#8a6f2a', glow: '#f0cd7d', size: 1.0, eye: 'slit',
     features: [
-      F('goldHammer', 30, 30, '#e2ae4f', 10, 1.1),
-      F('codeCodex', 86, 62, '#8a3a2c', 0, 0.9),
-      F('guiltRing', 60, 22, '#f0cd7d', 0, 0.9),
-      F('leafGold', 60, 52, '#f0cd7d', 0, 1),
-      F('chainVerdict', 60, 84, '#8a6f2a', 0, 0.9),
-      F('sermonCuff', 34, 70, '#e2ae4f', 0, 0.8),
-      F('verdictScroll', 88, 42, '#e9e4d4', 0, 0.8),
+      F('judgHammer', 28, 32, '#e2ae4f', 10, 1.15),            // 0: judgment hammer
+      F('lawCodex', 86, 58, '#8a3a2c', 0, 0.9),                // 1: law codex book
+      F('gildPlate', 60, 52, '#f0cd7d', 0, 1.05, '#8a6f2a'),  // 2: gilded plate body
+      F('guiltHalo', 60, 12, '#f0cd7d', 0, 0.95),              // 3: halo of guilt
+      F('verdictSeal', 60, 38, '#c9a34f', 0, 0.8),             // 4: verdict seal emblem
+      F('goldChainSkirt', 60, 78, '#8a6f2a', 0, 1.0),          // 5: gold chain skirt
+      F('accuseFinger', 34, 66, '#e2ae4f', 0, 0.75),           // 6: accusing finger point
+      F('solemnMask', 60, 22, '#c9a34f', 0, 0.85),             // 7: solemn judging mask
+      F('tribunalBoot', 60, 92, '#5c241c', 0, 0.85),           // 8: tribunal boots
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 54 }, boundFeatures: [3, 4] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 22 }, boundFeatures: [2] },
-      { id: 'armL', parentId: 'root', anchor: { x: 30, y: 46 }, boundFeatures: [0] },
-      { id: 'armR', parentId: 'root', anchor: { x: 86, y: 52 }, boundFeatures: [1, 6] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 84 }, boundFeatures: [5] },
-      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 84 }, boundFeatures: [] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 52 }, boundFeatures: [2, 4] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 18 }, boundFeatures: [3, 7] },
+      { id: 'armL', parentId: 'root', anchor: { x: 28, y: 44 }, boundFeatures: [0, 6] },
+      { id: 'armR', parentId: 'root', anchor: { x: 86, y: 52 }, boundFeatures: [1] },
+      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 82 }, boundFeatures: [5, 8] },
+      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 86 }, boundFeatures: [] },
     ],
   },
   'plaza-crier': {
     kind: 'humanoid', hue: '#8a3a2c', hue2: '#5c241c', glow: '#f0cd7d', size: 0.85, eye: 'white',
     features: [
-      F('hornMegaphone', 34, 36, '#e2ae4f', 14, 0.9),
-      F('drumBelt', 60, 80, '#8a6f2a', 0, 0.9),
-      F('scrollQuiver', 88, 44, '#e9e4d4', 0, 1),
-      F('medallion', 60, 54, '#f0cd7d', 0, 0.9),
-      F('pointStaff', 30, 62, '#8a7350', 0, 1),
-      F('shoutingMouth', 60, 34, '#5c241c', 0, 0.8),
-      F('bellTassel', 76, 72, '#f0cd7d', 0, 0.7),
+      F('warDrum', 60, 72, '#8a6f2a', 0, 0.95),                // 0: belt-mounted war drum
+      F('crierScepter', 30, 50, '#8a7350', 4, 1.05),           // 1: decree scepter
+      F('heraldTabard', 60, 54, '#8a3a2c', 0, 1.05, '#5c241c'), // 2: herald tabard
+      F('bellCap', 60, 14, '#f0cd7d', 0, 0.85),                // 3: bell-tipped cap
+      F('taxPouch', 84, 70, '#8a6f2a', 0, 0.75),               // 4: tax collection pouch
+      F('shoutMouth', 60, 30, '#5c241c', 0, 0.7),              // 5: wide shouting mouth
+      F('buffDrumstick', 82, 52, '#e2ae4f', 0, 0.7),           // 6: drumstick in hand
+      F('scrollCase', 88, 36, '#e9e4d4', 0, 0.8),              // 7: scroll case on back
+      F('crierBoots', 60, 90, '#5c241c', 0, 0.8),              // 8: pointed crier boots
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 58 }, boundFeatures: [1, 3] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 30 }, boundFeatures: [5] },
-      { id: 'armL', parentId: 'root', anchor: { x: 30, y: 50 }, boundFeatures: [0, 4] },
-      { id: 'armR', parentId: 'root', anchor: { x: 88, y: 50 }, boundFeatures: [2] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 80 }, boundFeatures: [6] },
-      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 88 }, boundFeatures: [] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 56 }, boundFeatures: [2, 0] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 22 }, boundFeatures: [3, 5] },
+      { id: 'armL', parentId: 'root', anchor: { x: 30, y: 48 }, boundFeatures: [1] },
+      { id: 'armR', parentId: 'root', anchor: { x: 84, y: 50 }, boundFeatures: [6, 4] },
+      { id: 'legL', parentId: 'root', anchor: { x: 46, y: 86 }, boundFeatures: [8] },
+      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 84 }, boundFeatures: [7] },
     ],
   },
   'royal-champion': {
     kind: 'knight', hue: '#c0c8d8', hue2: '#8a92a8', glow: '#f0cd7d', size: 1.15, eye: 'red',
     features: [
-      F('towerShield', 88, 60, '#c0c8d8', 0, 1.1, '#8a92a8'),
-      F('lanceTip', 26, 28, '#e9e4d4', -12, 1.2),
-      F('crushCharge', 60, 88, '#8a92a8', 0, 1),
-      F('plumeGold', 60, 12, '#f0cd7d', 0, 0.9),
-      F('chainMail', 60, 66, '#8a92a8', 0, 1.1),
-      F('dentedBrim', 60, 22, '#c0c8d8', 0, 0.8),
-      F('victorySash', 60, 48, '#e34325', 0, 0.8),
+      F('towerShield', 86, 56, '#c0c8d8', 0, 1.15, '#8a92a8'), // 0: massive tower shield
+      F('warlance', 24, 22, '#e9e4d4', -10, 1.25),             // 1: charging war lance
+      F('fullPlate', 60, 54, '#c0c8d8', 0, 1.1, '#8a92a8'),   // 2: full plate armour
+      F('goldPlume', 60, 8, '#f0cd7d', 0, 0.9),                // 3: golden plume crest
+      F('crushGreave', 50, 84, '#8a92a8', 0, 1.0),             // 4: crushing greave
+      F('crushGreave2', 72, 84, '#8a92a8', 0, 1.0),            // 5: right greave
+      F('brittleMark', 76, 44, '#f0cd7d', 0, 0.7),             // 6: brittle-break mark
+      F('chargeDust', 60, 96, '#8a92a8', 0, 1.0),              // 7: charge dust cloud
+      F('victorCape', 60, 66, '#e34325', 0, 0.85),             // 8: victor's cape
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 58 }, boundFeatures: [4, 6] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 18 }, boundFeatures: [3, 5] },
-      { id: 'armL', parentId: 'root', anchor: { x: 26, y: 48 }, boundFeatures: [1] },
-      { id: 'armR', parentId: 'root', anchor: { x: 88, y: 54 }, boundFeatures: [0] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 88 }, boundFeatures: [2] },
-      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 88 }, boundFeatures: [] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 54 }, boundFeatures: [2, 8] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 14 }, boundFeatures: [3] },
+      { id: 'armL', parentId: 'root', anchor: { x: 24, y: 40 }, boundFeatures: [1] },
+      { id: 'armR', parentId: 'root', anchor: { x: 86, y: 50 }, boundFeatures: [0, 6] },
+      { id: 'legL', parentId: 'root', anchor: { x: 50, y: 84 }, boundFeatures: [4, 7] },
+      { id: 'legR', parentId: 'root', anchor: { x: 72, y: 84 }, boundFeatures: [5] },
     ],
   },
   'lord-inquisitor': {
     kind: 'knight', hue: '#e2ae4f', hue2: '#8a6f2a', glow: '#f0cd7d', size: 1.1, eye: 'slit',
     features: [
-      F('twinHammers', 60, 34, '#f0cd7d', 0, 1.1),
-      F('haloJudge', 60, 14, '#f0cd7d', 0, 1),
-      F('goldMantle', 60, 64, '#8a6f2a', 0, 1.15, '#8a3a2c'),
-      F('sealSleeve', 34, 70, '#8a3a2c', 0, 0.8),
-      F('murmurChin', 60, 38, '#5c241c', 0, 0.8),
-      F('docketHand', 86, 56, '#e9e4d4', 0, 0.8),
-      F('lawChain', 60, 82, '#c9a34f', 0, 0.9),
+      F('twinHammerL', 30, 38, '#f0cd7d', -8, 1.1),            // 0: left judgment hammer
+      F('twinHammerR', 88, 38, '#f0cd7d', 8, 1.1),             // 1: right judgment hammer
+      F('verdictMantle', 60, 58, '#8a6f2a', 0, 1.15, '#8a3a2c'), // 2: verdict mantle
+      F('judgeHalo', 60, 10, '#f0cd7d', 0, 1.0),               // 3: senior judge halo
+      F('sealBadge', 60, 44, '#c9a34f', 0, 0.8),               // 4: verdict seal badge
+      F('condemnGaze', 60, 26, '#e34325', 0, 0.75),            // 5: condemning slit gaze
+      F('chainRobe', 60, 76, '#8a3a2c', 0, 1.05),              // 6: chain-linked robe
+      F('docketScroll', 86, 66, '#e9e4d4', 0, 0.8),            // 7: docket scroll
+      F('lawBoots', 60, 92, '#5c241c', 0, 0.9),                // 8: heavy law boots
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 56 }, boundFeatures: [2, 6] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 20 }, boundFeatures: [1, 4] },
-      { id: 'armL', parentId: 'root', anchor: { x: 34, y: 52 }, boundFeatures: [0, 3] },
-      { id: 'armR', parentId: 'root', anchor: { x: 86, y: 52 }, boundFeatures: [5] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 88 }, boundFeatures: [] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 54 }, boundFeatures: [2, 4] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 18 }, boundFeatures: [3, 5] },
+      { id: 'armL', parentId: 'root', anchor: { x: 30, y: 44 }, boundFeatures: [0] },
+      { id: 'armR', parentId: 'root', anchor: { x: 88, y: 44 }, boundFeatures: [1, 7] },
+      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 86 }, boundFeatures: [6, 8] },
       { id: 'legR', parentId: 'root', anchor: { x: 76, y: 88 }, boundFeatures: [] },
     ],
   },
   'sun-crown-warden': {
     kind: 'statue', hue: '#f0cd7d', hue2: '#b8963a', glow: '#f0cd7d', size: 1.4, eye: 'glow',
     features: [
-      F('sunCrown', 60, 14, '#f7e3ae', 0, 1.1),
-      F('radiantHalo', 60, 30, '#f0cd7d', 0, 1.2),
-      F('twinScepters', 60, 60, '#e2ae4f', 0, 1.1),
-      F('crackLaw', 60, 76, '#8a6f2a', 0, 1),
-      F('pillarBase', 60, 96, '#b8963a', 0, 1.1),
-      F('decreeEyes', 60, 36, '#e34325', 0, 0.8),
-      F('goldenDust', 60, 90, '#f7e3ae', 0, 1),
-      F('judgmentBeam', 34, 50, '#f0cd7d', 0, 0.9),
+      F('sunCrownMassive', 60, 10, '#f7e3ae', 0, 1.2),         // 0: massive sun crown
+      F('coronaFlare', 60, 24, '#f0cd7d', 0, 1.15),            // 1: corona flare halo
+      F('gateBody', 60, 56, '#b8963a', 0, 1.25, '#8a6f2a'),   // 2: gate-like stone body
+      F('doubleHammerL', 28, 50, '#e2ae4f', -8, 1.1),          // 3: left execution hammer
+      F('doubleHammerR', 90, 50, '#e2ae4f', 8, 1.1),           // 4: right execution hammer
+      F('brittleDecree', 60, 70, '#8a6f2a', 0, 1.0),           // 5: brittle decree cracks
+      F('guardSummon', 86, 82, '#cfd3dc', 0, 0.8),             // 6: guard summon sigil
+      F('pillarLegs', 60, 92, '#b8963a', 0, 1.15),             // 7: pillar-like legs
+      F('verdictBeam', 60, 40, '#f7e3ae', 0, 0.9),             // 8: verdict energy beam
     ],
     joints: [
-      { id: 'root', parentId: null, anchor: { x: 60, y: 60 }, boundFeatures: [2, 3] },
-      { id: 'head', parentId: 'root', anchor: { x: 60, y: 22 }, boundFeatures: [0, 1, 5] },
-      { id: 'armL', parentId: 'root', anchor: { x: 34, y: 54 }, boundFeatures: [7] },
-      { id: 'armR', parentId: 'root', anchor: { x: 86, y: 54 }, boundFeatures: [] },
-      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 90 }, boundFeatures: [4, 6] },
-      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 96 }, boundFeatures: [] },
+      { id: 'root', parentId: null, anchor: { x: 60, y: 56 }, boundFeatures: [2, 5] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 16 }, boundFeatures: [0, 1, 8] },
+      { id: 'armL', parentId: 'root', anchor: { x: 28, y: 50 }, boundFeatures: [3] },
+      { id: 'armR', parentId: 'root', anchor: { x: 90, y: 54 }, boundFeatures: [4, 6] },
+      { id: 'legL', parentId: 'root', anchor: { x: 46, y: 90 }, boundFeatures: [7] },
+      { id: 'legR', parentId: 'root', anchor: { x: 74, y: 92 }, boundFeatures: [] },
     ],
   },
 
