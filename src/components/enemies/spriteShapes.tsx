@@ -1538,6 +1538,10 @@ export function FeatureGlyph({ id, f }: { id: string; f: FeatureSpec }) {
   else if (has(id, 'silverBite')) node = fangs(f);
   else if (has(id, 'sentinelStatue', 'stoneSleeve')) node = shield(f);
   else if (has(id, 'deadRoll')) node = tail(f);
+  else if (has(id, 'beakCluster', 'talonsRake')) node = fangs(f);
+  else if (has(id, 'gauntFrame', 'muscleHaunch', 'thickBark')) node = plate(f);
+  else if (has(id, 'leatherGlove', 'overallBib')) node = cloth(f);
+  else if (has(id, 'witherBranch')) node = vine(f);
   else if (has(id, 'chantFaint', 'dutyWhistle')) node = smoke(f);
   else if (has(id, 'deepCrush', 'stonePalm')) node = fist(f);
   else if (has(id, 'goldenBuckle')) node = coin(f, 3);
@@ -1551,7 +1555,7 @@ export function FeatureGlyph({ id, f }: { id: string; f: FeatureSpec }) {
 /* ================= 身体原型 ================= */
 
 function Eye({ spec, x, y, s = 1 }: { spec: MonsterVisualSpec; x: number; y: number; s?: number }) {
-  const c = spec.eye === 'red' ? '#ff5a3c' : spec.eye === 'white' ? '#e9e4d4' : spec.glow;
+  const c = spec.eye === 'red' ? '#fb5234' : spec.eye === 'white' ? '#e9e4d4' : spec.glow;
   if (spec.eye === 'none') return null;
   if (spec.eye === 'slit') return <rect x={x - 2.2 * s} y={y - 3.4 * s} width={2.4 * s} height={6.8 * s} rx={1.2} fill={c} />;
   return (
