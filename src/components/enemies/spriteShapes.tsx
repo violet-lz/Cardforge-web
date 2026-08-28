@@ -6,7 +6,9 @@ import type { FeatureSpec, MonsterVisualSpec } from '../../game/enemies/monsterV
 /* ================= 特征形状 ================= */
 
 const t = (f: FeatureSpec) => `translate(${f.x} ${f.y}) rotate(${f.r ?? 0}) scale(${f.sc ?? 1})`;
-const has = (id: string, ...keys: string[]) => keys.some((k) => id.includes(k));
+// 大小写不敏感匹配：特征 id 多为驼峰复合词（如 barkClaw），关键词以小写声明，
+// 用小写比对确保 'Claw' 等词中大写关键词也能命中对应形状，避免误落 dot() 兜底。
+const has = (id: string, ...keys: string[]) => { const lid = id.toLowerCase(); return keys.some((k) => lid.includes(k.toLowerCase())); };
 
 function flame(f: FeatureSpec, n = 1) {
   const d = 'M0 6C-4 2 -3 -3 0 -7C1 -3 5 -2 4 2C3 5 1 6 0 6Z';
@@ -1558,6 +1560,29 @@ export function FeatureGlyph({ id, f }: { id: string; f: FeatureSpec }) {
   else if (has(id, 'mireFilm', 'toxicMass', 'stoneHide')) node = plate(f);
   else if (has(id, 'plagueSore', 'taxPouch')) node = drops(f, 3);
   else if (has(id, 'valveHead')) node = gear(f);
+
+  // ─── 第七批 (钟楼/荒漠/陨石) 复合词补充 ───
+  else if (has(id, 'acolyteCloak', 'acolyteRobe', 'cosmicRobe', 'sovereignMantle', 'sandVeilHood', 'weaverHood', 'wardenHelm')) node = cloth(f);
+  else if (has(id, 'afterHalo', 'sandHalo', 'silenceHalo', 'stormHalo', 'gatherOrb', 'voidOrb', 'chargeCore', 'hardCore')) node = orb(f);
+  else if (has(id, 'amberGaze', 'trackStar', 'sandVortex')) node = star(f, 3);
+  else if (has(id, 'blindSandCloud', 'sandMistVeil', 'phaseMist', 'silenceVeil', 'gritDust', 'collapseDust', 'sandBleedStep', 'dutyBoot', 'climbBoot')) node = dust(f);
+  else if (has(id, 'brokenTail', 'twinShadow', 'threadVine', 'duneCoil')) node = tail(f);
+  else if (has(id, 'bronzeGate', 'bronzePlate', 'cosmicPlate', 'rockPlate', 'meteorShell', 'sandSeam')) node = plate(f);
+  else if (has(id, 'burstFist', 'crusherFist', 'crushStomp', 'gustClaw', 'voidClaw', 'silentPaw')) node = fist(f);
+  else if (has(id, 'chargeGlow', 'cosmicGlow', 'heatShimmer', 'phaseRiftCrack')) node = glowDot(f);
+  else if (has(id, 'cosmicShield', 'voidBanner')) node = shield(f);
+  else if (has(id, 'darkFur')) node = fur(f);
+  else if (has(id, 'desertRune', 'desertSeal', 'meteorShard')) node = rune(f);
+  else if (has(id, 'duneThrone')) node = throne(f);
+  else if (has(id, 'fadeBlade', 'raiderBlade', 'scimitarBlade', 'ironFang', 'sandFang')) node = blade(f);
+  else if (has(id, 'gauntBandageArm')) node = bandage(f);
+  else if (has(id, 'goldCoinPouch', 'goldenChain')) node = coin(f, 3);
+  else if (has(id, 'gritArc')) node = arch(f);
+  else if (has(id, 'hollowBell')) node = bellIcon(f);
+  else if (has(id, 'hungerMaw')) node = mouth(f);
+  else if (has(id, 'kingMalletHammer', 'terminusMaulHammer')) node = hammer(f);
+  else if (has(id, 'lootSaddle')) node = sack(f);
+  else if (has(id, 'scepterScarabStaff')) node = staff(f, 'orb');
 
   else node = dot(f);
 
