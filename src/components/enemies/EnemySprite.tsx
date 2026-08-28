@@ -83,20 +83,20 @@ export default function EnemySprite({
       )}
       {tier === 'elite' && <circle cx={60} cy={58} r={48} fill="none" stroke={spec.glow} strokeOpacity={0.22} strokeWidth={1} strokeDasharray="10 5" />}
       <ellipse cx={60} cy={103} rx={27 * sizeScale} ry={4.4} fill="#000" opacity={0.42} />
-      <g
-        transform={`translate(${60 * (1 - sizeScale)}, ${offsetY}) scale(${sizeScale})`}
-        className={!animation && animate ? 'enemy-idle' : undefined}
-      >
-        {isAnimating ? (
-          <JointRenderer spec={spec} animation={animation!} instanceId={gid} onEnd={onAnimationEnd} />
-        ) : (
-          <>
-            <BodyGlyph spec={spec} gid={gid} />
-            {spec.features.map((f, i) => (
-              <FeatureGlyph key={i} id={f.s} f={f} />
-            ))}
-          </>
-        )}
+      {/* Outer <g> holds the immutable size transform; inner <g> handles idle animation to avoid CSS overriding scale */}
+      <g transform={`translate(${60 * (1 - sizeScale)}, ${offsetY}) scale(${sizeScale})`}>
+        <g className={!animation && animate ? 'enemy-idle' : undefined}>
+          {isAnimating ? (
+            <JointRenderer spec={spec} animation={animation!} instanceId={gid} onEnd={onAnimationEnd} />
+          ) : (
+            <>
+              <BodyGlyph spec={spec} gid={gid} />
+              {spec.features.map((f, i) => (
+                <FeatureGlyph key={i} id={f.s} f={f} />
+              ))}
+            </>
+          )}
+        </g>
       </g>
     </svg>
   );

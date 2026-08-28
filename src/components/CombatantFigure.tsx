@@ -2,16 +2,17 @@ import type { IntentType } from '../game/combat/enemyTypes';
 import EnemySprite from './enemies/EnemySprite';
 import CharacterSprite from './characters/CharacterSprite';
 
-export type CombatAnimation = 'idle' | 'attack' | 'defend' | 'skill' | 'summon' | 'hurt' | 'defeated';
+export type CombatAnimation = 'idle' | 'attack' | 'defend' | 'skill' | 'summon' | 'hurt' | 'defeated' | 'block' | 'blockReact';
 
 // Map CombatAnimation to skeletal animation clip names
 const combatAnimToClip = (anim: CombatAnimation): string | undefined => {
   switch (anim) {
     case 'attack': return 'attack1';
-    case 'defend': return 'defend';
+    case 'defend': case 'block': return 'block';
     case 'skill': return 'skill1';
     case 'summon': return 'skill2';
     case 'hurt': case 'defeated': return 'hit';
+    case 'blockReact': return 'blockReact';
     default: return undefined;
   }
 };

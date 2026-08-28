@@ -1499,6 +1499,50 @@ export function FeatureGlyph({ id, f }: { id: string; f: FeatureSpec }) {
   else if (has(id, 'antenna', 'aerial', 'signalMast')) node = antenna(f);
   else if (has(id, 'barb', 'hookBarb', 'thornBarb')) node = barb(f);
   else if (has(id, 'dot', 'glint', 'pupil', 'speck')) node = id.endsWith('dots') ? dots(f, 3) : dot(f);
+
+  // ─── Extended dispatch: catch remaining IDs ───
+  else if (has(id, 'Slab', 'chitin', 'ironHide', 'ironShoulder', 'gorget', 'cuirass', 'Chrome', 'Cuff', 'Wrap', 'Suit', 'wireSkin', 'violetSkin', 'skinPeel', 'eightPress')) node = plate(f);
+  else if (has(id, 'Breath', 'socketFire', 'overloadHum', 'humVibe')) node = flame(f, 1);
+  else if (has(id, 'Bite', 'Muzzle', 'Chin', 'Lips')) node = mouth(f);
+  else if (has(id, 'Grasp', 'clutchEgg', 'crushCharge', 'crocChild')) node = claw(f);
+  else if (has(id, 'ambushFin', 'windRake', 'floatPebble')) node = spikes(f);
+  else if (has(id, 'Sleeve', 'Drape', 'courtFan', 'ragBundle')) node = cloth(f);
+  else if (has(id, 'dutyStain', 'gritSplat', 'dirtCrust', 'Base', 'neonFloor', 'Platform', 'creekBed')) node = dust(f);
+  else if (has(id, 'jointKnee', 'barkKnee', 'slagKnee', 'paleKnee', 'Stance', 'hopperLeg', 'sixStub', 'kneelShot')) node = boots(f);
+  else if (has(id, 'hoverDisc', 'Obelisk', 'shaftShaft', 'scepterStub', 'mothWheel', 'kingBulk')) node = orb(f);
+  else if (has(id, 'judgmentBeam', 'verdictBeam', 'laserCross', 'deconCannon')) node = bolt(f);
+  else if (has(id, 'banquetStain', 'devourStain', 'slimeSplat', 'barnacleCluster', 'blotTip')) node = drops(f, 3);
+  else if (has(id, 'coldWake', 'muffle')) node = smoke(f);
+  else if (has(id, 'deathMark', 'mortemMark', 'voidMark', 'warPaint', 'pierceMark', 'ancientWord', 'erasedName')) node = rune(f);
+  else if (has(id, 'sentenceGrid', 'holoGavel')) node = ring(f, false);
+  else if (has(id, 'hollowHole', 'hollowWhisper', 'oldGrave')) node = skull(f);
+  else if (has(id, 'thickNeck', 'wideShoulder', 'twinHead')) node = horn(f);
+  else if (has(id, 'twinScepter', 'twinScimitar', 'vesperClapper')) node = staff(f, 'rod');
+  else if (has(id, 'paperCrease', 'soulAbacus', 'nodCompute')) node = scroll(f);
+  else if (has(id, 'spireTower', 'spiritFunnel', 'refractBody')) node = crystal(f);
+  else if (has(id, 'weaveLoom', 'rustleSound')) node = vine(f);
+  else if (has(id, 'fieldHound', 'packScent')) node = paw(f);
+  else if (has(id, 'whiskerFan', 'whiskerTwitch')) node = ear(f);
+  else if (has(id, 'broodBack', 'broodSac', 'swollenGut')) node = fur(f);
+  else if (has(id, 'droneBay', 'meltWire', 'hoverSkid')) node = led(f, 3);
+  else if (has(id, 'gavelNod', 'glossTop', 'goldLaurel', 'rallyCry', 'wakeGesture')) node = face(f);
+  else if (has(id, 'ruinFragment', 'crossingRush', 'windChest')) node = post(f);
+  else if (has(id, 'jointRattle')) node = gear(f);
+  else if (has(id, 'royalGloss')) node = coin(f, 3);
+  else if (has(id, 'toadFriend', 'pocketHerb')) node = cauldron(f);
+  else if (has(id, 'cosmicHowl', 'voidPulse', 'astrolabe')) node = star(f, 3);
+  else if (has(id, 'festerPore')) node = blood(f);
+  else if (has(id, 'manaSip', 'bindSpell')) node = reticle(f);
+  else if (has(id, 'warDrum')) node = bellIcon(f);
+  else if (has(id, 'wolfMark', 'witherBough', 'barkNail')) node = mane(f);
+  else if (has(id, 'silverBite')) node = fangs(f);
+  else if (has(id, 'sentinelStatue', 'stoneSleeve')) node = shield(f);
+  else if (has(id, 'deadRoll')) node = tail(f);
+  else if (has(id, 'chantFaint', 'dutyWhistle')) node = smoke(f);
+  else if (has(id, 'deepCrush', 'stonePalm')) node = fist(f);
+  else if (has(id, 'goldenBuckle')) node = coin(f, 3);
+  else if (has(id, 'reefCamouflage')) node = moss(f);
+
   else node = dot(f);
 
   return <>{node}</>;

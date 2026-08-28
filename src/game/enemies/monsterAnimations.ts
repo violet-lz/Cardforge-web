@@ -1,5 +1,5 @@
 // 怪物动画数据模块 · 基于身体原型(kind)的模板化动画剪辑
-// 每个 BodyKind 提供 5 个动画: hit, attack1, defend, skill1, skill2
+// 每个 BodyKind 提供 7 个动画: hit, attack1, block, skill1, skill2, idle, blockReact
 
 import type { AnimationClip, MonsterVisualSpec, BodyKind } from './monsterVisualTypes';
 
@@ -28,7 +28,7 @@ const beastAnims: AnimationClip[] = [
     { time: 0.5, joints: [{ jointId: 'root', translateX: 5 }, { jointId: 'head', rotation: 12, translateX: 4 }, { jointId: 'armL', rotation: 10 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  { name: 'defend', duration: 500, keyframes: [
+  { name: 'block', duration: 500, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'root', rotation: -4, translateY: 3 }, { jointId: 'armL', rotation: -12 }, { jointId: 'armR', rotation: -12 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -46,6 +46,19 @@ const beastAnims: AnimationClip[] = [
     { time: 0.75, joints: [{ jointId: 'root', rotation: 4 }, { jointId: 'head', rotation: 6 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: slight breathing + tail wag
+  { name: 'idle', duration: 2400, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'legR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', translateY: -1 }, { jointId: 'legR', rotation: 3 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'legR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', translateY: 1 }, { jointId: 'legR', rotation: -3 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: body jerks back slightly but holds ground
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'root', translateX: -2, translateY: 1 }, { jointId: 'head', rotation: -4 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const wolfAnims: AnimationClip[] = [
@@ -58,8 +71,8 @@ const wolfAnims: AnimationClip[] = [
     { time: 0.7, joints: [{ jointId: 'head', rotation: -5, translateX: 2 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: hunker down
-  { name: 'defend', duration: 450, keyframes: [
+  // block: hunker down
+  { name: 'block', duration: 450, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'root', translateY: 4, rotation: -3 }, { jointId: 'head', rotation: -6 }, { jointId: 'legL', rotation: 6 }, { jointId: 'legR', rotation: 6 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -78,6 +91,19 @@ const wolfAnims: AnimationClip[] = [
     { time: 0.6, joints: [{ jointId: 'head', rotation: -22, translateY: -4 }, { jointId: 'armL', rotation: -8 }, { jointId: 'armR', rotation: -8 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: slight breathing + tail wag
+  { name: 'idle', duration: 2400, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'legR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', translateY: -1 }, { jointId: 'legR', rotation: 3 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'legR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', translateY: 1 }, { jointId: 'legR', rotation: -3 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: body jerks back but holds ground
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'root', translateX: -2, translateY: 1 }, { jointId: 'head', rotation: -4 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const dragonAnims: AnimationClip[] = [
@@ -90,8 +116,8 @@ const dragonAnims: AnimationClip[] = [
     { time: 0.75, joints: [{ jointId: 'head', rotation: 6, translateX: 3 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: wings fold in
-  { name: 'defend', duration: 600, keyframes: [
+  // block: wings fold in
+  { name: 'block', duration: 600, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'root', translateY: 2 }, { jointId: 'armL', rotation: -18, translateX: 3 }, { jointId: 'armR', rotation: 18, translateX: -3 }, { jointId: 'head', rotation: -8 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -111,6 +137,20 @@ const dragonAnims: AnimationClip[] = [
     { time: 0.6, joints: [{ jointId: 'head', rotation: -24, translateY: -5 }, { jointId: 'armL', rotation: -35 }, { jointId: 'armR', rotation: 35 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: chest heave + wing micro-flutter
+  { name: 'idle', duration: 2800, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', translateY: -2 }, { jointId: 'armL', rotation: -2 }, { jointId: 'armR', rotation: 2 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', translateY: 2 }, { jointId: 'armL', rotation: 2 }, { jointId: 'armR', rotation: -2 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: wings pulse forward absorbing impact
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'armL', rotation: 6 }, { jointId: 'armR', rotation: -6 }, { jointId: 'root', translateX: -1 }], easing: 'ease-out' },
+    { time: 0.6, joints: [{ jointId: 'armL', rotation: -6 }, { jointId: 'armR', rotation: 6 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const humanoidAnims: AnimationClip[] = [
@@ -122,8 +162,8 @@ const humanoidAnims: AnimationClip[] = [
     { time: 0.5, joints: [{ jointId: 'armL', rotation: 18, translateX: 3 }, { jointId: 'root', rotation: 6 }, { jointId: 'head', rotation: 4 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: arms inward, body hunches
-  { name: 'defend', duration: 500, keyframes: [
+  // block: arms inward, body hunches
+  { name: 'block', duration: 500, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.35, joints: [{ jointId: 'root', translateY: 2, rotation: -3 }, { jointId: 'armL', rotation: -14, translateX: 2 }, { jointId: 'armR', rotation: 14, translateX: -2 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -142,6 +182,19 @@ const humanoidAnims: AnimationClip[] = [
     { time: 0.6, joints: [{ jointId: 'armL', rotation: -25, translateY: -5 }, { jointId: 'armR', rotation: 25, translateY: -5 }, { jointId: 'head', rotation: -8 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: weight shift + head micro-nod
+  { name: 'idle', duration: 2600, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', translateX: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', translateX: 1 }, { jointId: 'head', rotation: 1 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', translateX: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', translateX: -1 }, { jointId: 'head', rotation: -1 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: shield/arm absorbs with slight bend
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'armL', rotation: 4 }, { jointId: 'root', translateX: -2 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const knightAnims: AnimationClip[] = [
@@ -153,8 +206,8 @@ const knightAnims: AnimationClip[] = [
     { time: 0.5, joints: [{ jointId: 'armL', rotation: 22, translateX: 4 }, { jointId: 'armR', rotation: 8, translateX: 2 }, { jointId: 'root', rotation: 8 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: shield raise
-  { name: 'defend', duration: 500, keyframes: [
+  // block: shield raise
+  { name: 'block', duration: 500, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.3, joints: [{ jointId: 'armR', rotation: -18, translateY: -3 }, { jointId: 'root', translateY: 2, rotation: -2 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -173,6 +226,19 @@ const knightAnims: AnimationClip[] = [
     { time: 0.65, joints: [{ jointId: 'armL', rotation: -20 }, { jointId: 'armR', rotation: 20 }, { jointId: 'head', rotation: -14 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: weight shift + head micro-nod
+  { name: 'idle', duration: 2600, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', translateX: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', translateX: 1 }, { jointId: 'head', rotation: 1 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', translateX: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', translateX: -1 }, { jointId: 'head', rotation: -1 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: shield/arm absorbs with slight bend
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'armL', rotation: 4 }, { jointId: 'root', translateX: -2 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const ratAnims: AnimationClip[] = [
@@ -186,8 +252,8 @@ const ratAnims: AnimationClip[] = [
     { time: 0.7, joints: [{ jointId: 'head', rotation: -4, translateX: 2 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: curl up
-  { name: 'defend', duration: 400, keyframes: [
+  // block: curl up
+  { name: 'block', duration: 400, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.35, joints: [{ jointId: 'root', translateY: 3, rotation: -6 }, { jointId: 'head', rotation: -10 }, { jointId: 'legL', rotation: 8 }, { jointId: 'legR', rotation: 8 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -209,6 +275,19 @@ const ratAnims: AnimationClip[] = [
     { time: 0.6, joints: [{ jointId: 'root', rotation: -2, translateX: -1 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: nervous twitch
+  { name: 'idle', duration: 2000, keyframes: [
+    { time: 0, joints: [{ jointId: 'head', rotation: 0 }, { jointId: 'root', translateX: 0 }], easing: 'linear' },
+    { time: 0.25, joints: [{ jointId: 'head', rotation: 4 }, { jointId: 'root', translateX: 1 }], easing: 'linear' },
+    { time: 0.5, joints: [{ jointId: 'head', rotation: -4 }, { jointId: 'root', translateX: 0 }], easing: 'linear' },
+    { time: 0.75, joints: [{ jointId: 'head', rotation: 4 }, { jointId: 'root', translateX: -1 }], easing: 'linear' },
+  ]},
+  // blockReact: whole body hunkers deeper
+  { name: 'blockReact', duration: 300, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'root', translateY: 2 }, { jointId: 'head', rotation: -6 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const mothAnims: AnimationClip[] = [
@@ -220,8 +299,8 @@ const mothAnims: AnimationClip[] = [
     { time: 0.5, joints: [{ jointId: 'root', translateY: 3, translateX: 4 }, { jointId: 'armL', rotation: 12 }, { jointId: 'armR', rotation: -12 }, { jointId: 'head', rotation: 10 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: wings wrap
-  { name: 'defend', duration: 450, keyframes: [
+  // block: wings wrap
+  { name: 'block', duration: 450, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'armL', rotation: 18, translateX: 3 }, { jointId: 'armR', rotation: -18, translateX: -3 }, { jointId: 'root', translateY: 2 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -243,6 +322,20 @@ const mothAnims: AnimationClip[] = [
     { time: 0.75, joints: [{ jointId: 'root', translateY: -4 }, { jointId: 'armL', rotation: -10 }, { jointId: 'armR', rotation: 10 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: hover bob + wing oscillation
+  { name: 'idle', duration: 2200, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', translateY: -3 }, { jointId: 'armL', rotation: -5 }, { jointId: 'armR', rotation: 5 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', translateY: 3 }, { jointId: 'armL', rotation: 5 }, { jointId: 'armR', rotation: -5 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: wings fold tight then spring
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.25, joints: [{ jointId: 'armL', rotation: 8 }, { jointId: 'armR', rotation: -8 }], easing: 'ease-out' },
+    { time: 0.6, joints: [{ jointId: 'armL', rotation: -8 }, { jointId: 'armR', rotation: 8 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const birdAnims: AnimationClip[] = [
@@ -254,8 +347,8 @@ const birdAnims: AnimationClip[] = [
     { time: 0.5, joints: [{ jointId: 'root', translateY: 4, translateX: 5 }, { jointId: 'head', rotation: 14, translateX: 4 }, { jointId: 'armL', rotation: 10 }, { jointId: 'armR', rotation: -10 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: wings fold tight
-  { name: 'defend', duration: 450, keyframes: [
+  // block: wings fold tight
+  { name: 'block', duration: 450, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.35, joints: [{ jointId: 'armL', rotation: 20, translateX: 4 }, { jointId: 'armR', rotation: -20, translateX: -4 }, { jointId: 'root', translateY: 3, rotation: -4 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -274,6 +367,20 @@ const birdAnims: AnimationClip[] = [
     { time: 0.5, joints: [{ jointId: 'head', rotation: -20, translateY: -4 }, { jointId: 'armL', rotation: -18 }, { jointId: 'armR', rotation: 18 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: hover bob + wing oscillation
+  { name: 'idle', duration: 2200, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', translateY: -3 }, { jointId: 'armL', rotation: -5 }, { jointId: 'armR', rotation: 5 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', translateY: 3 }, { jointId: 'armL', rotation: 5 }, { jointId: 'armR', rotation: -5 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: wings fold tight then spring
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.25, joints: [{ jointId: 'armL', rotation: 8 }, { jointId: 'armR', rotation: -8 }], easing: 'ease-out' },
+    { time: 0.6, joints: [{ jointId: 'armL', rotation: -8 }, { jointId: 'armR', rotation: 8 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const swarmAnims: AnimationClip[] = [
@@ -285,8 +392,8 @@ const swarmAnims: AnimationClip[] = [
     { time: 0.45, joints: [{ jointId: 'root', translateX: 5 }, { jointId: 'armL', rotation: 12, translateX: 3 }, { jointId: 'armR', rotation: -12, translateX: 3 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: swarm condenses
-  { name: 'defend', duration: 450, keyframes: [
+  // block: swarm condenses
+  { name: 'block', duration: 450, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'armL', rotation: 14, translateX: 3 }, { jointId: 'armR', rotation: -14, translateX: -3 }, { jointId: 'head', translateY: 2 }, { jointId: 'legL', translateY: -2 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -306,6 +413,20 @@ const swarmAnims: AnimationClip[] = [
     { time: 0.6, joints: [{ jointId: 'armL', rotation: -22, translateX: -5 }, { jointId: 'armR', rotation: 22, translateX: 5 }, { jointId: 'head', translateY: -4 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: hover bob + wing oscillation
+  { name: 'idle', duration: 2200, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', translateY: -3 }, { jointId: 'armL', rotation: -5 }, { jointId: 'armR', rotation: 5 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', translateY: 3 }, { jointId: 'armL', rotation: 5 }, { jointId: 'armR', rotation: -5 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: wings fold tight then spring
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.25, joints: [{ jointId: 'armL', rotation: 8 }, { jointId: 'armR', rotation: -8 }], easing: 'ease-out' },
+    { time: 0.6, joints: [{ jointId: 'armL', rotation: -8 }, { jointId: 'armR', rotation: 8 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const serpentAnims: AnimationClip[] = [
@@ -317,8 +438,8 @@ const serpentAnims: AnimationClip[] = [
     { time: 0.5, joints: [{ jointId: 'root', rotation: 12, translateX: 4 }, { jointId: 'head', rotation: 16, translateX: 5 }, { jointId: 'legL', rotation: -6 }, { jointId: 'legR', rotation: 6 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: coil tighten
-  { name: 'defend', duration: 500, keyframes: [
+  // block: coil tighten
+  { name: 'block', duration: 500, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'root', rotation: -8, translateY: 3 }, { jointId: 'legL', rotation: 12 }, { jointId: 'legR', rotation: -12 }, { jointId: 'head', rotation: -6 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -338,6 +459,19 @@ const serpentAnims: AnimationClip[] = [
     { time: 0.75, joints: [{ jointId: 'root', rotation: 6 }, { jointId: 'legL', rotation: 8 }, { jointId: 'legR', rotation: -8 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: body undulation
+  { name: 'idle', duration: 2600, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'legL', rotation: 0 }, { jointId: 'legR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', rotation: 2 }, { jointId: 'legL', rotation: 3 }, { jointId: 'legR', rotation: -3 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'legL', rotation: 0 }, { jointId: 'legR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', rotation: -2 }, { jointId: 'legL', rotation: -3 }, { jointId: 'legR', rotation: 3 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: coil tightens on impact
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'root', rotation: -4 }, { jointId: 'legL', rotation: 5 }, { jointId: 'legR', rotation: -5 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const wormAnims: AnimationClip[] = [
@@ -349,8 +483,8 @@ const wormAnims: AnimationClip[] = [
     { time: 0.5, joints: [{ jointId: 'root', translateY: -4, translateX: 3 }, { jointId: 'head', rotation: 14, translateX: 4 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: body segments tighten
-  { name: 'defend', duration: 500, keyframes: [
+  // block: body segments tighten
+  { name: 'block', duration: 500, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'root', translateY: 3 }, { jointId: 'legL', rotation: 10 }, { jointId: 'legR', rotation: -10 }, { jointId: 'head', rotation: -8 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -370,6 +504,19 @@ const wormAnims: AnimationClip[] = [
     { time: 0.6, joints: [{ jointId: 'root', rotation: 8 }, { jointId: 'legL', rotation: 10 }, { jointId: 'legR', rotation: -10 }], easing: 'linear' },
     { time: 1, joints: [] },
   ]},
+  // idle: body undulation
+  { name: 'idle', duration: 2600, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'legL', rotation: 0 }, { jointId: 'legR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', rotation: 2 }, { jointId: 'legL', rotation: 3 }, { jointId: 'legR', rotation: -3 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'legL', rotation: 0 }, { jointId: 'legR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', rotation: -2 }, { jointId: 'legL', rotation: -3 }, { jointId: 'legR', rotation: 3 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: coil tightens on impact
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'root', rotation: -4 }, { jointId: 'legL', rotation: 5 }, { jointId: 'legR', rotation: -5 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const blobAnims: AnimationClip[] = [
@@ -381,8 +528,8 @@ const blobAnims: AnimationClip[] = [
     { time: 0.55, joints: [{ jointId: 'root', translateX: 4, translateY: 2 }, { jointId: 'armL', translateX: 3 }, { jointId: 'armR', translateX: -2 }, { jointId: 'head', translateX: 3 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: contraction — body pulls inward
-  { name: 'defend', duration: 500, keyframes: [
+  // block: contraction — body pulls inward
+  { name: 'block', duration: 500, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'armL', translateX: 3 }, { jointId: 'armR', translateX: -3 }, { jointId: 'head', translateY: 2 }, { jointId: 'legL', translateY: -2 }, { jointId: 'legR', translateY: -2 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -403,6 +550,20 @@ const blobAnims: AnimationClip[] = [
     { time: 0.5, joints: [{ jointId: 'armL', translateX: -6 }, { jointId: 'armR', translateX: 6 }, { jointId: 'head', translateY: -5 }, { jointId: 'legL', translateY: 4 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: pulsing expand/contract
+  { name: 'idle', duration: 2400, keyframes: [
+    { time: 0, joints: [{ jointId: 'armL', translateX: 0 }, { jointId: 'armR', translateX: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'armL', translateX: -2 }, { jointId: 'armR', translateX: 2 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'armL', translateX: 0 }, { jointId: 'armR', translateX: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'armL', translateX: 2 }, { jointId: 'armR', translateX: -2 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: surface ripple
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.2, joints: [{ jointId: 'armL', translateX: -3 }, { jointId: 'armR', translateX: 3 }], easing: 'ease-out' },
+    { time: 0.5, joints: [{ jointId: 'armL', translateX: 3 }, { jointId: 'armR', translateX: -3 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const constructAnims: AnimationClip[] = [
@@ -414,8 +575,8 @@ const constructAnims: AnimationClip[] = [
     { time: 0.55, joints: [{ jointId: 'armL', rotation: 18, translateY: 3, translateX: 3 }, { jointId: 'root', translateY: 2 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: lock — minimal movement, hunkers
-  { name: 'defend', duration: 500, keyframes: [
+  // block: lock — minimal movement, hunkers
+  { name: 'block', duration: 500, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'root', translateY: 2 }, { jointId: 'armL', rotation: -10, translateX: 2 }, { jointId: 'armR', rotation: 10, translateX: -2 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -436,6 +597,19 @@ const constructAnims: AnimationClip[] = [
     { time: 0.75, joints: [{ jointId: 'armL', rotation: -12 }, { jointId: 'armR', rotation: 12 }, { jointId: 'head', rotation: -6 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: minimal creak
+  { name: 'idle', duration: 3000, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', rotation: 0.5 }, { jointId: 'head', rotation: 1 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', rotation: -0.5 }, { jointId: 'head', rotation: -1 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: structure shudders
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'root', translateX: -1, rotation: -2 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const statueAnims: AnimationClip[] = [
@@ -447,8 +621,8 @@ const statueAnims: AnimationClip[] = [
     { time: 0.6, joints: [{ jointId: 'armL', rotation: 16, translateX: 3 }, { jointId: 'root', rotation: 6, translateX: 2 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: petrify stance
-  { name: 'defend', duration: 500, keyframes: [
+  // block: petrify stance
+  { name: 'block', duration: 500, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.3, joints: [{ jointId: 'root', translateY: 1 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -467,6 +641,19 @@ const statueAnims: AnimationClip[] = [
     { time: 0.6, joints: [{ jointId: 'root', translateY: -4 }, { jointId: 'armL', rotation: -14 }, { jointId: 'armR', rotation: 14 }, { jointId: 'head', rotation: -6 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: minimal creak
+  { name: 'idle', duration: 3000, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', rotation: 0.5 }, { jointId: 'head', rotation: 1 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', rotation: -0.5 }, { jointId: 'head', rotation: -1 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: structure shudders
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'root', translateX: -1, rotation: -2 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const gateAnims: AnimationClip[] = [
@@ -478,8 +665,8 @@ const gateAnims: AnimationClip[] = [
     { time: 0.6, joints: [{ jointId: 'root', translateY: 3, translateX: 3 }, { jointId: 'armL', rotation: 10, translateX: 3 }, { jointId: 'armR', rotation: -10, translateX: -3 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: seal shut
-  { name: 'defend', duration: 600, keyframes: [
+  // block: seal shut
+  { name: 'block', duration: 600, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'armL', rotation: 16, translateX: 4 }, { jointId: 'armR', rotation: -16, translateX: -4 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -496,6 +683,19 @@ const gateAnims: AnimationClip[] = [
     { time: 0, joints: [], easing: 'ease-in' },
     { time: 0.3, joints: [{ jointId: 'armL', rotation: -10 }, { jointId: 'armR', rotation: 10 }], easing: 'ease-in' },
     { time: 0.6, joints: [{ jointId: 'armL', rotation: -24, translateX: -5 }, { jointId: 'armR', rotation: 24, translateX: 5 }, { jointId: 'head', translateY: -4 }, { jointId: 'root', translateY: -2 }], easing: 'ease-in-out' },
+    { time: 1, joints: [] },
+  ]},
+  // idle: minimal creak
+  { name: 'idle', duration: 3000, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', rotation: 0.5 }, { jointId: 'head', rotation: 1 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', rotation: -0.5 }, { jointId: 'head', rotation: -1 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: structure shudders
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'root', translateX: -1, rotation: -2 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
 ];
@@ -515,8 +715,8 @@ const ghostAnims: AnimationClip[] = [
     { time: 0.6, joints: [{ jointId: 'root', translateX: 4 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: fade/phase — root moves slightly up and fades (simulated via translation)
-  { name: 'defend', duration: 500, keyframes: [
+  // block: fade/phase — root moves slightly up and fades (simulated via translation)
+  { name: 'block', duration: 500, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.35, joints: [{ jointId: 'root', translateY: -4 }, { jointId: 'armL', rotation: -8 }, { jointId: 'armR', rotation: 8 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -536,6 +736,20 @@ const ghostAnims: AnimationClip[] = [
     { time: 0.75, joints: [{ jointId: 'root', translateY: -4 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: ethereal float
+  { name: 'idle', duration: 2800, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', translateY: -3 }, { jointId: 'head', rotation: 2 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', translateY: 3 }, { jointId: 'head', rotation: -2 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: flickers/phases
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.2, joints: [{ jointId: 'root', translateX: -3, translateY: -2 }], easing: 'ease-out' },
+    { time: 0.5, joints: [{ jointId: 'root', translateX: 2, translateY: 1 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const bruteAnims: AnimationClip[] = [
@@ -547,8 +761,8 @@ const bruteAnims: AnimationClip[] = [
     { time: 0.55, joints: [{ jointId: 'armL', rotation: 22, translateY: 4 }, { jointId: 'armR', rotation: 18, translateY: 4 }, { jointId: 'root', translateY: 3, translateX: 3 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: arms cross guard
-  { name: 'defend', duration: 550, keyframes: [
+  // block: arms cross guard
+  { name: 'block', duration: 550, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.35, joints: [{ jointId: 'armL', rotation: 14, translateX: 4 }, { jointId: 'armR', rotation: -14, translateX: -4 }, { jointId: 'root', translateY: 2, rotation: -3 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -568,6 +782,19 @@ const bruteAnims: AnimationClip[] = [
     { time: 0.6, joints: [{ jointId: 'head', rotation: -22, translateY: -4 }, { jointId: 'armL', rotation: -28 }, { jointId: 'armR', rotation: 28 }, { jointId: 'root', translateY: -2 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: heavy breathing
+  { name: 'idle', duration: 2600, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', translateY: -2 }, { jointId: 'armL', rotation: -2 }, { jointId: 'armR', rotation: 2 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', translateY: 2 }, { jointId: 'armL', rotation: 2 }, { jointId: 'armR', rotation: -2 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: arms absorb with grunt
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'armL', rotation: 4 }, { jointId: 'armR', rotation: -4 }, { jointId: 'root', translateX: -2 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const treeAnims: AnimationClip[] = [
@@ -579,8 +806,8 @@ const treeAnims: AnimationClip[] = [
     { time: 0.55, joints: [{ jointId: 'armL', rotation: 20, translateX: 4 }, { jointId: 'armR', rotation: 14, translateX: 3 }, { jointId: 'root', rotation: 5 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: roots brace — legs tighten, body lowers
-  { name: 'defend', duration: 550, keyframes: [
+  // block: roots brace — legs tighten, body lowers
+  { name: 'block', duration: 550, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'root', translateY: 3 }, { jointId: 'legL', rotation: 8, translateY: 2 }, { jointId: 'legR', rotation: -8, translateY: 2 }, { jointId: 'armL', rotation: -6 }, { jointId: 'armR', rotation: 6 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -600,6 +827,19 @@ const treeAnims: AnimationClip[] = [
     { time: 0.6, joints: [{ jointId: 'armL', rotation: -26, translateX: -5, translateY: -3 }, { jointId: 'armR', rotation: 26, translateX: 5, translateY: -3 }, { jointId: 'head', rotation: -6 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: gentle sway
+  { name: 'idle', duration: 3000, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', rotation: 2 }, { jointId: 'armL', rotation: 3 }, { jointId: 'armR', rotation: -3 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', rotation: -2 }, { jointId: 'armL', rotation: -3 }, { jointId: 'armR', rotation: 3 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: bark plates absorb
+  { name: 'blockReact', duration: 380, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'root', rotation: -2 }, { jointId: 'armL', rotation: -4 }, { jointId: 'armR', rotation: 4 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const hagAnims: AnimationClip[] = [
@@ -611,8 +851,8 @@ const hagAnims: AnimationClip[] = [
     { time: 0.5, joints: [{ jointId: 'armL', rotation: 18, translateX: 4, translateY: 2 }, { jointId: 'head', rotation: 8 }, { jointId: 'root', rotation: 5 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: cauldron hunch
-  { name: 'defend', duration: 500, keyframes: [
+  // block: cauldron hunch
+  { name: 'block', duration: 500, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'root', translateY: 3, rotation: -6 }, { jointId: 'head', rotation: -10 }, { jointId: 'armL', rotation: -12 }, { jointId: 'armR', rotation: 12 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -633,6 +873,19 @@ const hagAnims: AnimationClip[] = [
     { time: 0.75, joints: [{ jointId: 'armL', rotation: -10 }, { jointId: 'armR', rotation: 10 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: hunched rocking
+  { name: 'idle', duration: 2600, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', rotation: 2 }, { jointId: 'head', rotation: 3 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', rotation: -2 }, { jointId: 'head', rotation: -3 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: shield flare
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'armL', rotation: 6 }, { jointId: 'root', translateX: -3 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const scorpionAnims: AnimationClip[] = [
@@ -644,8 +897,8 @@ const scorpionAnims: AnimationClip[] = [
     { time: 0.5, joints: [{ jointId: 'legR', rotation: 18, translateY: 3, translateX: 4 }, { jointId: 'head', rotation: 6, translateX: 3 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: pincers guard — arms inward
-  { name: 'defend', duration: 500, keyframes: [
+  // block: pincers guard — arms inward
+  { name: 'block', duration: 500, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.35, joints: [{ jointId: 'armL', rotation: 14, translateX: 3 }, { jointId: 'armR', rotation: -14, translateX: -3 }, { jointId: 'root', translateY: 2 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -665,6 +918,19 @@ const scorpionAnims: AnimationClip[] = [
     { time: 0.75, joints: [{ jointId: 'legR', rotation: -20, translateY: -4 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: leg shifting
+  { name: 'idle', duration: 2400, keyframes: [
+    { time: 0, joints: [{ jointId: 'legL', rotation: 0 }, { jointId: 'legR', rotation: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'legL', rotation: 3 }, { jointId: 'legR', rotation: -3 }, { jointId: 'armL', rotation: 2 }, { jointId: 'armR', rotation: -2 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'legL', rotation: 0 }, { jointId: 'legR', rotation: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'legL', rotation: -3 }, { jointId: 'legR', rotation: 3 }, { jointId: 'armL', rotation: -2 }, { jointId: 'armR', rotation: 2 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: shell absorbs
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'root', translateY: 2 }, { jointId: 'armL', rotation: 4 }, { jointId: 'armR', rotation: -4 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const effigyAnims: AnimationClip[] = [
@@ -677,8 +943,8 @@ const effigyAnims: AnimationClip[] = [
     { time: 0.6, joints: [{ jointId: 'root', rotation: 3, translateX: 3 }, { jointId: 'armR', rotation: -10 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: slump — body collapses slightly
-  { name: 'defend', duration: 500, keyframes: [
+  // block: slump — body collapses slightly
+  { name: 'block', duration: 500, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'root', translateY: 4, rotation: -8 }, { jointId: 'head', rotation: -12 }, { jointId: 'armL', rotation: 10 }, { jointId: 'armR', rotation: -10 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -699,6 +965,19 @@ const effigyAnims: AnimationClip[] = [
     { time: 0.6, joints: [{ jointId: 'legL', rotation: 10 }, { jointId: 'legR', rotation: -10 }, { jointId: 'root', translateY: -2 }], easing: 'linear' },
     { time: 1, joints: [] },
   ]},
+  // idle: creepy twitching
+  { name: 'idle', duration: 2200, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', rotation: 0 }, { jointId: 'head', rotation: 0 }], easing: 'linear' },
+    { time: 0.25, joints: [{ jointId: 'root', rotation: 3 }, { jointId: 'head', rotation: -5 }], easing: 'linear' },
+    { time: 0.5, joints: [{ jointId: 'root', rotation: -3 }, { jointId: 'head', rotation: 5 }], easing: 'linear' },
+    { time: 0.75, joints: [{ jointId: 'root', rotation: 2 }, { jointId: 'head', rotation: -3 }], easing: 'linear' },
+  ]},
+  // blockReact: jerks rigidly
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'root', rotation: -4 }, { jointId: 'head', rotation: 6 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const crocAnims: AnimationClip[] = [
@@ -711,8 +990,8 @@ const crocAnims: AnimationClip[] = [
     { time: 0.65, joints: [{ jointId: 'head', rotation: 8, translateX: 3 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: flatten — body lowers and legs spread
-  { name: 'defend', duration: 500, keyframes: [
+  // block: flatten — body lowers and legs spread
+  { name: 'block', duration: 500, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'root', translateY: 4, rotation: -3 }, { jointId: 'legL', rotation: 8, translateX: -2 }, { jointId: 'legR', rotation: -8, translateX: 2 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -733,6 +1012,19 @@ const crocAnims: AnimationClip[] = [
     { time: 0.75, joints: [{ jointId: 'legR', rotation: 10 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
+  // idle: low breathing
+  { name: 'idle', duration: 2600, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', translateY: -1 }, { jointId: 'head', rotation: 2 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'head', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', translateY: 1 }, { jointId: 'head', rotation: -2 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: low absorb
+  { name: 'blockReact', duration: 350, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'root', translateY: 2 }, { jointId: 'head', rotation: -4 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
 ];
 
 const whaleAnims: AnimationClip[] = [
@@ -744,8 +1036,8 @@ const whaleAnims: AnimationClip[] = [
     { time: 0.55, joints: [{ jointId: 'legL', rotation: 18, translateX: 4 }, { jointId: 'legR', rotation: 18, translateX: 4 }, { jointId: 'root', rotation: 6 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
-  // defend: dive down
-  { name: 'defend', duration: 600, keyframes: [
+  // block: dive down
+  { name: 'block', duration: 600, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
     { time: 0.4, joints: [{ jointId: 'root', translateY: 4, rotation: -4 }, { jointId: 'head', rotation: -8, translateY: 2 }], easing: 'ease-in-out' },
     { time: 1, joints: [] },
@@ -763,6 +1055,19 @@ const whaleAnims: AnimationClip[] = [
     { time: 0.2, joints: [{ jointId: 'root', translateY: -3 }, { jointId: 'head', rotation: -6 }], easing: 'ease-in-out' },
     { time: 0.45, joints: [{ jointId: 'root', translateY: -4 }, { jointId: 'head', rotation: 4 }, { jointId: 'armL', rotation: -10 }, { jointId: 'armR', rotation: 10 }], easing: 'ease-in-out' },
     { time: 0.7, joints: [{ jointId: 'root', translateY: -3 }, { jointId: 'head', rotation: -4 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
+  // idle: gentle drift
+  { name: 'idle', duration: 3000, keyframes: [
+    { time: 0, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.25, joints: [{ jointId: 'root', translateY: -3 }, { jointId: 'armL', rotation: -3 }, { jointId: 'armR', rotation: 3 }], easing: 'ease-in-out' },
+    { time: 0.5, joints: [{ jointId: 'root', translateY: 0 }, { jointId: 'armL', rotation: 0 }, { jointId: 'armR', rotation: 0 }], easing: 'ease-in-out' },
+    { time: 0.75, joints: [{ jointId: 'root', translateY: 3 }, { jointId: 'armL', rotation: 3 }, { jointId: 'armR', rotation: -3 }], easing: 'ease-in-out' },
+  ]},
+  // blockReact: mass absorbs
+  { name: 'blockReact', duration: 380, keyframes: [
+    { time: 0, joints: [], easing: 'ease-out' },
+    { time: 0.3, joints: [{ jointId: 'root', translateX: -2 }, { jointId: 'armL', rotation: -3 }, { jointId: 'armR', rotation: 3 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
 ];
