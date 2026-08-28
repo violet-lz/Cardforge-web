@@ -1,7 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
-  base: '/Cardforge-web/',
-});
+  base: mode === 'production' ? '/Cardforge-web/' : '/',
+  server: {
+    open: true,
+  },
+}));
