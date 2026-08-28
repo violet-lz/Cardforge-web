@@ -5,6 +5,7 @@
  */
 export interface ChangelogEntry { date: string; message: string; }
 export const CHANGELOG: ChangelogEntry[] = [
+  { date: '2026-08-28', message: '科技+天空+城堡+墓道24怪物外观重制·9独特特征·0 dot fallback -/- Overhaul 24 monsters (Tech + Sky + Castle + Crypt) with 9 unique features, 0 dot fallback' },
   { date: '2026-08-28', message: '修复本地开发npm start自动打开浏览器+正确路径 -/- Fix npm start to auto-open browser at correct local path (/ for dev, /Cardforge-web/ for production)' },
   { date: '2026-08-28', message: '皇都外环+血色之地+魔法之地18怪物外观重制·9独特特征·0 dot fallback -/- Overhaul 18 monsters (Outer Ring + Blood Lands + Arcane) with 9 unique features, 0 dot fallback' },
   { date: '2026-08-28', message: '沼泽+下水道+皇都20怪物外观重制·9独特特征·0 dot fallback -/- Overhaul 20 monsters (Mire + Sewer + Capital) with 9 unique features, 0 dot fallback' },
