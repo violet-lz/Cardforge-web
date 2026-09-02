@@ -119,8 +119,8 @@ const dragonAnims: AnimationClip[] = [
   // attack2: tail sweep + body twist
   { name: 'attack2', duration: 750, keyframes: [
     { time: 0, joints: [], easing: 'ease-in' },
-    { time: 0.2, joints: [{ jointId: 'root', rotate: 10 }, { jointId: 'legL', rotation: -15 }], easing: 'ease-in' },
-    { time: 0.5, joints: [{ jointId: 'root', rotate: -10 }, { jointId: 'legR', rotation: 15 }], easing: 'ease-out' },
+    { time: 0.2, joints: [{ jointId: 'root', rotation: 10 }, { jointId: 'legL', rotation: -15 }], easing: 'ease-in' },
+    { time: 0.5, joints: [{ jointId: 'root', rotation: -10 }, { jointId: 'legR', rotation: 15 }], easing: 'ease-out' },
     { time: 0.75, joints: [{ jointId: 'head', rotation: 5 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},

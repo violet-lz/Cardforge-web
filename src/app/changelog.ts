@@ -5,6 +5,7 @@
  */
 export interface ChangelogEntry { date: string; message: string; }
 export const CHANGELOG: ChangelogEntry[] = [
+  { date: '2026-09-02', message: 'feat:修复bug -/- fix bug' },
   { date: '2026-08-28', message: '霓虹院+恶魔巢穴+世界地垒+旧日余响36怪物外观重制·完成全部167只 -/- Overhaul final 36 monsters (Neon+Demon+Rampart+Legacy); all 167 monsters complete, 9 features each' },
   { date: '2026-08-28', message: '钟楼+荒漠+陨石20怪物外观重制+形状调度大小写不敏感根治(全1365 ID零dot fallback) -/- Overhaul 20 monsters (Steeple+Desert+Meteor); make shape dispatch case-insensitive, 0 dot fallback across all 1365 IDs' },
   { date: '2026-08-28', message: '冥界+渡口+海洋+亚特兰蒂斯24怪物外观重制·9独特特征·0 dot fallback -/- Overhaul 24 monsters (Nether + Ferry + Ocean + Atlantis) with 9 unique features, 0 dot fallback' },

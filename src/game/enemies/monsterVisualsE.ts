@@ -562,7 +562,6 @@ export const VISUALS_E: Record<string, MonsterVisualSpec> = {
       { id: 'legR', parentId: 'root', anchor: { x: 72, y: 88 }, boundFeatures: [] },
     ],
   },
-};
 
   // shimmering-water-elemental：海洋深处的闪烁元素 BOSS
   'shimmering-water-elemental': {
@@ -585,6 +584,6 @@ export const VISUALS_E: Record<string, MonsterVisualSpec> = {
       { id: 'armR', parentId: 'root', anchor: { x: 84, y: 52 }, boundFeatures: [2] },
       { id: 'legL', parentId: 'root', anchor: { x: 44, y: 88 }, boundFeatures: [5, 7] },
       { id: 'legR', parentId: 'root', anchor: { x: 76, y: 88 }, boundFeatures: [6] },
-    },
+    ],
   },
 };
