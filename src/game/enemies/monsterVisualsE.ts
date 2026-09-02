@@ -563,3 +563,28 @@ export const VISUALS_E: Record<string, MonsterVisualSpec> = {
     ],
   },
 };
+
+  // shimmering-water-elemental：海洋深处的闪烁元素 BOSS
+  'shimmering-water-elemental': {
+    kind: 'brute', hue: '#1a5a7e', hue2: '#0d3b56', glow: '#1ac7ea', size: 1.4, eye: 'glow',
+    features: [
+      F('crystalCore', 60, 60, '#1ac7ea', 0, 1.3, '#0d3b56'), // 0: 内核晶体·青蓝光芒
+      F('waveScaleL', 30, 30, '#1ac7ea', -15, 1.2),            // 1: 左鳞片·波浪纹
+      F('waveScaleR', 90, 30, '#1ac7ea', 15, 1.2),             // 2: 右鳞片·波浪纹
+      F('abyssalMaw', 60, 34, '#0d3b56', 0, 1.1),              // 3: 深渊巨口
+      F('tentacleSpine', 40, 58, '#1a5a7e', 0, 1.3),           // 4: 深渊触手·脊刺
+      F('tentacleGrapple', 88, 70, '#0d3b56', 0, 1.15),        // 5: 捕获触手·缠绕
+      F('pearlNecklace', 60, 82, '#f2e8bc', 0, 1),             // 6: 深海珍珠项链
+      F('vortexWhirlpool', 60, 12, '#1ac7ea', 0, 1.25),        // 7: 漩涡·水流入口
+      F('ancientCoral', 30, 20, '#f2e8bc', 0, 0.9),             // 8: 古老珊瑚·粉彩
+    ],
+    joints: [
+      { id: 'root', parentId: null, anchor: { x: 60, y: 60 }, boundFeatures: [0, 4] },
+      { id: 'head', parentId: 'root', anchor: { x: 60, y: 30 }, boundFeatures: [3, 8] },
+      { id: 'armL', parentId: 'root', anchor: { x: 36, y: 52 }, boundFeatures: [1] },
+      { id: 'armR', parentId: 'root', anchor: { x: 84, y: 52 }, boundFeatures: [2] },
+      { id: 'legL', parentId: 'root', anchor: { x: 44, y: 88 }, boundFeatures: [5, 7] },
+      { id: 'legR', parentId: 'root', anchor: { x: 76, y: 88 }, boundFeatures: [6] },
+    },
+  },
+};

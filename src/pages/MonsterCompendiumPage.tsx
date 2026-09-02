@@ -1,136 +1,227 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { useLocale } from '../app/locale';
+import { useEffect, useState } from 'react';
+import { MONSTER_VISUALS, REGION_OF, REGIONS, enemyTier, tierLabel } from '../game/enemies/monsterVisuals';
 import EnemySprite from '../components/enemies/EnemySprite';
-import { MONSTER_VISUALS, REGIONS, REGION_OF, enemyTier, tierLabel } from '../game/enemies/monsterVisuals';
-import { BASIC_ENEMIES } from '../data/enemies/basicEnemies';
+import { F } from '../game/enemies/monsterVisualTypes';
 
-interface Props { onBack: () => void; }
+// 过滤有效怪物 (有 7+ 特征且 6 个关节)
+function filterValidMonsters() {
+  const valid: string[] = [];
+  for (const [id, spec] of Object.entries(MONSTER_VISUALS) as [string, any][]) {
+    if (spec.features.length >= 7 && spec.joints?.length === 6) {
+      valid.push(id);
+    }
+  }
+  return valid;
+}
 
-interface RegionData {
+// 按地域分组
+function groupByRegion(ids: string[]) {
+  const groups: Record<string, string[]> = {};
+  for (const id of ids) {
+    const region = REGION_OF[id];
+    if (!region) continue;
+    if (!groups[region]) groups[region] = [];
+    groups[region].push(id);
+  }
+  return groups;
+}
+
+interface MonsterCardProps {
   id: string;
-  name: string;
-  en: string;
-  hue: string;
-  monsters: string[];
+  label?: string;
 }
 
-function RegionSection({
-  region,
-  expanded,
-  onExpand,
-  playingClip,
-  onPlay,
-}: {
-  region: RegionData;
-  expanded: string | null;
-  onExpand: (id: string | null) => void;
-  playingClip: string | undefined;
-  onPlay: (clip: string) => void;
-}) {
-  const ref = useRef<HTMLElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { rootMargin: '200px' },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <section ref={ref} className="region-section" aria-label={region.name}>
-      <div className="region-header" style={{ '--region-hue': region.hue } as React.CSSProperties}>
-        <h2>{region.name}</h2>
-        <small>{region.en}</small>
-        <span className="region-count">{region.monsters.length}</span>
-      </div>
-      {visible && (
-        <div className="monster-grid">
-          {region.monsters.map((id) => {
-            const tier = enemyTier(id);
-            const isExpanded = expanded === id;
-            return (
-              <div key={id}>
-                <article
-                  className={`monster-card${isExpanded ? ' monster-card-active' : ''}`}
-                  onClick={() => onExpand(isExpanded ? null : id)}
-                  role="button"
-                  tabIndex={0}
-                  aria-expanded={isExpanded}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onExpand(isExpanded ? null : id); } }}
-                >
-                  <EnemySprite id={id} size={120} />
-                  <span className="monster-name">{BASIC_ENEMIES[id]?.name ?? id}</span>
-                  <span className={`tier-badge tier-${tier}`}>{tierLabel(tier)}</span>
-                </article>
-                {isExpanded && (
-                  <div className="monster-detail-panel">
-                    <EnemySprite id={id} size={240} animation={playingClip} onAnimationEnd={() => onPlay('')} />
-                    <div className="anim-controls">
-                      <button onClick={(e) => { e.stopPropagation(); onPlay('hit'); }}>受击</button>
-                      <button onClick={(e) => { e.stopPropagation(); onPlay('attack1'); }}>攻击</button>
-                      <button onClick={(e) => { e.stopPropagation(); onPlay('defend'); }}>防御</button>
-                      <button onClick={(e) => { e.stopPropagation(); onPlay('skill1'); }}>技能</button>
-                      <button onClick={(e) => { e.stopPropagation(); onPlay('skill2'); }}>召唤</button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </section>
-  );
+interface AnimationControlProps {
+  id: string;
+  animationName: string;
+  clipName: string;
 }
 
-export function MonsterCompendiumPage({ onBack }: Props) {
-  const { t } = useLocale();
-  const [expanded, setExpanded] = useState<string | null>(null);
-  const [playingClip, setPlayingClip] = useState<string | undefined>(undefined);
+interface MonsterCompendiumPageProps {
+  onBack: () => void;
+}
 
-  // Group monsters by region
-  const monstersByRegion: RegionData[] = REGIONS.map((region) => ({
-    ...region,
-    monsters: Object.entries(REGION_OF)
-      .filter(([, regionId]) => regionId === region.id)
-      .map(([monsterId]) => monsterId)
-      .filter((id) => MONSTER_VISUALS[id]),
-  }));
+export function MonsterCompendiumPage({ onBack }: MonsterCompendiumPageProps) {
+  const validIds = filterValidMonsters();
+  const regionGroups = groupByRegion(validIds);
+  const regionOrder = REGIONS.map(r => r.id);
 
-  const handleAnimPlay = useCallback((clipName: string) => {
-    if (!clipName) { setPlayingClip(undefined); return; }
-    setPlayingClip(clipName);
-    setTimeout(() => setPlayingClip(undefined), 1200);
-  }, []);
-
-  const totalMonsters = Object.keys(MONSTER_VISUALS).length;
+  // 状态：选中的怪物和正在播放的动画
+  const [selectedMonster, setSelectedMonster] = useState<string | null>(null);
+  const [playingAnimation, setPlayingAnimation] = useState<string>('idle');
 
   return (
-    <main className="run-shell compendium-shell monster-compendium">
-      <header className="run-header">
-        <div>
-          <p className="eyebrow">MONSTER ARCHIVE · 怪物图鉴</p>
-          <h1>{t('home.monsterArchive')}</h1>
-          <p className="subtitle">{t('home.monsterArchiveDetail')} · {totalMonsters}</p>
-        </div>
-        <button className="text-button" onClick={onBack}>{t('backHome')}</button>
+    <div style={{ padding: '1rem' }}>
+      <header style={{ marginBottom: '1rem' }}>
+        <button onClick={onBack}>← 返回</button>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 600 }}>怪物图鉴</h1>
       </header>
 
-      {monstersByRegion.map((region) => (
-        <RegionSection
-          key={region.id}
-          region={region}
-          expanded={expanded}
-          onExpand={setExpanded}
-          playingClip={playingClip}
-          onPlay={handleAnimPlay}
-        />
-      ))}
-    </main>
+      <section style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
+        gap: '1rem',
+        overflowY: 'auto',
+        maxHeight: '80vh',
+      }}>
+        {regionOrder.map(regionId => {
+          const regionMeta = REGIONS.find(r => r.id === regionId);
+          if (!regionMeta) return null;
+          const monsterIds = regionGroups[regionId] ?? [];
+          
+          return (
+            <div key={regionId} style={{
+              marginBottom: '1.5rem',
+              paddingBottom: '0.5rem',
+              borderBottom: '1px solid #ddd',
+            }}>
+              <h3 style={{ margin: '0.5rem 0', fontSize: '0.9rem', fontWeight: 500 }}>
+                {regionMeta.name} ({regionMeta.en})
+              </h3>
+              {monsterIds.map(id => {
+                const spec = MONSTER_VISUALS[id];
+                if (!spec) return null;
+                const tier = enemyTier(id);
+                const size = spec.size ?? 1;
+                
+                return (
+                  <div
+                    key={id}
+                    style={{
+                      border: '1px solid #aaa',
+                      borderRadius: '4px',
+                      padding: '4px',
+                      textAlign: 'center',
+                      width: '120px',
+                      display: 'inline-block',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => setSelectedMonster(id)}
+                  >
+                    <EnemySprite
+                      id={id}
+                      size={120}
+                      animate={false} // Idle 静态预览
+                      />
+                    <div style={{ marginTop: '4px', fontSize: '0.7rem', marginBottom: '2px' }}>
+                      {id}\n{tierLabel(tier)}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* 点击的怪物展开详情面板 */}
+              {selectedMonster === id && (
+                <div style={{
+                  marginTop: '1rem',
+                  padding: '1rem',
+                  background: '#f8f8f8',
+                  borderRadius: '4px',
+                  maxHeight: '400px',
+                  overflowY: 'auto',
+                }}>
+                  <h4 style={{ margin: '0.5rem 0', fontSize: '0.8rem' }}>
+                    {spec.name || id} - {tierLabel(tier)}
+                  </h4>
+                  
+                  <p style={{ margin: '0.5rem 0', fontSize: '0.7rem', color: '#666' }}>
+                    <strong>外观特征:</strong> {spec.features.length} 个特征
+                  </p>
+                  
+                  <p style={{ margin: '0.5rem 0', fontSize: '0.7rem', color: '#666' }}>
+                    <strong>体型:</strong> {size}
+                  </p>
+                  
+                  <div style={{ margin: '0.8rem 0', fontSize: '0.7rem' }}>
+                    <strong>动画控制:</strong> {' '}
+                    <button
+                      onClick={() => setPlayingAnimation('idle')}
+                      style={{ marginRight: '4px', padding: '4px 8px', fontSize: '0.65rem' }}
+                    >
+                      Idle
+                    </button>
+                    <button
+                      onClick={() => setPlayingAnimation('hit')}
+                      style={{ marginRight: '4px', padding: '4px 8px', fontSize: '0.65rem' }}
+                    >
+                      Hit
+                    </button>
+                    <button
+                      onClick={() => setPlayingAnimation('attack1')}
+                      style={{ marginRight: '4px', padding: '4px 8px', fontSize: '0.65rem' }}
+                    >
+                      Attack1
+                    </button>
+                    <button
+                      onClick={() => setPlayingAnimation('attack2')}
+                      style={{ marginRight: '4px', padding: '4px 8px', fontSize: '0.65rem' }}
+                    >
+                      Attack2
+                    </button>
+                    <button
+                      onClick={() => setPlayingAnimation('attack3')}
+                      style={{ marginRight: '4px', padding: '4px 8px', fontSize: '0.65rem' }}
+                    >
+                      Attack3
+                    </button>
+                    <button
+                      onClick={() => setPlayingAnimation('skill1')}
+                      style={{ marginRight: '4px', padding: '4px 8px', fontSize: '0.65rem' }}
+                    >
+                      Skill1
+                    </button>
+                    <button
+                      onClick={() => setPlayingAnimation('skill2')}
+                      style={{ marginRight: '4px', padding: '4px 8px', fontSize: '0.65rem' }}
+                    >
+                      Skill2
+                    </button>
+                    <button
+                      onClick={() => setPlayingAnimation('block')}
+                      style={{ marginRight: '4px', padding: '4px 8px', fontSize: '0.65rem' }}
+                    >
+                      Block
+                    </button>
+                    <button
+                      onClick={() => setPlayingAnimation('blockReact')}
+                      style={{ marginRight: '4px', padding: '4px 8px', fontSize: '0.65rem' }}
+                    >
+                      BlockReact
+                    </button>
+                  </div>
+                  
+                  {/* 动画预览区域 */}
+                  <div style={{ marginTop: '1rem' }}>
+                    <EnemySprite
+                      id={selectedMonster}
+                      size={200}
+                      animate={true}
+                      animation={playingAnimation}
+                      onAnimationEnd={() => setPlayingAnimation('idle')}
+                    />
+                    <p style={{ fontSize: '0.65rem', marginTop: '0.5rem', color: '#666' }}>
+                      正在播放: {playingAnimation}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+
+        {/* 无数据区域占位 */}
+        {regionOrder.map(regionId => {
+          const monsterIds = regionGroups[regionId] ?? [];
+          if (monsterIds.length === 0) {
+            return (
+              <div key={`empty-${regionId}`} style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>
+                <p>暂无可展示的怪物</p>
+              </div>
+            );
+          }
+          return null;
+        })}
+      </section>
+    </div>
   );
 }
