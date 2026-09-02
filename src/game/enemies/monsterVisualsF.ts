@@ -451,13 +451,13 @@ export const VISUALS_F: Record<string, MonsterVisualSpec> = {
   'world-ender': {
     kind: 'dragon', hue: '#241c38', hue2: '#120c20', glow: '#ff4fd8', size: 1.8, eye: 'red',
     features: [
-      F('scaleBasaltCrackLava', 60, 60, '#3a3450', 0, 1.4, '#1c1630'), // 0 玄武岩龟裂身躯·暗金熔岩
+      F('crackBasalt', 60, 60, '#3a3450', 0, 1.4, '#1c1630'), // 0 玄武岩龟裂身躯·暗金熔岩
       F('wingObsidian', 30, 30, '#2c2648', -12, 1.4),                  // 1 黑曜石鳞翼·左
       F('wingObsidianR', 90, 30, '#2c2648', 12, 1.4),                  // 2 黑曜石鳞翼·右
-      F('starEyeNebula', 60, 30, '#ff4fd8', 0, 1),                     // 3 星云双目
+      F('eyeNebula', 60, 30, '#ff4fd8', 0, 1),                     // 3 星云双目
       F('spikeStalagmite', 60, 44, '#8fc3e8', 0, 1.25),               // 4 石笋骨刺
       F('tailStalactite', 88, 92, '#120c20', 0, 1.3),                 // 5 钟乳石尾锤
-      F('clawMountain', 34, 84, '#241c38', 0, 1.3),                   // 6 山脊巨爪·左
+      F('crestMountain', 34, 84, '#241c38', 0, 1.3),                   // 6 山脊巨爪·左
       F('hornDeadwood', 60, 12, '#5c5478', 0, 1.2),                   // 7 枯木龙角
       F('fangJut', 46, 42, '#e8f4ff', 0, 1.1),                        // 8 突出巨牙
     ],

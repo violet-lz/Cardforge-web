@@ -116,6 +116,22 @@ const dragonAnims: AnimationClip[] = [
     { time: 0.75, joints: [{ jointId: 'head', rotation: 6, translateX: 3 }], easing: 'ease-out' },
     { time: 1, joints: [] },
   ]},
+  // attack2: tail sweep + body twist
+  { name: 'attack2', duration: 750, keyframes: [
+    { time: 0, joints: [], easing: 'ease-in' },
+    { time: 0.2, joints: [{ jointId: 'root', rotate: 10 }, { jointId: 'legL', rotation: -15 }], easing: 'ease-in' },
+    { time: 0.5, joints: [{ jointId: 'root', rotate: -10 }, { jointId: 'legR', rotation: 15 }], easing: 'ease-out' },
+    { time: 0.75, joints: [{ jointId: 'head', rotation: 5 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
+  // attack3: fiery breath charge
+  { name: 'attack3', duration: 900, keyframes: [
+    { time: 0, joints: [], easing: 'ease-in' },
+    { time: 0.3, joints: [{ jointId: 'head', rotation: 20 }, { jointId: 'root', translateY: -5 }], easing: 'ease-in' },
+    { time: 0.6, joints: [{ jointId: 'armL', rotation: -30 }, { jointId: 'armR', rotation: 30 }, { jointId: 'head', rotation: 25 }], easing: 'ease-out' },
+    { time: 0.8, joints: [{ jointId: 'head', rotation: 15 }, { jointId: 'root', translateX: 3 }], easing: 'ease-out' },
+    { time: 1, joints: [] },
+  ]},
   // block: wings fold in
   { name: 'block', duration: 600, keyframes: [
     { time: 0, joints: [], easing: 'ease-in-out' },
